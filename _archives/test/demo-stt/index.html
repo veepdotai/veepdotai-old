@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>annyang! Easily add speech recognition to your site</title>
+  <meta name="description" content="annyang is a JavaScript SpeechRecognition library that makes adding voice commands to your site super-easy. Let your users control your site with their voice." />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta property="og:image" content="https://www.talater.com/annyang/images/icon_speech.png"/>
+  <meta property="og:title" content="annyang! Easily add speech recognition to your site"/>
+  <meta property="og:url" content="https://www.talater.com/annyang/"/>
+  <meta property="og:site_name" content="annyang"/>
+  <meta property="fb:admins" content="568390229" />
+  <script src="annyang.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+  <script>
+  "use strict";
+
+  // first we make sure annyang started succesfully
+  if (annyang) {
+
+    // define the functions our commands will run.
+    var hello = function() {
+      $("#hello").slideDown("slow");
+      scrollTo("#section_hello");
+    };
+
+    var showFlickr = function(tag) {
+      $('#flickrGallery').show();
+      $('#flickrLoader p').text('Searching for '+tag).fadeIn('fast');
+      var url = '//api.flickr.com/services/rest/?method=flickr.photos.search&api_key=a828a6571bb4f0ff8890f7a386d61975&sort=interestingness-desc&per_page=9&format=json&callback=jsonFlickrApi&tags='+tag;
+      $.ajax({
+        type: 'GET',
+        url: url,
+        async: false,
+        jsonpCallback: 'jsonFlickrApi',
+        contentType: "application/json",
+        dataType: 'jsonp'
+      });
+      scrollTo("#section_image_search");
+    };
+
+    var jsonFlickrApi = function(results) {
+      $('#flickrLoader p').fadeOut('slow');
+      var photos = results.photos.photo;
+      $.each(photos, function(index, photo) {
+        $(document.createElement("img"))
+          .attr({ src: '//farm'+photo.farm+'.staticflickr.com/'+photo.server+'/'+photo.id+'_'+photo.secret+'_s.jpg' })
+          .addClass("flickrGallery")
+          .appendTo(flickrGallery);
+      });
+    };
+
+    var bonjour = function(person) {
+	alert('bonjour ' + person);
+    };
+
+    var showTPS = function(type) {
+      $('#tpsreport').show().animate({
+        bottom: '-100px'
+      }).delay('2000').animate({
+        bottom: '-500px'
+      });
+    };
+
+    var getStarted = function() {
+      window.location.href = 'https://github.com/TalAter/annyang';
+    }
+
+    // define our commands.
+    // * The key is the phrase you want your users to say.
+    // * The value is the action to do.
+    //   You can pass a function, a function name (as a string), or write your function as part of the commands object.
+    var commands = {
+      'hello (there)':        hello,
+      'show me *search':      showFlickr,
+      'show :type report':    showTPS,
+      'let\'s get started':   getStarted,
+      'bonjour :person':      bonjour,
+    };
+
+    // OPTIONAL: activate debug mode for detailed logging in the console
+    annyang.debug();
+
+    // Add voice commands to respond to
+    annyang.addCommands(commands);
+
+    // OPTIONAL: Set a language for speech recognition (defaults to English)
+    // For a full list of language codes, see the documentation:
+    // https://github.com/TalAter/annyang/blob/master/docs/FAQ.md#what-languages-are-supported
+    annyang.setLanguage('fr');
+
+    // Start listening. You can call this here, or attach this call to an event, button, etc.
+    annyang.start();
+  } else {
+    $(document).ready(function() {
+      $('#unsupported').fadeIn('fast');
+    });
+  }
+
+  var scrollTo = function(identifier, speed) {
+    $('html, body').animate({
+        scrollTop: $(identifier).offset().top
+    }, speed || 1000);
+  }
+  </script>
+  <link rel="stylesheet" href="css/main.min.css" />
+</head>
+<body>
+
+  <div>
+	<textarea id="context"i cols="40" rows="5">Un peu de texte</textarea>
+  </div>
+
+  <div id="unsupported" class="hidden">
+    <h4>It looks like your browser doesn't support speech recognition.</h4>
+    <p>annyang plays nicely with all browsers, progressively enhancing modern browsers that support the SpeechRecognition standard, while leaving users with older browsers unaffected.</p>
+    <p>Please visit <a href="http://www.annyangjs.com/">http://www.annyangjs.com/</a> in a desktop browser like Chrome.</p>
+  </div>
+
+  <script>
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-24775009-1']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+  <script src="./vendor/js/highlight.pack.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+</body>
+</html>
