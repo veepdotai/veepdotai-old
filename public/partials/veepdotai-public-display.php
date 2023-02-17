@@ -8,8 +8,8 @@
  * @link       https://www.veep.ai
  * @since      1.0.0
  *
- * @package    Veep
- * @subpackage Veep/public/partials
+ * @package    Veepdotai
+ * @subpackage Veepdotai/public/partials
  */
 ?>
 

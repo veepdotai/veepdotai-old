@@ -1,11 +1,11 @@
 {
-    "name": "bxml/veep",
+    "name": "veepdotai/veepdotai",
     "require": {
         "orhanerday/open-ai": "^3.4"
     },
     "autoload": {
         "psr-4": {
-            "Bxml\\Veep\\": "src/"
+            "veepdotai\\veepdotai\\": "src/"
         }
     },
     "authors": [

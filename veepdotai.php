@@ -10,10 +10,10 @@
  *
  * @link              https://www.veep.ai
  * @since             1.0.0
- * @package           Veep
+ * @package           Veepdotai
  *
  * @wordpress-plugin
- * Plugin Name:       Veep
+ * Plugin Name:       Veepdotai
  * Plugin URI:        https://www.veep.ai
  * Description:       Content generator
  * Version:           1.0.0
@@ -35,7 +35,7 @@ if ( ! defined( 'WPINC' ) ) {
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
-define( 'VEEP_VERSION', '1.0.0' );
+define( 'VEEPDOTAI_VERSION', '1.0.0' );
 
 /**
  * The code that runs during plugin activation.
@@ -43,7 +43,7 @@ define( 'VEEP_VERSION', '1.0.0' );
  */
 function activate_veepdotai() {
 	require_once plugin_dir_path( __FILE__ ) . 'includes/class-veepdotai-activator.php';
-	Veep_Activator::activate();
+	Veepdotai_Activator::activate();
 }
 
 /**
@@ -52,7 +52,7 @@ function activate_veepdotai() {
  */
 function deactivate_veepdotai() {
 	require_once plugin_dir_path( __FILE__ ) . 'includes/class-veepdotai-deactivator.php';
-	Veep_Deactivator::deactivate();
+	Veepdotai_Deactivator::deactivate();
 }
 
 register_activation_hook( __FILE__, 'activate_veepdotai' );
@@ -80,7 +80,7 @@ require plugin_dir_path( __FILE__ ) . 'includes/class-veepdotai.php';
  */
 function run_veepdotai() {
 
-	$plugin = new Veep();
+	$plugin = new Veepdotai();
 	$plugin->run();
 
 }

@@ -1,6 +1,6 @@
 <?php
 
-Class Veep_Menu_Generator {
+Class Veepdotai_Menu_Generator {
 
     function __construct() {
     }

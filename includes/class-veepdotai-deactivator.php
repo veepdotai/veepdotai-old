@@ -6,8 +6,8 @@
  * @link       https://www.veep.ai
  * @since      1.0.0
  *
- * @package    Veep
- * @subpackage Veep/includes
+ * @package    Veepdotai
+ * @subpackage Veepdotai/includes
  */
 
 /**
@@ -16,11 +16,11 @@
  * This class defines all code necessary to run during the plugin's deactivation.
  *
  * @since      1.0.0
- * @package    Veep
- * @subpackage Veep/includes
+ * @package    Veepdotai
+ * @subpackage Veepdotai/includes
  * @author     Jean-Christophe Kermagoret <jc@kermagoret.net>
  */
-class Veep_Deactivator {
+class Veepdotai_Deactivator {
 
 	/**
 	 * Short Description. (use period)

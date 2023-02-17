@@ -6,8 +6,8 @@
  * @link       https://www.veep.ai
  * @since      1.0.0
  *
- * @package    Veep
- * @subpackage Veep/includes
+ * @package    Veepdotai
+ * @subpackage Veepdotai/includes
  */
 
 /**
@@ -17,11 +17,11 @@
  * the plugin, and register them with the WordPress API. Call the
  * run function to execute the list of actions and filters.
  *
- * @package    Veep
- * @subpackage Veep/includes
+ * @package    Veepdotai
+ * @subpackage Veepdotai/includes
  * @author     Jean-Christophe Kermagoret <jc@kermagoret.net>
  */
-class Veep_Loader {
+class Veepdotai_Loader {
 
 	/**
 	 * The array of actions registered with WordPress.

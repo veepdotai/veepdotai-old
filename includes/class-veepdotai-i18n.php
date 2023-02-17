@@ -9,8 +9,8 @@
  * @link       https://www.veep.ai
  * @since      1.0.0
  *
- * @package    Veep
- * @subpackage Veep/includes
+ * @package    Veepdotai
+ * @subpackage Veepdotai/includes
  */
 
 /**
@@ -20,11 +20,11 @@
  * so that it is ready for translation.
  *
  * @since      1.0.0
- * @package    Veep
- * @subpackage Veep/includes
+ * @package    Veepdotai
+ * @subpackage Veepdotai/includes
  * @author     Jean-Christophe Kermagoret <jc@kermagoret.net>
  */
-class Veep_i18n {
+class Veepdotai_i18n {
 
 
 	/**
@@ -35,7 +35,7 @@ class Veep_i18n {
 	public function load_plugin_textdomain() {
 
 		load_plugin_textdomain(
-			'veep',
+			'veepdotai',
 			false,
 			dirname( dirname( plugin_basename( __FILE__ ) ) ) . '/languages/'
 		);

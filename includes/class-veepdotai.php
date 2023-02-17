@@ -9,8 +9,8 @@
  * @link       https://www.veep.ai
  * @since      1.0.0
  *
- * @package    Veep
- * @subpackage Veep/includes
+ * @package    Veepdotai
+ * @subpackage Veepdotai/includes
  */
 
 /**
@@ -23,11 +23,11 @@
  * version of the plugin.
  *
  * @since      1.0.0
- * @package    Veep
- * @subpackage Veep/includes
+ * @package    Veepdotai
+ * @subpackage Veepdotai/includes
  * @author     Jean-Christophe Kermagoret <jc@kermagoret.net>
  */
-class Veep {
+class Veepdotai {
 
 	/**
 	 * The loader that's responsible for maintaining and registering all hooks that power
@@ -35,7 +35,7 @@ class Veep {
 	 *
 	 * @since    1.0.0
 	 * @access   protected
-	 * @var      Veep_Loader    $loader    Maintains and registers all hooks for the plugin.
+	 * @var      Veepdotai_Loader    $loader    Maintains and registers all hooks for the plugin.
 	 */
 	protected $loader;
 
@@ -67,12 +67,12 @@ class Veep {
 	 * @since    1.0.0
 	 */
 	public function __construct() {
-		if ( defined( 'VEEP_VERSION' ) ) {
-			$this->version = VEEP_VERSION;
+		if ( defined( 'VEEPDOTAI_VERSION' ) ) {
+			$this->version = VEEPDOTAI_VERSION;
 		} else {
 			$this->version = '1.0.0';
 		}
-		$this->plugin_name = 'veep';
+		$this->plugin_name = 'veepdotai';
 
 		$this->load_dependencies();
 		$this->set_locale();
@@ -86,10 +86,10 @@ class Veep {
 	 *
 	 * Include the following files that make up the plugin:
 	 *
-	 * - Veep_Loader. Orchestrates the hooks of the plugin.
-	 * - Veep_i18n. Defines internationalization functionality.
-	 * - Veep_Admin. Defines all hooks for the admin area.
-	 * - Veep_Public. Defines all hooks for the public side of the site.
+	 * - Veepdotai_Loader. Orchestrates the hooks of the plugin.
+	 * - Veepdotai_i18n. Defines internationalization functionality.
+	 * - Veepdotai_Admin. Defines all hooks for the admin area.
+	 * - Veepdotai_Public. Defines all hooks for the public side of the site.
 	 *
 	 * Create an instance of the loader which will be used to register the hooks
 	 * with WordPress.
@@ -103,34 +103,34 @@ class Veep {
 		 * The class responsible for orchestrating the actions and filters of the
 		 * core plugin.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-veep-loader.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-veepdotai-loader.php';
 
 		/**
 		 * The class responsible for defining internationalization functionality
 		 * of the plugin.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-veep-i18n.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-veepdotai-i18n.php';
 
 		/**
 		 * The class responsible for defining all actions that occur in the admin area.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-veep-admin.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-veepdotai-admin.php';
 
 		/**
 		 * The class responsible for defining all actions that occur in the public-facing
 		 * side of the site.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-veep-public.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-veepdotai-public.php';
 				
 
-		$this->loader = new Veep_Loader();
+		$this->loader = new Veepdotai_Loader();
 
 	}
 
 	/**
 	 * Define the locale for this plugin for internationalization.
 	 *
-	 * Uses the Veep_i18n class in order to set the domain and to register the hook
+	 * Uses the Veepdotai_i18n class in order to set the domain and to register the hook
 	 * with WordPress.
 	 *
 	 * @since    1.0.0
@@ -138,7 +138,7 @@ class Veep {
 	 */
 	private function set_locale() {
 
-		$plugin_i18n = new Veep_i18n();
+		$plugin_i18n = new Veepdotai_i18n();
 
 		$this->loader->add_action( 'plugins_loaded', $plugin_i18n, 'load_plugin_textdomain' );
 
@@ -153,7 +153,7 @@ class Veep {
 	 */
 	private function define_admin_hooks() {
 
-		$plugin_admin = new Veep_Admin( $this->get_plugin_name(), $this->get_version() );
+		$plugin_admin = new Veepdotai_Admin( $this->get_plugin_name(), $this->get_version() );
 
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
@@ -170,7 +170,7 @@ class Veep {
 	 */
 	private function define_public_hooks() {
 
-		$plugin_public = new Veep_Public( $this->get_plugin_name(), $this->get_version() );
+		$plugin_public = new Veepdotai_Public( $this->get_plugin_name(), $this->get_version() );
 
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
@@ -201,7 +201,7 @@ class Veep {
 	 * The reference to the class that orchestrates the hooks with the plugin.
 	 *
 	 * @since     1.0.0
-	 * @return    Veep_Loader    Orchestrates the hooks of the plugin.
+	 * @return    Veepdotai_Loader    Orchestrates the hooks of the plugin.
 	 */
 	public function get_loader() {
 		return $this->loader;
