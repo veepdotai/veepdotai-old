@@ -1,0 +1,504 @@
+# Copyright (C) 2023 Kerma Projects SAS
+# This file is distributed under the same license as the Veep plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: Veep 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/veep\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2023-02-02T21:36:50+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.7.1\n"
+"X-Domain: veep\n"
+
+#. Plugin Name of the plugin
+msgid "Veep"
+msgstr ""
+
+#. Description of the plugin
+msgid "Autonomous Virtual Presence"
+msgstr "Présence Virtuelle Autonome"
+
+#. Author of the plugin
+msgid "Kerma Projects SAS"
+msgstr ""
+
+#. Author URI of the plugin
+msgid "https://www.veep.ai/"
+msgstr ""
+
+#: includes/class-init.php:140
+#: templates/page-settings.php:50
+msgid "Settings"
+msgstr "Paramètres"
+
+#: includes/class-settings-admin.php:14
+msgid "General"
+msgstr "Général"
+
+#: includes/class-settings-admin.php:17
+msgid "License key"
+msgstr "Clé de licence"
+
+#: includes/class-settings-admin.php:21
+msgid "AI Secret API key"
+msgstr ""
+
+#: includes/class-settings-admin.php:25
+msgid "Separators"
+msgstr ""
+
+#: includes/class-settings-admin.php:29
+msgid "Debug mode"
+msgstr ""
+
+#: includes/class-settings-admin.php:38
+msgid "Import / Export"
+msgstr ""
+
+#: includes/class-settings-admin.php:41
+#: includes/class-settings-admin.php:90
+msgid "Export"
+msgstr ""
+
+#: includes/class-settings-admin.php:45
+#: includes/class-settings-admin.php:98
+msgid "Import"
+msgstr ""
+
+#: includes/class-settings-admin.php:66
+msgid "Activate"
+msgstr "Activer"
+
+#: includes/class-settings-admin.php:72
+msgid "Get an AI secret API key (only open.ai for the moment)"
+msgstr ""
+
+#: includes/class-settings-admin.php:95
+msgid "Paste the import code here"
+msgstr ""
+
+#: includes/class-settings-admin.php:96
+msgid "Overwrite existing items?"
+msgstr ""
+
+#: includes/class-settings-admin.php:142
+#: includes/class-settings-admin.php:159
+msgid "Not yet activated"
+msgstr ""
+
+#: includes/class-settings-admin.php:149
+msgid "License active until"
+msgstr ""
+
+#: includes/class-settings-admin.php:165
+msgid "License active"
+msgstr ""
+
+#: includes/class-settings-admin.php:166
+msgid "expires"
+msgstr ""
+
+#: includes/class-settings-admin.php:183
+msgid "Grid columns"
+msgstr ""
+
+#: includes/class-settings-admin.php:184
+msgid "Grid gap"
+msgstr ""
+
+#: includes/class-settings-admin.php:185
+msgid "Text style"
+msgstr ""
+
+#: includes/class-settings-admin.php:186
+msgid "Text color"
+msgstr ""
+
+#: includes/class-settings-admin.php:187
+msgid "Font size"
+msgstr ""
+
+#: includes/class-settings-admin.php:188
+msgid "Background color"
+msgstr ""
+
+#: includes/class-settings-admin.php:189
+msgid "Border"
+msgstr ""
+
+#: includes/class-settings-admin.php:190
+msgid "Border style"
+msgstr ""
+
+#: includes/class-settings-admin.php:191
+msgid "None"
+msgstr ""
+
+#: includes/class-settings-admin.php:192
+msgid "Solid"
+msgstr ""
+
+#: includes/class-settings-admin.php:193
+msgid "Dashed"
+msgstr ""
+
+#: includes/class-settings-admin.php:194
+msgid "Dotted"
+msgstr ""
+
+#: includes/class-settings-admin.php:195
+msgid "Double"
+msgstr ""
+
+#: includes/class-settings-admin.php:196
+msgid "Border color"
+msgstr ""
+
+#: includes/class-settings-admin.php:197
+msgid "Border width"
+msgstr ""
+
+#: includes/class-settings-admin.php:198
+msgid "Button text"
+msgstr ""
+
+#: includes/class-settings-admin.php:199
+msgid "Button text color"
+msgstr ""
+
+#: includes/class-settings-admin.php:200
+msgid "Button padding"
+msgstr ""
+
+#: includes/class-settings-admin.php:201
+msgid "Separator"
+msgstr ""
+
+#: includes/class-settings-admin.php:202
+msgid "Custom CSS"
+msgstr ""
+
+#: includes/class-settings-admin.php:203
+msgid "Column widths"
+msgstr ""
+
+#: includes/class-settings-admin.php:204
+#: includes/class-settings-admin.php:250
+msgid "Content"
+msgstr ""
+
+#: includes/class-settings-admin.php:205
+msgid "Image size"
+msgstr ""
+
+#: includes/class-settings-admin.php:206
+msgid "Author field"
+msgstr ""
+
+#: includes/class-settings-admin.php:207
+msgid "Display name"
+msgstr ""
+
+#: includes/class-settings-admin.php:208
+msgid "User login"
+msgstr ""
+
+#: includes/class-settings-admin.php:209
+msgid "User ID"
+msgstr ""
+
+#: includes/class-settings-admin.php:210
+msgid "Field type"
+msgstr ""
+
+#: includes/class-settings-admin.php:211
+msgid "Text"
+msgstr ""
+
+#: includes/class-settings-admin.php:212
+msgid "Date"
+msgstr ""
+
+#: includes/class-settings-admin.php:213
+msgid "Number"
+msgstr ""
+
+#: includes/class-settings-admin.php:214
+msgid "Date format"
+msgstr ""
+
+#: includes/class-settings-admin.php:215
+msgid "Input format"
+msgstr ""
+
+#: includes/class-settings-admin.php:216
+msgid "Number format"
+msgstr ""
+
+#: includes/class-settings-admin.php:217
+msgid "Link"
+msgstr ""
+
+#: includes/class-settings-admin.php:218
+msgid "Link type"
+msgstr ""
+
+#: includes/class-settings-admin.php:219
+msgid "Post URL"
+msgstr ""
+
+#: includes/class-settings-admin.php:220
+msgid "Custom URL"
+msgstr ""
+
+#: includes/class-settings-admin.php:221
+msgid "Open in new tab?"
+msgstr ""
+
+#: includes/class-settings-admin.php:222
+msgid "Prefix"
+msgstr ""
+
+#: includes/class-settings-admin.php:223
+msgid "Suffix"
+msgstr ""
+
+#: includes/class-settings-admin.php:224
+msgid "Hide item?"
+msgstr ""
+
+#: includes/class-settings-admin.php:225
+msgid "Padding"
+msgstr ""
+
+#: includes/class-settings-admin.php:226
+msgid "CSS class"
+msgstr ""
+
+#: includes/class-settings-admin.php:227
+msgid "Button border"
+msgstr ""
+
+#: includes/class-settings-admin.php:228
+msgid "Term URL"
+msgstr ""
+
+#: includes/class-settings-admin.php:229
+msgid "Fetch"
+msgstr ""
+
+#: includes/class-settings-admin.php:230
+msgid "All post types"
+msgstr ""
+
+#: includes/class-settings-admin.php:231
+msgid "and show"
+msgstr ""
+
+#: includes/class-settings-admin.php:232
+msgid "per page"
+msgstr ""
+
+#: includes/class-settings-admin.php:233
+msgid "Sort by"
+msgstr ""
+
+#: includes/class-settings-admin.php:234
+msgid "Posts"
+msgstr ""
+
+#: includes/class-settings-admin.php:235
+msgid "Post Title"
+msgstr ""
+
+#: includes/class-settings-admin.php:236
+msgid "Post Name"
+msgstr ""
+
+#: includes/class-settings-admin.php:237
+msgid "Post Type"
+msgstr ""
+
+#: includes/class-settings-admin.php:238
+msgid "Post Date"
+msgstr ""
+
+#: includes/class-settings-admin.php:239
+msgid "Post Modified"
+msgstr ""
+
+#: includes/class-settings-admin.php:240
+msgid "Menu Order"
+msgstr ""
+
+#: includes/class-settings-admin.php:241
+msgid "Custom Fields"
+msgstr ""
+
+#: includes/class-settings-admin.php:242
+msgid "Narrow results by"
+msgstr ""
+
+#: includes/class-settings-admin.php:243
+msgid "Hit Enter"
+msgstr ""
+
+#: includes/class-settings-admin.php:244
+msgid "Add sort"
+msgstr ""
+
+#: includes/class-settings-admin.php:245
+msgid "Add filter"
+msgstr ""
+
+#: includes/class-settings-admin.php:246
+msgid "Clear"
+msgstr ""
+
+#: includes/class-settings-admin.php:247
+msgid "Enter term slugs"
+msgstr ""
+
+#: includes/class-settings-admin.php:248
+msgid "Enter values"
+msgstr ""
+
+#: includes/class-settings-admin.php:249
+msgid "Layout"
+msgstr ""
+
+#: includes/class-settings-admin.php:251
+msgid "Style"
+msgstr ""
+
+#: includes/class-settings-admin.php:252
+msgid "Row"
+msgstr ""
+
+#: includes/class-settings-admin.php:253
+msgid "Column"
+msgstr ""
+
+#: includes/class-settings-admin.php:254
+msgid "Start typing"
+msgstr ""
+
+#: includes/class-settings-admin.php:255
+msgid "Label"
+msgstr ""
+
+#: includes/class-settings-admin.php:256
+msgid "Name"
+msgstr ""
+
+#: includes/class-settings-admin.php:257
+msgid "Facet type"
+msgstr ""
+
+#: includes/class-settings-admin.php:258
+msgid "Copy shortcode"
+msgstr ""
+
+#: includes/class-settings-admin.php:259
+msgid "Data source"
+msgstr ""
+
+#: includes/class-settings-admin.php:260
+msgid "Switch to advanced mode"
+msgstr ""
+
+#: includes/class-settings-admin.php:261
+msgid "Switch to visual mode"
+msgstr ""
+
+#: includes/class-settings-admin.php:262
+msgid "Display"
+msgstr ""
+
+#: includes/class-settings-admin.php:263
+msgid "Query"
+msgstr ""
+
+#: includes/class-settings-admin.php:264
+msgid "Help"
+msgstr ""
+
+#: includes/class-settings-admin.php:265
+msgid "Display Code"
+msgstr ""
+
+#: includes/class-settings-admin.php:266
+msgid "Query Arguments"
+msgstr ""
+
+#: includes/class-settings-admin.php:267
+msgid "Saving"
+msgstr ""
+
+#: includes/class-settings-admin.php:268
+msgid "Indexing"
+msgstr ""
+
+#: includes/class-settings-admin.php:269
+msgid "Indexing complete"
+msgstr ""
+
+#: includes/class-settings-admin.php:270
+msgid "Looking"
+msgstr ""
+
+#: includes/class-settings-admin.php:271
+msgid "Purging"
+msgstr ""
+
+#: includes/class-settings-admin.php:272
+msgid "Copied!"
+msgstr ""
+
+#: includes/class-settings-admin.php:273
+msgid "Press CTRL+C to copy"
+msgstr ""
+
+#: includes/class-settings-admin.php:274
+msgid "Activating"
+msgstr ""
+
+#: includes/class-settings-admin.php:275
+msgid "Re-index"
+msgstr ""
+
+#: includes/class-settings-admin.php:276
+msgid "Stop indexer"
+msgstr ""
+
+#: includes/class-settings-admin.php:277
+msgid "Loading"
+msgstr ""
+
+#: includes/class-settings-admin.php:278
+msgid "Importing"
+msgstr ""
+
+#: includes/class-settings-admin.php:279
+msgid "Convert to query args"
+msgstr ""
+
+#: includes/class-settings-admin.php:280
+msgid "Delete item?"
+msgstr ""
+
+#: includes/class-settings-admin.php:324
+msgid "full"
+msgstr ""
+
+#: templates/page-settings.php:49
+msgid "AI"
+msgstr ""
+
+#: templates/page-settings.php:51
+msgid "Support"
+msgstr ""

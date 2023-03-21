@@ -1,0 +1,75 @@
+DSI temps partagé est une société proposant des services de directeur informatique de transition, notamment pour la mise en place et la gestion des équipes, l'aide au choix dans les logiciels pour les fonctions informatiques, commerciales et marketing de l'entreprise (Plate-forme de développement informatique, CRM, Growth hacking, Marketing, Web)
+
+Rédige un menu de navigation pour un site web sur ces sujets au format YAML, avec un hero title, une tagline.
+
+---
+
+Hero Title: DSI Temps Partagé
+Tagline: Trouvez le talent pour vos projets informatiques
+
+Menu: 
+    - Home: /
+    - Notre offre: /offer
+    - Nous contacter: /contact
+    - Directeur informatique de transition: /transit
+    - Logiciels: /software
+      - Plate-forme de développement informatique: /dev-platform
+      - CRM: /crm
+      - Growth hacking: /growth-hacking
+      - Marketing: /marketing
+      - Web: /web
+    - Qui sommes-nous?: /about
+
+Rédige la page d'accueil de ce site avec un paragraphe pour chaque partie principale du menu.
+
+# Bienvenue chez DSI Temps Partagé !
+
+DSI Temps Partagé est une société offrant des services de directeur informatique de transition, des logiciels et des services de marketing pour aider votre entreprise à atteindre ses objectifs. Nous mettons à votre disposition un personnel compétent et qualifié pour vous accompagner dans la réalisation de vos projets.
+
+## Notre offre
+
+DSI Temps Partagé offre des services de directeur informatique de transition et de gestion des équipes. Nous pouvons vous aider à choisir les bons outils et logiciels pour vous assurer que vos fonctions informatiques, commerciales et marketing sont optimisées.
+
+## Logiciels
+
+Nous proposons des logiciels pour vous aider à atteindre vos objectifs commerciaux, marketing et informatiques. Nous offrons une plate-forme de développement informatique, un CRM, un growth hacking, des services de marketing et un développement Web.
+
+## Qui sommes-nous ?
+
+DSI Temps Partagé est une équipe de professionnels qualifiés et compétents qui vous accompagnent dans la mise en place et la gestion de vos projets informatiques. Nous sommes fiers de fournir des services de qualité à nos clients et de les aider à atteindre leurs objectifs. Pour en savoir plus, n'hésitez pas à nous contacter.
+
+Rédige la page Notre offre en insistant sur la compétences des personnes mises à leur disposition.
+
+# Notre offre
+
+DSI Temps Partagé propose des services de directeur informatique de transition et de gestion des équipes. Notre équipe de professionnels qualifiés et compétents vous accompagne pour vous assurer que vos fonctions informatiques, commerciales et marketing sont optimisées.
+
+Nous vous proposons des services personnalisés et adaptés à vos besoins et à votre budget. Nous nous engageons à vous offrir un personnel compétent et à l'écoute pour vous aider à atteindre vos objectifs de développement et de croissance.
+
+Nous sommes à l'écoute de vos besoins et prêts à vous aider à trouver le personnel adéquat pour votre projet. Notre équipe s'engage à vous offrir un service de qualité et des solutions innovantes pour vous aider à atteindre vos objectifs.
+
+N'hésitez pas à nous contacter pour en savoir plus sur nos services et sur la manière dont nous pouvons vous aider à réussir vos projets.
+
+Rédige la page Logiciels en insistant sur le growth hacking.
+
+# Logiciels
+
+DSI Temps Partagé propose des solutions logicielles pour vous aider à atteindre vos objectifs commerciaux, marketing et informatiques. Nous offrons une plate-forme de développement informatique, un CRM, un growth hacking, des services de marketing et un développement Web.
+
+Le growth hacking est un processus qui combine l'utilisation de la technologie et des données pour stimuler la croissance et le développement des entreprises. Nous mettons à votre disposition des professionnels qualifiés et compétents pour vous aider à mettre en place des stratégies de croissance efficaces. Nous pouvons vous aider à créer des campagnes marketing ciblées, à améliorer votre présence en ligne et à optimiser votre site Web.
+
+Nous sommes à l'écoute de vos besoins et prêts à vous aider à trouver le personnel adéquat pour votre projet. Notre équipe s'engage à vous offrir un service de qualité et des solutions innovantes pour vous aider à atteindre vos objectifs.
+
+N'hésitez pas à nous contacter pour en savoir plus sur nos services et sur la manière dont nous pouvons vous aider à réussir vos projets.
+
+Rédige la page Formations en insistant sur les logiciels proposés.
+
+# Formations
+
+DSI Temps Partagé propose des formations et des services dédiés à l'utilisation des logiciels pour aider votre entreprise à atteindre ses objectifs. Nous proposons des formations sur les plate-formes de développement informatique, le CRM, le growth hacking, le marketing et le développement Web.
+
+Nos formations sont conçues pour vous aider à acquérir les compétences et connaissances nécessaires pour utiliser les outils et logiciels dont vous avez besoin pour votre entreprise. Nous sommes à l'écoute de vos besoins et prêts à vous aider à trouver le personnel adéquat pour votre projet. Notre équipe s'engage à vous offrir un service de qualité et des solutions innovantes pour vous aider à atteindre vos objectifs.
+
+Nous proposons également des services d'accompagnement personnalisés et adaptés à votre budget. Nous vous accompagnons dans la mise en place et la gestion de vos projets informatiques.
+
+N'hésitez pas à nous contacter pour en savoir plus sur nos services et sur la manière dont nous pouvons vous aider à réussir vos projets.

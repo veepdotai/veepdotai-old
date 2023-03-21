@@ -1,0 +1,22 @@
+{
+    "name": "veepdotai/veepdotai",
+    "require": {
+        "orhanerday/open-ai": "^3.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "veepdotai\\veepdotai\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Jean-Christophe Kermagoret",
+            "email": "jc@kermagoret.net"
+        }
+    ],
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": false
+        }
+    }
+}
