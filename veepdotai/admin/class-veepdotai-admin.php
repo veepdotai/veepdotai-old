@@ -1,5 +1,4 @@
 <?php
-
 /**
  * The admin-specific functionality of the plugin.
  *
@@ -106,7 +105,6 @@ class Veepdotai_Admin {
 		 * between the defined hooks and the functions defined in this
 		 * class.
 		 */
-
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/veepdotai-admin.js', array( 'jquery' ), $this->version, false );
 	}
 
@@ -377,7 +375,7 @@ class Veepdotai_Admin {
                 update_option($this->plugin_name.'_ai_section1_article1', sanitize_text_field($post[$this->plugin_name.'-ai-section1-article1']));
                 update_option($this->plugin_name.'_ai_title_section2', sanitize_text_field($post[$this->plugin_name.'-ai-title-section1']));
                 update_option($this->plugin_name.'_ai_section2_article1', sanitize_text_field($post[$this->plugin_name.'-ai-section1-article1']));
-
+                include_once(plugin_dir_path(__FILE__) . 'partials/veepdotai-shortcode.php');
             }
 		} elseif (isset($post[$this->plugin_name.'-ai-generate-site'])) {
             if($this->security_check($post, $this->plugin_name.'-main_admin_site')) {
