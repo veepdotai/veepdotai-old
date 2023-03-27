@@ -110,35 +110,38 @@ class Veepdotai_Admin {
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/veepdotai-admin.js', array( 'jquery' ), $this->version, false );
 	}
 
-	    /**
+    /**
      * Add the main admin menu
      *
      * @since  1.0.0
      */
     public function main_admin_menu() {
-        add_menu_page( 'Veepdotai Admin Menu',
+        add_menu_page( 'Veepdotai Admin',
             'Veepdotai',
             'manage_options',
             $this->plugin_name,
             array($this, 'main_admin_menu_callback'),
             plugin_dir_url( __FILE__ ) .'assets/images/veepdotai-admin-icon.svg'
         );
-    }
-
-	
-	    /**
-     * Add the main admin site
-     *
-     * @since  1.0.0
-     */
-    public function main_admin_site() {
-        add_menu_page( 'Veepdotai Admin Site',
-            'Veepdotai',
+        add_submenu_page( $this->plugin_name,
+            'Veepdotai Menu',
+            'Veepdotai Menu',
             'manage_options',
-            $this->plugin_name,
-            array($this, 'main_admin_site_callback'),
+            'veepdotai-menu',
+            array($this, 'main_admin_submenu_menu_callback'),
             plugin_dir_url( __FILE__ ) .'assets/images/veepdotai-admin-icon.svg'
         );
+        add_submenu_page( $this->plugin_name,
+            'Veepdotai Menu',
+            'Veepdotai Site',
+            'manage_options',
+            'veepdotai-site',
+            array($this, 'main_admin_submenu_site_callback'),
+            plugin_dir_url( __FILE__ ) .'assets/images/veepdotai-admin-icon.svg'
+        );
+
+        remove_submenu_page($this->plugin_name, $this->plugin_name);
+
     }
 
     /**
@@ -150,12 +153,16 @@ class Veepdotai_Admin {
 		return true;
 	}
 
+    public function main_admin_menu_callback() {
+        include( 'partials/main-admin-home.php' );
+    }
+
 		/**
      * Render the main admin menu and save data to the db
      *
      * @since  1.0.0
      */
-    public function main_admin_menu_callback() {
+    public function main_admin_submenu_menu_callback() {
         global $wpdb;
 
 		$categories = get_categories();
@@ -345,7 +352,7 @@ class Veepdotai_Admin {
      *
      * @since  1.0.0
      */
-	public function main_admin_site_callback() {
+	public function main_admin_submenu_site_callback() {
         global $wpdb;
 
 		$categories = get_categories();
@@ -362,73 +369,15 @@ class Veepdotai_Admin {
                 update_option($this->plugin_name.'_ai_api_key', sanitize_text_field($post[$this->plugin_name.'-ai-api_key']));
                 echo '<script>window.location.replace("admin.php?page=veepdotai")</script>';
             }
-        } elseif (isset($post[$this->plugin_name.'-ai-generate-site'])) {
+        } elseif (isset($post[$this->plugin_name.'-ai-save'])) {
             if($this->security_check($post, $this->plugin_name.'-main_admin_site')) {
                 update_option($this->plugin_name.'_ai_hero_title', sanitize_text_field($post[$this->plugin_name.'-ai-hero_title']));
                 update_option($this->plugin_name.'_ai_tagline', sanitize_text_field($post[$this->plugin_name.'-ai-tagline']));
+                update_option($this->plugin_name.'_ai_title_section1', sanitize_text_field($post[$this->plugin_name.'-ai-title-section1']));
+                update_option($this->plugin_name.'_ai_section1_article1', sanitize_text_field($post[$this->plugin_name.'-ai-section1-article1']));
+                update_option($this->plugin_name.'_ai_title_section2', sanitize_text_field($post[$this->plugin_name.'-ai-title-section1']));
+                update_option($this->plugin_name.'_ai_section2_article1', sanitize_text_field($post[$this->plugin_name.'-ai-section1-article1']));
 
-				//$open_ai_key = getenv('OPENAI_API_KEY');
-				$open_ai_key = get_option($this->plugin_name.'_ai_api_key');
-				$open_ai = new OpenAi($open_ai_key);
-				
-				$prompt = get_option($this->plugin_name.'_ai_hero_title');
-				$prompt = get_option($this->plugin_name.'_ai_tagline');
-				$promptWithCommand = $prompt . " Rédige le contenu au format YAML pour un site web, sur le sujet du hero title et de la tagline, des principales sections à mettre sur la page d'accueil.";
-				//$prompt = $prompt . " Propose-moi un menu de navigation pour le site web des pompes funèbres duriez.";
-				//$prompt = $prompt . " Propose-moi un menu de navigation pour un site web en remplaçant les '\n' par '&#13;'.";
-
-				$raw = $open_ai->completion([
-					'model' => 'text-davinci-003',
-					'prompt' => $promptWithCommand,
-					'temperature' => 0.7,
-					'max_tokens' => 512,
-					'frequency_penalty' => 0,
-					'presence_penalty' => 0.6,
-				]);
-
-				$this->var_error_log( $raw );
-			
-/*				
-				$raw= <<<_EOF_
-				{"id":"cmpl-6gAFowcFdl66wjyIDh9CQ6btVAvXB","object":"text_completion","created":1675507212,"model":"text-davinci-003","choices":[{"text":"\n\n1. Accueil \n2. Notre Histoire \n3. Services Funéraires \n4. Réception des Défunts \n5. Cérémonies \n6. Salons Funéraires \n7. Démarches administratives \n8. Contact","index":0,"logprobs":null,"finish_reason":"stop"}],"usage":{"prompt_tokens":152,"completion_tokens":68,"total_tokens":220}}
-				_EOF_;
-
-				//$result = preg_replace('/\\n/', '\\\\\n', $raw);
-*/
-				$result = preg_replace('/\\\\n/', '##n', $raw);
-				/*
-					$this->var_error_log( $result );
-					var_dump($result);
-					echo $result . "\n";
-				*/
-				$infos = json_decode($result);
-				/*
-					$this->var_error_log( $infos );
-					var_dump($infos);
-					echo "Erreur? " . json_last_error() ."\n\n";
-				*/
-				$text = $infos->choices[0]->text;
-				$text = preg_replace('/^##n##n/', '', $text);
-				/*
-					echo "Text: " . $text . ".\n\n";
-					var_dump($text);
-					echo "OUTPUT ###";
-				*/
-				//$output = preg_replace('/\\\\n/', '&#13;', $text);
-				$output = preg_replace('/##n/', '&#13;', $text);
-				/*
-					echo "$output";
-				*/
-
-//				$result = $prompt . "\n\n"
-//							. "Raw:\n.\n" . $raw . "\n\n"
-//							. "Text:\n.\n" . $text . "\n\n"
-//							. "Output:\n.\n" . $output;
-
-				$result = $output;
-				update_option($this->plugin_name.'_ai_site', $result);
-
-                echo '<script>window.location.replace("admin.php?page=veepdotai")</script>';
             }
 		} elseif (isset($post[$this->plugin_name.'-ai-generate-site'])) {
             if($this->security_check($post, $this->plugin_name.'-main_admin_site')) {
@@ -441,7 +390,6 @@ class Veepdotai_Admin {
 					"Blog" => "Blog site"
 				];
 				$generator->generateSite($site);
-                echo '<script>window.location.replace("admin.php?page=veepdotai")</script>';
             }
 		}
 
@@ -451,6 +399,7 @@ class Veepdotai_Admin {
         $admin_site_html = ob_get_contents();
         ob_end_clean();
         echo $admin_site_html;
+
     }
 
 

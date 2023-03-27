@@ -17,7 +17,7 @@
             <p><?php _e( 'Open API Key. If you dont have one, <a href="https://platform.openai.com/account/api-keys" target="_blank">get an API Key</a>', $this->plugin_name ) ?></p>
             <input class="button-primary" type="submit" name="<?php echo $this->plugin_name ?>-ai-save-api-key" value="<?php _e( 'Save API key', $this->plugin_name ) ?>" /><br>
         </fieldset>
-
+        <hr>
         <fieldset>
             <fieldset>
                 <legend>Hero title</legend>
@@ -32,15 +32,38 @@
                 <label for="<?php echo $this->plugin_name ?>-ai-tagline"></label>
                 <textarea style="width: 90%" rows="5" type="text" name="<?php echo $this->plugin_name ?>-ai-tagline"><?php echo get_option($this->plugin_name.'_ai_tagline') ?></textarea>
             </fieldset>
-            
-            <input class="button-primary" type="submit" name="<?php echo $this->plugin_name ?>-ai-generate-site" value="<?php _e( 'Generate site', $this->plugin_name ) ?>" /><br>
-        </fieldset>
-        
-        <fieldset>
-            <legend>Site</legend>
+            <hr>
+            <fieldset>
+                <legend>Title section 1</legend>
 
-            <label for="<?php echo $this->plugin_name ?>-ai-site"></label>
-            <textarea id="context" style="width: 90%" rows="20" type="text" name="<?php echo $this->plugin_name ?>-ai-site"><?php echo get_option($this->plugin_name.'_ai_site') ?></textarea>
+                <label for="<?php echo $this->plugin_name ?>-ai-title-section1"></label>
+                <input type="text" name="<?php echo $this->plugin_name ?>-ai-title-section1" value="<?php echo get_option($this->plugin_name.'_ai_title_section1') ?>"/>
+            </fieldset>
+
+            <fieldset>
+                <legend>Article 1</legend>
+
+                <label for="<?php echo $this->plugin_name ?>-ai-section1-article1"></label>
+                <textarea style="width: 90%" rows="5" type="text" name="<?php echo $this->plugin_name ?>-ai-section1-article1"><?php echo get_option($this->plugin_name.'_ai_section1_article1') ?></textarea>
+            </fieldset>
+
+            <fieldset>
+                <legend>Title section 2</legend>
+
+                <label for="<?php echo $this->plugin_name ?>-ai-title-section2"></label>
+                <input type="text" name="<?php echo $this->plugin_name ?>-ai-title-section2" value="<?php echo get_option($this->plugin_name.'_ai_title_section2') ?>"/>
+            </fieldset>
+
+            <fieldset>
+                <legend>Article 1</legend>
+
+                <label for="<?php echo $this->plugin_name ?>-ai-section2-article1"></label>
+                <textarea style="width: 90%" rows="5" type="text" name="<?php echo $this->plugin_name ?>-ai-section2-article1"><?php echo get_option($this->plugin_name.'_ai_section2_article1') ?></textarea>
+            </fieldset>
+
+            <input class="button-primary" type="submit" name="<?php echo $this->plugin_name ?>-ai-save" value="<?php _e( 'Save', $this->plugin_name ) ?>" />
+
+            <input class="button-primary" type="submit" name="<?php echo $this->plugin_name ?>-ai-generate-site" value="<?php _e( 'Generate site', $this->plugin_name ) ?>" /><br>
         </fieldset>
 
 
