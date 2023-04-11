@@ -72,10 +72,11 @@
 
             <label for="<?php echo $this->plugin_name ?>-templates"></label>
             <select name="<?php echo $this->plugin_name ?>-templates">
-                <option value="<?php echo $this->plugin_name ?>-template1" <?php selected($selected_option, $this->plugin_name.'-template1') ?>>Template 1</option>
+                <option value="<?php echo $this->plugin_name ?>-templatelp" <?php selected($selected_option, $this->plugin_name.'-templatelp') ?>>Template de landing page</option>
                 <option value="<?php echo $this->plugin_name ?>-template2" <?php selected($selected_option, $this->plugin_name.'-template2') ?>>Template 2</option>
+                <option value="<?php echo $this->plugin_name ?>-template3" <?php selected($selected_option, $this->plugin_name.'-template3') ?>>Template 3</option>
             </select>
-        </fieldset>
+        </fieldset><br>
 
 
         <input class="button-primary" type="submit" name="<?php echo $this->plugin_name ?>-ai-save" value="<?php _e( 'Save', $this->plugin_name ) ?>" />

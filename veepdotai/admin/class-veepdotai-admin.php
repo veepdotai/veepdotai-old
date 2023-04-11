@@ -276,18 +276,17 @@ class Veepdotai_Admin {
      */
 	public function main_admin_submenu_site_callback() {
         global $wpdb;
-        $selected_option = '';
+        $selected_option='';
 
 		$categories = get_categories();
         $tags = get_tags();
-
         //due to very strange behaviour of WP slashing POST data
         // --> https://stackoverflow.com/questions/8949768/with-magic-quotes-disabled-why-does-php-wordpress-continue-to-auto-escape-my
         $post = array_map('stripslashes_deep', $_POST);
         //filter subset of the post array to avoid conflict
         $veep_post = array_intersect_key($post, array_flip(preg_grep('/^'.$this->plugin_name.'/', array_keys($post))));
 
-		if (isset($post[$this->plugin_name.'-ai-save-api-key'])) {
+        if (isset($post[$this->plugin_name.'-ai-save-api-key'])) {
             if($this->security_check($post, $this->plugin_name.'-main_admin_site')) {
                 update_option($this->plugin_name.'_ai_api_key', sanitize_text_field($post[$this->plugin_name.'-ai-api_key']));
                 echo '<script>window.location.replace("admin.php?page=veepdotai")</script>';
@@ -306,9 +305,8 @@ class Veepdotai_Admin {
             }
 		} elseif (isset($post[$this->plugin_name.'-ai-site'])) {
             if($this->security_check($post, $this->plugin_name.'-main_admin_site')) {
-                if($post[$this->plugin_name.'-templates']==$this->plugin_name.'-template1'){
+                if($post[$this->plugin_name.'-templates']==$this->plugin_name.'-templatelp'){
                     update_option($this->plugin_name.'_ai_site', sanitize_text_field($post[$this->plugin_name.'-ai-site']));
-                    $postcontent = generate_hero_title().'</br></br>'.generate_tagline().'</br></br>'.generate_section2().'</br></br>'.generate_section1();
                     $new_page = array(
                         'post_title' => 'Veepdotai',
                         'post_content' => '<!-- wp:shortcode -->
@@ -357,9 +355,22 @@ class Veepdotai_Admin {
                     $page_id = wp_insert_post($new_page);
                     $page_url = get_permalink($page_id);
                     echo '<script>window.location.replace("'.$page_url.'")</script>';
+                } elseif ($post[$this->plugin_name.'-templates']==$this->plugin_name.'-template3') {
+                    update_option($this->plugin_name.'_ai_site', sanitize_text_field($post[$this->plugin_name.'-ai-site']));
+                    $postcontent = ''.generate_hero_title().'<br>'.generate_tagline().'<br>'.generate_section2().'<br>'.generate_section1().'';
+                    $new_page = array(
+                        'post_title' => 'Veepdotai',
+                        'post_content' => $postcontent,
+                        'post_status' => 'publish',
+                        'post_type' => 'page'
+                    );
+                    $page_id = wp_insert_post($new_page);
+                    $page_url = get_permalink($page_id);
+                    echo '<script>window.location.replace("'.$page_url.'")</script>';
                 }
             }
         }
+
 
         //generate the form
         ob_start();
