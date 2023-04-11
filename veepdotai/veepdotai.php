@@ -30,6 +30,13 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
+define('VEEPDOTAI_LANG', 'fr_FR');
+
+add_action('plugins_loaded', 'veepdotai_load_textdomain');
+function veepdotai_load_textdomain() {
+    $plugin_dir = basename(dirname(__FILE__));
+    load_plugin_textdomain(VEEPDOTAI_LANG, false, $plugin_dir . '/languages');
+}
 /**
  * Currently plugin version.
  * Start at version 1.0.0 and use SemVer - https://semver.org

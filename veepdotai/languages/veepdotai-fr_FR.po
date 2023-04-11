@@ -1,0 +1,5 @@
+msgid "Welcome to my plugin"
+msgstr "Bienvenue dans mon plugin"
+
+msgid "Click here to learn more"
+msgstr "Cliquez ici pour en savoir plus"

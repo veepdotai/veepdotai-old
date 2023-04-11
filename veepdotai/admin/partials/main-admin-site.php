@@ -32,39 +32,56 @@
                 <label for="<?php echo $this->plugin_name ?>-ai-tagline"></label>
                 <textarea style="width: 90%" rows="5" type="text" name="<?php echo $this->plugin_name ?>-ai-tagline"><?php echo get_option($this->plugin_name.'_ai_tagline') ?></textarea>
             </fieldset>
-            <hr>
-            <fieldset>
-                <legend>Title section 1</legend>
+        </fieldset>
+        <hr>
+        <fieldset style="box-shadow: lightgrey -5px 5px 7px; padding: 10px; padding: 10px; margin: 15px 0px">
+            <label><b>Section 1 :</b></label>
+            <fieldset style="margin-left: 20px">
+                <legend>Title</legend>
 
                 <label for="<?php echo $this->plugin_name ?>-ai-title-section1"></label>
                 <input type="text" name="<?php echo $this->plugin_name ?>-ai-title-section1" value="<?php echo get_option($this->plugin_name.'_ai_title_section1') ?>"/>
             </fieldset>
 
-            <fieldset>
+            <fieldset style="margin-left: 20px">
                 <legend>Article 1</legend>
 
                 <label for="<?php echo $this->plugin_name ?>-ai-section1-article1"></label>
                 <textarea style="width: 90%" rows="5" type="text" name="<?php echo $this->plugin_name ?>-ai-section1-article1"><?php echo get_option($this->plugin_name.'_ai_section1_article1') ?></textarea>
             </fieldset>
 
-            <fieldset>
-                <legend>Title section 2</legend>
+        </fieldset>
+        <fieldset style="box-shadow: lightgrey -5px 5px 7px; padding: 10px; margin: 15px 0px">
+            <label><b>Section 2 :</b></label>
+            <fieldset style="margin-left: 20px">
+                <legend>Title </legend>
 
                 <label for="<?php echo $this->plugin_name ?>-ai-title-section2"></label>
                 <input type="text" name="<?php echo $this->plugin_name ?>-ai-title-section2" value="<?php echo get_option($this->plugin_name.'_ai_title_section2') ?>"/>
             </fieldset>
 
-            <fieldset>
+            <fieldset style="margin-left: 20px">
                 <legend>Article 1</legend>
 
                 <label for="<?php echo $this->plugin_name ?>-ai-section2-article1"></label>
                 <textarea style="width: 90%" rows="5" type="text" name="<?php echo $this->plugin_name ?>-ai-section2-article1"><?php echo get_option($this->plugin_name.'_ai_section2_article1') ?></textarea>
             </fieldset>
-
-            <input class="button-primary" type="submit" name="<?php echo $this->plugin_name ?>-ai-save" value="<?php _e( 'Save', $this->plugin_name ) ?>" />
-
-            <input class="button-primary" type="submit" name="<?php echo $this->plugin_name ?>-ai-generate-site" value="<?php _e( 'Generate site', $this->plugin_name ) ?>" /><br>
         </fieldset>
+        <fieldset>
+            <legend>Template</legend>
+
+            <label for="<?php echo $this->plugin_name ?>-templates"></label>
+            <select name="<?php echo $this->plugin_name ?>-templates">
+                <option value="<?php echo $this->plugin_name ?>-template1" <?php selected($selected_option, $this->plugin_name.'-template1') ?>>Template 1</option>
+                <option value="<?php echo $this->plugin_name ?>-template2" <?php selected($selected_option, $this->plugin_name.'-template2') ?>>Template 2</option>
+            </select>
+        </fieldset>
+
+
+        <input class="button-primary" type="submit" name="<?php echo $this->plugin_name ?>-ai-save" value="<?php _e( 'Save', $this->plugin_name ) ?>" />
+
+
+        <input class="button-primary" type="submit" name="<?php echo $this->plugin_name ?>-ai-site" value="<?php _e( 'Generate site', $this->plugin_name ) ?>" /><br>
 
 
     </form>

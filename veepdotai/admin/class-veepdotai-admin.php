@@ -162,8 +162,9 @@ class Veepdotai_Admin {
      */
     public function main_admin_submenu_menu_callback() {
         global $wpdb;
+        $templateSelect = '';
 
-		$categories = get_categories();
+        $categories = get_categories();
         $tags = get_tags();
 
         //due to very strange behaviour of WP slashing POST data
@@ -172,170 +173,93 @@ class Veepdotai_Admin {
         //filter subset of the post array to avoid conflict
         $veep_post = array_intersect_key($post, array_flip(preg_grep('/^'.$this->plugin_name.'/', array_keys($post))));
 
-		if (isset($post[$this->plugin_name.'-ai-save-api-key'])) {
+        if (isset($post[$this->plugin_name.'-ai-save-api-key'])) {
             if($this->security_check($post, $this->plugin_name.'-main_admin_menu')) {
                 update_option($this->plugin_name.'_ai_api_key', sanitize_text_field($post[$this->plugin_name.'-ai-api_key']));
-                echo '<script>window.location.replace("admin.php?page=veepdotai")</script>';
+                echo '<script>window.location.replace("admin.php?page=veepdotai-menu")</script>';
             }
         } elseif (isset($post[$this->plugin_name.'-ai-generate-menu'])) {
             if($this->security_check($post, $this->plugin_name.'-main_admin_menu')) {
                 update_option($this->plugin_name.'_ai_context', sanitize_text_field($post[$this->plugin_name.'-ai-context']));
 
-				//$open_ai_key = getenv('OPENAI_API_KEY');
-				$open_ai_key = get_option($this->plugin_name.'_ai_api_key');
-				$open_ai = new OpenAi($open_ai_key);
-				
-				$prompt = get_option($this->plugin_name.'_ai_context');
-				$promptWithCommand = $prompt . " Rédige un menu de navigation pour un site web sur ces sujets au format YAML, avec un hero title, une tagline et les principales sections à mettre sur la page d'accueil.";
-				//$prompt = $prompt . " Propose-moi un menu de navigation pour le site web des pompes funèbres duriez.";
-				//$prompt = $prompt . " Propose-moi un menu de navigation pour un site web en remplaçant les '\n' par '&#13;'.";
+                //$open_ai_key = getenv('OPENAI_API_KEY');
+                $open_ai_key = get_option($this->plugin_name.'_ai_api_key');
+                $open_ai = new OpenAi($open_ai_key);
 
-				$raw = $open_ai->completion([
-					'model' => 'text-davinci-003',
-					'prompt' => $promptWithCommand,
-					'temperature' => 0.7,
-					'max_tokens' => 512,
-					'frequency_penalty' => 0,
-					'presence_penalty' => 0.6,
-				]);
 
-				$this->var_error_log( $raw );
-			
-/*				
-				$raw= <<<_EOF_
-				{"id":"cmpl-6gAFowcFdl66wjyIDh9CQ6btVAvXB","object":"text_completion","created":1675507212,"model":"text-davinci-003","choices":[{"text":"\n\n1. Accueil \n2. Notre Histoire \n3. Services Funéraires \n4. Réception des Défunts \n5. Cérémonies \n6. Salons Funéraires \n7. Démarches administratives \n8. Contact","index":0,"logprobs":null,"finish_reason":"stop"}],"usage":{"prompt_tokens":152,"completion_tokens":68,"total_tokens":220}}
-				_EOF_;
+                $prompt = get_option($this->plugin_name.'_ai_context');
+                $promptWithCommand = $prompt . " Rédige un menu de navigation pour un site web sur ces sujets au format YAML, avec un hero title, une tagline et les principales sections à mettre sur la page d'accueil.";
+                //$prompt = $prompt . " Propose-moi un menu de navigation pour le site web des pompes funèbres duriez.";
+                //$prompt = $prompt . " Propose-moi un menu de navigation pour un site web en remplaçant les '\n' par '&#13;'.";
 
-				//$result = preg_replace('/\\n/', '\\\\\n', $raw);
-*/
-				$result = preg_replace('/\\\\n/', '##n', $raw);
-				/*
-					$this->var_error_log( $result );
-					var_dump($result);
-					echo $result . "\n";
-				*/
-				$infos = json_decode($result);
-				/*
-					$this->var_error_log( $infos );
-					var_dump($infos);
-					echo "Erreur? " . json_last_error() ."\n\n";
-				*/
-				$text = $infos->choices[0]->text;
-				$text = preg_replace('/^##n##n/', '', $text);
-				/*
-					echo "Text: " . $text . ".\n\n";
-					var_dump($text);
-					echo "OUTPUT ###";
-				*/
-				//$output = preg_replace('/\\\\n/', '&#13;', $text);
-				$output = preg_replace('/##n/', '&#13;', $text);
-				/*
-					echo "$output";
-				*/
+                $raw = $open_ai->completion([
+                    'model' => 'text-davinci-003',
+                    'prompt' => $promptWithCommand,
+                    'temperature' => 0.7,
+                    'max_tokens' => 512,
+                    'frequency_penalty' => 0,
+                    'presence_penalty' => 0.6,
+                ]);
+
+                var_dump($raw);
+
+                $this->var_error_log( $raw );
+
+                /*
+                                $raw= <<<_EOF_
+                                {"id":"cmpl-6gAFowcFdl66wjyIDh9CQ6btVAvXB","object":"text_completion","created":1675507212,"model":"text-davinci-003","choices":[{"text":"\n\n1. Accueil \n2. Notre Histoire \n3. Services Funéraires \n4. Réception des Défunts \n5. Cérémonies \n6. Salons Funéraires \n7. Démarches administratives \n8. Contact","index":0,"logprobs":null,"finish_reason":"stop"}],"usage":{"prompt_tokens":152,"completion_tokens":68,"total_tokens":220}}
+                                _EOF_;
+                                //$result = preg_replace('/\\n/', '\\\\\n', $raw);
+                */
+                $result = preg_replace('/\\\\n/', '##n', $raw);
+                /*
+                    $this->var_error_log( $result );
+                    var_dump($result);
+                    echo $result . "\n";
+                */
+                $infos = json_decode($result);
+                /*
+                    $this->var_error_log( $infos );
+                    var_dump($infos);
+                    echo "Erreur? " . json_last_error() ."\n\n";
+                */
+                $text = $infos->choices[0]->text;
+                $text = preg_replace('/^##n##n/', '', $text);
+                /*
+                    echo "Text: " . $text . ".\n\n";
+                    var_dump($text);
+                    echo "OUTPUT ###";
+                */
+                //$output = preg_replace('/\\\\n/', '&#13;', $text);
+                $output = preg_replace('/##n/', '&#13;', $text);
+                /*
+                    echo "$output";
+                */
 
 //				$result = $prompt . "\n\n"
 //							. "Raw:\n.\n" . $raw . "\n\n"
 //							. "Text:\n.\n" . $text . "\n\n"
 //							. "Output:\n.\n" . $output;
 
-				$result = $output;
-				update_option($this->plugin_name.'_ai_menu', $result);
+                $result = $output;
 
-                echo '<script>window.location.replace("admin.php?page=veepdotai")</script>';
+                update_option($this->plugin_name.'_ai_menu', $result);
+
             }
-		} elseif (isset($post[$this->plugin_name.'-ai-generate-menu'])) {
+        } elseif (isset($post[$this->plugin_name.'-ai-generate-site'])) {
             if($this->security_check($post, $this->plugin_name.'-main_admin_menu')) {
                 update_option($this->plugin_name.'_ai_menu', sanitize_text_field($post[$this->plugin_name.'-ai-menu']));
-				$generator = new Veepdotai_Menu_Generator();
-				$menu = [];
-				$menu["name"] = "Test menu";
-				$menu["items"] = [
-					"Accueil" => "Accueil menu",
-					"Blog" => "Blog menu"
-				];
-				$generator->generateMenu($menu);
-                echo '<script>window.location.replace("admin.php?page=veepdotai")</script>';
+                $generator = new Veepdotai_Menu_Generator();
+                $menu = [];
+                $menu["name"] = "Test menu";
+                $menu["items"] = [
+                    "Accueil" => "Accueil menu",
+                    "Blog" => "Blog menu"
+                ];
+                $generator->generateMenu($menu);
+                echo '<script>window.location.replace("admin.php?page=veepdotai-menu")</script>';
             }
-		}  elseif (isset($post[$this->plugin_name.'-ai-generate-site'])) {
-            if($this->security_check($post, $this->plugin_name.'-main_admin_site')) {
-                update_option($this->plugin_name.'_ai_context', sanitize_text_field($post[$this->plugin_name.'-ai-context']));
-
-				//$open_ai_key = getenv('OPENAI_API_KEY');
-				$open_ai_key = get_option($this->plugin_name.'_ai_api_key');
-				$open_ai = new OpenAi($open_ai_key);
-				
-				$prompt = get_option($this->plugin_name.'_ai_context');
-				$promptWithCommand = $prompt . "  Au format YAML, rédige le contenu des principales sections à mettre sur la page d'accueil pour un site web.";
-				//$prompt = $prompt . " Propose-moi un menu de navigation pour le site web des pompes funèbres duriez.";
-				//$prompt = $prompt . " Propose-moi un menu de navigation pour un site web en remplaçant les '\n' par '&#13;'.";
-
-				$raw = $open_ai->completion([
-					'model' => 'text-davinci-003',
-					'prompt' => $promptWithCommand,
-					'temperature' => 0.7,
-					'max_tokens' => 512,
-					'frequency_penalty' => 0,
-					'presence_penalty' => 0.6,
-				]);
-
-				$this->var_error_log( $raw );
-			
-/*				
-				$raw= <<<_EOF_
-				{"id":"cmpl-6gAFowcFdl66wjyIDh9CQ6btVAvXB","object":"text_completion","created":1675507212,"model":"text-davinci-003","choices":[{"text":"\n\n1. Accueil \n2. Notre Histoire \n3. Services Funéraires \n4. Réception des Défunts \n5. Cérémonies \n6. Salons Funéraires \n7. Démarches administratives \n8. Contact","index":0,"logprobs":null,"finish_reason":"stop"}],"usage":{"prompt_tokens":152,"completion_tokens":68,"total_tokens":220}}
-				_EOF_;
-
-				//$result = preg_replace('/\\n/', '\\\\\n', $raw);
-*/
-				$result = preg_replace('/\\\\n/', '##n', $raw);
-				/*
-					$this->var_error_log( $result );
-					var_dump($result);
-					echo $result . "\n";
-				*/
-				$infos = json_decode($result);
-				/*
-					$this->var_error_log( $infos );
-					var_dump($infos);
-					echo "Erreur? " . json_last_error() ."\n\n";
-				*/
-				$text = $infos->choices[0]->text;
-				$text = preg_replace('/^##n##n/', '', $text);
-				/*
-					echo "Text: " . $text . ".\n\n";
-					var_dump($text);
-					echo "OUTPUT ###";
-				*/
-				//$output = preg_replace('/\\\\n/', '&#13;', $text);
-				$output = preg_replace('/##n/', '&#13;', $text);
-				/*
-					echo "$output";
-				*/
-
-//				$result = $prompt . "\n\n"
-//							. "Raw:\n.\n" . $raw . "\n\n"
-//							. "Text:\n.\n" . $text . "\n\n"
-//							. "Output:\n.\n" . $output;
-
-				$result = $output;
-				update_option($this->plugin_name.'_ai_site', $result);
-
-                echo '<script>window.location.replace("admin.php?page=veepdotai")</script>';
-            } 
-		} elseif (isset($post[$this->plugin_name.'-ai-generate-site'])) {
-            if($this->security_check($post, $this->plugin_name.'-main_admin_site')) {
-                update_option($this->plugin_name.'_ai_site', sanitize_text_field($post[$this->plugin_name.'-ai-site']));
-				$generator = new Veepdotai_Site_Generator();
-				$site = [];
-				$site["name"] = "Test site";
-				$site["items"] = [
-					"Accueil" => "Accueil site",
-					"Blog" => "Blog site"
-				];
-				$generator->generateSite($site);
-                echo '<script>window.location.replace("admin.php?page=veepdotai")</script>';
-            }
-		}
+        }
 
         //generate the form
         ob_start();
@@ -352,6 +276,7 @@ class Veepdotai_Admin {
      */
 	public function main_admin_submenu_site_callback() {
         global $wpdb;
+        $selected_option = '';
 
 		$categories = get_categories();
         $tags = get_tags();
@@ -375,21 +300,66 @@ class Veepdotai_Admin {
                 update_option($this->plugin_name.'_ai_section1_article1', sanitize_text_field($post[$this->plugin_name.'-ai-section1-article1']));
                 update_option($this->plugin_name.'_ai_title_section2', sanitize_text_field($post[$this->plugin_name.'-ai-title-section1']));
                 update_option($this->plugin_name.'_ai_section2_article1', sanitize_text_field($post[$this->plugin_name.'-ai-section1-article1']));
+                update_option($this->plugin_name.'_ai_section2_article1', sanitize_text_field($post[$this->plugin_name.'-ai-section1-article1']));
+                $selected_option = isset($post[$this->plugin_name.'-templates']) ? $post[$this->plugin_name.'-templates'] : get_option($this->plugin_name.'-templates');
                 include_once(plugin_dir_path(__FILE__) . 'partials/veepdotai-shortcode.php');
             }
-		} elseif (isset($post[$this->plugin_name.'-ai-generate-site'])) {
+		} elseif (isset($post[$this->plugin_name.'-ai-site'])) {
             if($this->security_check($post, $this->plugin_name.'-main_admin_site')) {
-                update_option($this->plugin_name.'_ai_site', sanitize_text_field($post[$this->plugin_name.'-ai-site']));
-				$generator = new Veepdotai_Site_Generator();
-				$site = [];
-				$site["name"] = "Test site";
-				$site["sections"] = [
-					"Accueil" => "Accueil site",
-					"Blog" => "Blog site"
-				];
-				$generator->generateSite($site);
+                if($post[$this->plugin_name.'-templates']==$this->plugin_name.'-template1'){
+                    update_option($this->plugin_name.'_ai_site', sanitize_text_field($post[$this->plugin_name.'-ai-site']));
+                    $postcontent = generate_hero_title().'</br></br>'.generate_tagline().'</br></br>'.generate_section2().'</br></br>'.generate_section1();
+                    $new_page = array(
+                        'post_title' => 'Veepdotai',
+                        'post_content' => '<!-- wp:shortcode -->
+[veep_hero_title]
+<!-- /wp:shortcode -->
+
+<!-- wp:shortcode -->
+[veep_tagline]
+<!-- /wp:shortcode -->
+
+<!-- wp:shortcode -->
+[veep_section_1]
+<!-- /wp:shortcode -->
+
+<!-- wp:shortcode -->
+[veep_section_2]
+<!-- /wp:shortcode -->',
+                        'post_status' => 'publish',
+                        'post_type' => 'page'
+                    );
+                    $page_id = wp_insert_post($new_page);
+                    $page_url = get_permalink($page_id);
+                    echo '<script>window.location.replace("'.$page_url.'")</script>';
+                } elseif ($post[$this->plugin_name.'-templates']==$this->plugin_name.'-template2') {
+                    update_option($this->plugin_name.'_ai_site', sanitize_text_field($post[$this->plugin_name.'-ai-site']));
+                    $new_page = array(
+                        'post_title' => 'Veepdotai',
+                        'post_content' => '<!-- wp:shortcode -->
+[veep_hero_title]
+<!-- /wp:shortcode -->
+
+<!-- wp:shortcode -->
+[veep_section_1]
+<!-- /wp:shortcode -->
+
+<!-- wp:shortcode -->
+[veep_tagline]
+<!-- /wp:shortcode -->
+
+<!-- wp:shortcode -->
+[veep_section_2]
+<!-- /wp:shortcode -->',
+                        'post_status' => 'publish',
+                        'post_type' => 'page'
+                    );
+                    $page_id = wp_insert_post($new_page);
+                    $page_url = get_permalink($page_id);
+                    echo '<script>window.location.replace("'.$page_url.'")</script>';
+                }
             }
-		}
+        }
 
         //generate the form
         ob_start();

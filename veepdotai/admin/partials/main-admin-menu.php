@@ -31,16 +31,9 @@
 
             <label for="<?php echo $this->plugin_name ?>-ai-menu"></label>
             <textarea id="context" style="width: 90%" rows="20" type="text" name="<?php echo $this->plugin_name ?>-ai-menu"><?php echo get_option($this->plugin_name.'_ai_menu') ?></textarea>
-            <p><?php _e( 'Annotate the generated menu to exactly suit your needs and give orientations to the generator.', $this->plugin_name ) ?></p>
-            <input class="button-primary" type="submit" name="<?php echo $this->plugin_name ?>-ai-generate-site" value="<?php _e( 'Generate site', $this->plugin_name ) ?>" /><br>
         </fieldset>
 
 
-        <fieldset>
-            <legend>Site</legend>
-
-            <label for="<?php echo $this->plugin_name ?>-ai-site"></label>
-            <textarea id="context" style="width: 90%" rows="20" type="text" name="<?php echo $this->plugin_name ?>-ai-site"><?php echo get_option($this->plugin_name.'_ai_site') ?></textarea>
-        </fieldset>
+        <?php if (isset($post[$this->plugin_name.'-ai-generate-menu'])){print_r($menu_lines);} ?>
     </form>
 </div>
