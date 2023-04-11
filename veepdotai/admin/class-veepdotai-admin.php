@@ -122,21 +122,29 @@ class Veepdotai_Admin {
             plugin_dir_url( __FILE__ ) .'assets/images/veepdotai-admin-icon.svg'
         );
         add_submenu_page( $this->plugin_name,
-            'Veepdotai Menu',
-            'Veepdotai Menu',
+            'Menu',
+            'Menu',
             'manage_options',
             'veepdotai-menu',
             array($this, 'main_admin_submenu_menu_callback'),
             plugin_dir_url( __FILE__ ) .'assets/images/veepdotai-admin-icon.svg'
         );
         add_submenu_page( $this->plugin_name,
-            'Veepdotai Menu',
-            'Veepdotai Site',
+            'Menu',
+            'Site',
             'manage_options',
             'veepdotai-site',
             array($this, 'main_admin_submenu_site_callback'),
             plugin_dir_url( __FILE__ ) .'assets/images/veepdotai-admin-icon.svg'
         );
+//        add_submenu_page( $this->plugin_name,
+//            'Menu',
+//            'Page',
+//            'manage_options',
+//            'veepdotai-site',
+//            array($this, 'main_admin_submenu_page_callback'),
+//            plugin_dir_url( __FILE__ ) .'assets/images/veepdotai-admin-icon.svg'
+//        );
 
         remove_submenu_page($this->plugin_name, $this->plugin_name);
 
@@ -276,7 +284,8 @@ class Veepdotai_Admin {
      */
 	public function main_admin_submenu_site_callback() {
         global $wpdb;
-        $selected_option='';
+        $selected_template='';
+        $selected_generation='';
 
 		$categories = get_categories();
         $tags = get_tags();
@@ -300,67 +309,80 @@ class Veepdotai_Admin {
                 update_option($this->plugin_name.'_ai_title_section2', sanitize_text_field($post[$this->plugin_name.'-ai-title-section1']));
                 update_option($this->plugin_name.'_ai_section2_article1', sanitize_text_field($post[$this->plugin_name.'-ai-section1-article1']));
                 update_option($this->plugin_name.'_ai_section2_article1', sanitize_text_field($post[$this->plugin_name.'-ai-section1-article1']));
-                $selected_option = isset($post[$this->plugin_name.'-templates']) ? $post[$this->plugin_name.'-templates'] : get_option($this->plugin_name.'-templates');
+                $selected_template = isset($post[$this->plugin_name.'-templates']) ? $post[$this->plugin_name.'-templates'] : get_option($this->plugin_name.'-templates');
+                $selected_generation = isset($post[$this->plugin_name.'-generation']) ? $post[$this->plugin_name.'-generation'] : get_option($this->plugin_name.'-generation');
                 include_once(plugin_dir_path(__FILE__) . 'partials/veepdotai-shortcode.php');
             }
 		} elseif (isset($post[$this->plugin_name.'-ai-site'])) {
             if($this->security_check($post, $this->plugin_name.'-main_admin_site')) {
-                if($post[$this->plugin_name.'-templates']==$this->plugin_name.'-templatelp'){
+                if($post[$this->plugin_name.'-templates']==$this->plugin_name.'-template1' && $post[$this->plugin_name.'-generation']==$this->plugin_name.'-genshortcodes'){
                     update_option($this->plugin_name.'_ai_site', sanitize_text_field($post[$this->plugin_name.'-ai-site']));
                     $new_page = array(
                         'post_title' => 'Veepdotai',
                         'post_content' => '<!-- wp:shortcode -->
-[veep_hero_title]
-<!-- /wp:shortcode -->
-
-<!-- wp:shortcode -->
-[veep_tagline]
-<!-- /wp:shortcode -->
-
-<!-- wp:shortcode -->
-[veep_section_1]
-<!-- /wp:shortcode -->
-
-<!-- wp:shortcode -->
-[veep_section_2]
-<!-- /wp:shortcode -->',
+                                        [veep_hero_title]
+                                        <!-- /wp:shortcode -->
+                                        
+                                        <!-- wp:shortcode -->
+                                        [veep_tagline]
+                                        <!-- /wp:shortcode -->
+                                        
+                                        <!-- wp:shortcode -->
+                                        [veep_section_1]
+                                        <!-- /wp:shortcode -->
+                                        
+                                        <!-- wp:shortcode -->
+                                        [veep_section_2]
+                                        <!-- /wp:shortcode -->',
                         'post_status' => 'publish',
                         'post_type' => 'page'
                     );
                     $page_id = wp_insert_post($new_page);
                     $page_url = get_permalink($page_id);
                     echo '<script>window.location.replace("'.$page_url.'")</script>';
-                } elseif ($post[$this->plugin_name.'-templates']==$this->plugin_name.'-template2') {
+                } elseif($post[$this->plugin_name.'-templates']==$this->plugin_name.'-template1' && $post[$this->plugin_name.'-generation']==$this->plugin_name.'-gencontenu'){
                     update_option($this->plugin_name.'_ai_site', sanitize_text_field($post[$this->plugin_name.'-ai-site']));
+                    $postcontentTemplate1 = ''.generate_hero_title().'<br>'.generate_tagline().'<br>'.generate_section1().'<br>'.generate_section2().'';
                     $new_page = array(
                         'post_title' => 'Veepdotai',
-                        'post_content' => '<!-- wp:shortcode -->
-[veep_hero_title]
-<!-- /wp:shortcode -->
-
-<!-- wp:shortcode -->
-[veep_section_1]
-<!-- /wp:shortcode -->
-
-<!-- wp:shortcode -->
-[veep_tagline]
-<!-- /wp:shortcode -->
-
-<!-- wp:shortcode -->
-[veep_section_2]
-<!-- /wp:shortcode -->',
+                        'post_content' => $postcontentTemplate1,
                         'post_status' => 'publish',
                         'post_type' => 'page'
                     );
                     $page_id = wp_insert_post($new_page);
                     $page_url = get_permalink($page_id);
                     echo '<script>window.location.replace("'.$page_url.'")</script>';
-                } elseif ($post[$this->plugin_name.'-templates']==$this->plugin_name.'-template3') {
+                } elseif ($post[$this->plugin_name.'-templates']==$this->plugin_name.'-template2' && $post[$this->plugin_name.'-generation']==$this->plugin_name.'-genshortcodes') {
                     update_option($this->plugin_name.'_ai_site', sanitize_text_field($post[$this->plugin_name.'-ai-site']));
-                    $postcontent = ''.generate_hero_title().'<br>'.generate_tagline().'<br>'.generate_section2().'<br>'.generate_section1().'';
                     $new_page = array(
                         'post_title' => 'Veepdotai',
-                        'post_content' => $postcontent,
+                        'post_content' => '<!-- wp:shortcode -->
+                                        [veep_hero_title]
+                                        <!-- /wp:shortcode -->
+                                        
+                                        <!-- wp:shortcode -->
+                                        [veep_section_1]
+                                        <!-- /wp:shortcode -->
+                                        
+                                        <!-- wp:shortcode -->
+                                        [veep_tagline]
+                                        <!-- /wp:shortcode -->
+                                        
+                                        <!-- wp:shortcode -->
+                                        [veep_section_2]
+                                        <!-- /wp:shortcode -->',
+                        'post_status' => 'publish',
+                        'post_type' => 'page'
+                    );
+                    $page_id = wp_insert_post($new_page);
+                    $page_url = get_permalink($page_id);
+                    echo '<script>window.location.replace("'.$page_url.'")</script>';
+                } elseif ($post[$this->plugin_name.'-templates']==$this->plugin_name.'-template2' && $post[$this->plugin_name.'-generation']==$this->plugin_name.'-gencontenu') {
+                    update_option($this->plugin_name.'_ai_site', sanitize_text_field($post[$this->plugin_name.'-ai-site']));
+                    $postcontentTemplate2 = ''.generate_hero_title().'<br>'.generate_section2().'<br>'.generate_tagline().'<br>'.generate_section1().'';
+                    $new_page = array(
+                        'post_title' => 'Veepdotai',
+                        'post_content' => $postcontentTemplate2,
                         'post_status' => 'publish',
                         'post_type' => 'page'
                     );
@@ -380,6 +402,22 @@ class Veepdotai_Admin {
         echo $admin_site_html;
 
     }
+
+//    /**
+//     * Render the main admin site and save data to the db
+//     *
+//     * @since  1.0.0
+//     */
+//    public function main_admin_submenu_page_callback() {
+//
+//        //generate the form
+//        ob_start();
+//        include( 'partials/main-admin-page.php' );
+//        $admin_site_html = ob_get_contents();
+//        ob_end_clean();
+//        echo $admin_site_html;
+//
+//    }
 
 
 	public function var_error_log( $object=null ){
