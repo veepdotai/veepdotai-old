@@ -2,9 +2,9 @@
 
 function generate_hero_title(){
     $result="
-<div id='hero-title'>
+<!-- wp:heading -->
     <h1 style='text-align:center'>".get_option('veepdotai_ai_hero_title')."</h1>
-</div>
+<!-- /wp:heading -->
     ";
     return $result;
 }
@@ -13,7 +13,7 @@ add_shortcode('veep_hero_title', 'generate_hero_title');
 add_shortcode('veep_tagline', 'generate_tagline');
 function generate_tagline(){
     $result="
-<div id='tagline'>
+<div>
     <p style='text-align:center'><em>".get_option('veepdotai_ai_tagline')."</em></p>
 </div>
     ";
@@ -27,6 +27,7 @@ function generate_section1() {
         $img=get_option('veepdotai_ai_section1_img');
     }
     $result="
+
 <div style='margin-top: 100px'>
     <section style='display:flex; justify-content: space-around'>
         <article style='margin-right:50px'>

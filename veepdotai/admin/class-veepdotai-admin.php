@@ -380,7 +380,7 @@ class Veepdotai_Admin {
                     echo '<script>window.location.replace("'.$page_url.'")</script>';
                 } elseif ($post[$this->plugin_name.'-templates']==$this->plugin_name.'-template2' && $post[$this->plugin_name.'-generation']==$this->plugin_name.'-gencontenu') {
                     update_option($this->plugin_name.'_ai_site', sanitize_text_field($post[$this->plugin_name.'-ai-site']));
-                    $postcontentTemplate2 = ''.generate_hero_title().'<br>'.generate_section2().'<br>'.generate_tagline().'<br>'.generate_section1().'';
+                    $postcontentTemplate2 = ''.generate_hero_title().'<br><!-- wp:paragraph -->'.generate_section2().'<!-- /wp:paragraph --><br><!-- wp:paragraph -->'.generate_tagline().'<!-- /wp:paragraph --><br><!-- wp:paragraph -->'.generate_section1().'<!-- /wp:paragraph -->';
                     $new_page = array(
                         'post_title' => 'Veepdotai',
                         'post_content' => $postcontentTemplate2,
