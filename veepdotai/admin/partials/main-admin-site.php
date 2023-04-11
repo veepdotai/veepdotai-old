@@ -36,6 +36,12 @@
                 <textarea style="width: 90%" rows="5" type="text" name="<?php echo $this->plugin_name ?>-ai-section1-article1"><?php echo get_option($this->plugin_name.'_ai_section1_article1') ?></textarea>
             </fieldset>
 
+            <fieldset style="margin-left: 20px">
+                <legend>Image</legend>
+
+                <label for="<?php echo $this->plugin_name ?>-ai-section1-img"></label>
+                <input style="width: 50%" rows="5" type="url" name="<?php echo $this->plugin_name ?>-ai-section1-img" value="<?php echo get_option($this->plugin_name.'_ai_section1_img') ?>" />
+            </fieldset>
         </div>
         <div style="box-shadow: lightgrey -5px 5px 7px; padding: 10px; margin: 20px 0px">
             <label><b>Section 2 :</b></label>
@@ -51,6 +57,13 @@
 
                 <label for="<?php echo $this->plugin_name ?>-ai-section2-article1"></label>
                 <textarea style="width: 90%" rows="5" type="text" name="<?php echo $this->plugin_name ?>-ai-section2-article1"><?php echo get_option($this->plugin_name.'_ai_section2_article1') ?></textarea>
+            </fieldset>
+
+            <fieldset style="margin-left: 20px">
+                <legend>Image</legend>
+
+                <label for="<?php echo $this->plugin_name ?>-ai-section2-img"></label>
+                <input style="width: 50%" rows="5" type="url" name="<?php echo $this->plugin_name ?>-ai-section2-img" value="<?php echo get_option($this->plugin_name.'_ai_section2_img') ?>" />
             </fieldset>
         </div>
         <div style="margin:20px 0px">

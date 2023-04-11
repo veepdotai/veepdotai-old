@@ -306,9 +306,10 @@ class Veepdotai_Admin {
                 update_option($this->plugin_name.'_ai_tagline', sanitize_text_field($post[$this->plugin_name.'-ai-tagline']));
                 update_option($this->plugin_name.'_ai_title_section1', sanitize_text_field($post[$this->plugin_name.'-ai-title-section1']));
                 update_option($this->plugin_name.'_ai_section1_article1', sanitize_text_field($post[$this->plugin_name.'-ai-section1-article1']));
-                update_option($this->plugin_name.'_ai_title_section2', sanitize_text_field($post[$this->plugin_name.'-ai-title-section1']));
-                update_option($this->plugin_name.'_ai_section2_article1', sanitize_text_field($post[$this->plugin_name.'-ai-section1-article1']));
-                update_option($this->plugin_name.'_ai_section2_article1', sanitize_text_field($post[$this->plugin_name.'-ai-section1-article1']));
+                update_option($this->plugin_name.'_ai_section1_img', sanitize_text_field($post[$this->plugin_name.'-ai-section1-img']));
+                update_option($this->plugin_name.'_ai_title_section2', sanitize_text_field($post[$this->plugin_name.'-ai-title-section2']));
+                update_option($this->plugin_name.'_ai_section2_article1', sanitize_text_field($post[$this->plugin_name.'-ai-section2-article1']));
+                update_option($this->plugin_name.'_ai_section2_img', sanitize_text_field($post[$this->plugin_name.'-ai-section2-img']));
                 $selected_template = isset($post[$this->plugin_name.'-templates']) ? $post[$this->plugin_name.'-templates'] : get_option($this->plugin_name.'-templates');
                 $selected_generation = isset($post[$this->plugin_name.'-generation']) ? $post[$this->plugin_name.'-generation'] : get_option($this->plugin_name.'-generation');
                 include_once(plugin_dir_path(__FILE__) . 'partials/veepdotai-shortcode.php');
