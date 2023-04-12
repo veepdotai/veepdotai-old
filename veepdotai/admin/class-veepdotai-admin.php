@@ -125,7 +125,7 @@ class Veepdotai_Admin {
         add_submenu_page(
             $this->plugin_name,
             __( 'Veepdotai', $this->plugin_name  ),
-            __( 'Veepdotai menu', $this->plugin_name  ),
+            __( 'Menu', $this->plugin_name  ),
             'manage_options',
             $this->plugin_name.'-veepdotai-menu-logo', // 'veepdotai-menu', //plugin_dir_url( __FILE__ ) .'assets/images/veepdotai-admin-icon.svg'
             array($this, 'main_admin_submenu_menu_callback')
@@ -133,7 +133,7 @@ class Veepdotai_Admin {
         add_submenu_page(
             $this->plugin_name,
             __( 'Veepdotai', $this->plugin_name ),
-            __( 'Veepdotai site', $this->plugin_name ),
+            __( 'Site', $this->plugin_name ),
             'manage_options',
             $this->plugin_name.'-veepdotai-menu-site',
             array($this, 'main_admin_submenu_site_callback')
@@ -322,6 +322,7 @@ class Veepdotai_Admin {
             }
         } elseif (isset($post[$this->plugin_name.'-ai-save'])) {
             if($this->security_check($post, $this->plugin_name.'-main_admin_site')) {
+                update_option($this->plugin_name.'_ai_section1_img', sanitize_text_field($post[$this->plugin_name.'-ai-herotitle-img']));
                 update_option($this->plugin_name.'_ai_hero_title', sanitize_text_field($post[$this->plugin_name.'-ai-hero_title']));
                 update_option($this->plugin_name.'_ai_tagline', sanitize_text_field($post[$this->plugin_name.'-ai-tagline']));
                 update_option($this->plugin_name.'_ai_title_section1', sanitize_text_field($post[$this->plugin_name.'-ai-title-section1']));

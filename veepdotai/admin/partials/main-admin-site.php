@@ -6,6 +6,13 @@
 
         <div>
             <fieldset>
+                <legend>Bannière</legend>
+
+                <label for="<?php echo $this->plugin_name ?>-ai-herotitle-img"></label>
+                <input style="width: 50%" rows="5" type="url" name="<?php echo $this->plugin_name ?>-ai-herotitle-img" value="<?php echo get_option($this->plugin_name.'_ai_herotitle_img') ?>" />
+            </fieldset>
+
+            <fieldset>
                 <legend>Hero title</legend>
 
                 <label for="<?php echo $this->plugin_name ?>-ai-hero_title"></label>

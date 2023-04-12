@@ -1,8 +1,15 @@
 <?php
 
 function generate_hero_title(){
+    $img='https://media.istockphoto.com/id/1212064060/fr/photo/abs-hologram-data-flow-grid.jpg?s=612x612&w=0&k=20&c=8gcR3tSm1etZp0JL0aZAs5VwnGQrvgigVKq9tMdgjJI=';
+    if(get_option('veepdotai_ai_herotitle_img')!=null) {
+        $img=get_option('veepdotai_ai_herotitle_img');
+    }
     $result="
-<!-- wp:heading -->
+<!-- wp:image -->
+    <img src='$img'>
+<!-- /wp:image -->
+<!-- wp:heading {\"level\":1} -->
     <h1 style='text-align:center'>".get_option('veepdotai_ai_hero_title')."</h1>
 <!-- /wp:heading -->
     ";
@@ -13,9 +20,9 @@ add_shortcode('veep_hero_title', 'generate_hero_title');
 add_shortcode('veep_tagline', 'generate_tagline');
 function generate_tagline(){
     $result="
-<div>
+<!-- wp:paragraph -->
     <p style='text-align:center'><em>".get_option('veepdotai_ai_tagline')."</em></p>
-</div>
+<!-- /wp:paragraph -->
     ";
     return $result;
 }
@@ -27,18 +34,26 @@ function generate_section1() {
         $img=get_option('veepdotai_ai_section1_img');
     }
     $result="
-
+<!-- wp:group -->
 <div style='margin-top: 100px'>
     <section style='display:flex; justify-content: space-around'>
         <article style='margin-right:50px'>
-            <h2 style='text-align:center; font-size: 2.5rem'>".get_option('veepdotai_ai_title_section1')."</h2>
-            <p style='text-align: justify'>".get_option('veepdotai_ai_section1_article1')."</p>
+            <!-- wp:heading {\"level\":2} -->
+                <h2 style='text-align:center; font-size: 2.5rem'>".get_option('veepdotai_ai_title_section1')."</h2>
+            <!-- /wp:heading -->
+            <!-- wp:paragraph -->
+                <p style='text-align: justify'>".get_option('veepdotai_ai_section1_article1')."</p>
+            <!-- /wp:paragraph -->
+            <button href='#'>En savoir plus</button>
         </article>
         <aside style='max-width: 40%; margin:10px'>
+            <!-- wp:image -->
             <img src=$img style='height: 250px'>
+            <!-- /wp:image -->
         </aside>
     </section>
-</div>";
+</div>
+<!-- /wp:group -->";
     return $result;
 }
 
@@ -49,17 +64,26 @@ function generate_section2() {
         $img=get_option('veepdotai_ai_section2_img');
     }
     $result="
+<!-- wp:group -->
 <div style='margin-top: 100px'>
     <section style='display:flex; flex-direction: row-reverse; justify-content: space-around'>
         <article style='margin-left:50px'>
-            <h2 style='text-align:center; font-size: 2.5rem'>".get_option('veepdotai_ai_title_section2')."</h2>
-            <p style='text-align: justify'>".get_option('veepdotai_ai_section2_article1')."</p>
+            <!-- wp:heading {\"level\":2} -->
+                <h2 style='text-align:center; font-size: 2.5rem'>".get_option('veepdotai_ai_title_section2')."</h2>
+            <!-- /wp:heading -->
+            <!-- wp:paragraph -->
+                <p style='text-align: justify'>".get_option('veepdotai_ai_section2_article1')."</p>
+            <!-- /wp:paragraph -->
+            <button href='#'>En savoir plus</button>
         </article>
         <aside style='max-width: 40%; margin:10px'>
-            <img src=$img style='height: 250px'>
+            <!-- wp:image -->
+                <img src=$img style='height: 250px'>
+            <!-- /wp:image -->
         </aside>
     </section>
-</div>";
+</div>
+<!-- /wp:group -->";
     return $result;
 }
 
