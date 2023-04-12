@@ -114,13 +114,32 @@ class Veepdotai_Admin {
      * @since  1.0.0
      */
     public function main_admin_menu() {
-        add_menu_page( 'Veepdotai Admin',
+        add_menu_page(
+            'Veepdotai Admin',
             'Veepdotai',
             'manage_options',
             $this->plugin_name,
             array($this, 'main_admin_menu_callback'),
             plugin_dir_url( __FILE__ ) .'assets/images/veepdotai-admin-icon.svg'
         );
+        add_submenu_page(
+            $this->plugin_name,
+            __( 'Veepdotai', $this->plugin_name  ),
+            __( 'Veepdotai menu', $this->plugin_name  ),
+            'manage_options',
+            $this->plugin_name.'-veepdotai-menu-logo', // 'veepdotai-menu', //plugin_dir_url( __FILE__ ) .'assets/images/veepdotai-admin-icon.svg'
+            array($this, 'main_admin_submenu_menu_callback')
+        );
+        add_submenu_page(
+            $this->plugin_name,
+            __( 'Veepdotai', $this->plugin_name ),
+            __( 'Veepdotai site', $this->plugin_name ),
+            'manage_options',
+            $this->plugin_name.'-veepdotai-menu-site',
+            array($this, 'main_admin_submenu_site_callback')
+        );
+
+        /*
         add_submenu_page( $this->plugin_name,
             'Menu',
             'Menu',
@@ -137,6 +156,7 @@ class Veepdotai_Admin {
             array($this, 'main_admin_submenu_site_callback'),
             plugin_dir_url( __FILE__ ) .'assets/images/veepdotai-admin-icon.svg'
         );
+        */
 //        add_submenu_page( $this->plugin_name,
 //            'Menu',
 //            'Page',
