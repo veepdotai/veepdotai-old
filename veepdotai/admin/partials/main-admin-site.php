@@ -6,7 +6,7 @@
 
         <div>
             <fieldset>
-                <legend>Bannière</legend>
+                <legend>Image</legend>
 
                 <label for="<?php echo $this->plugin_name ?>-ai-herotitle-img"></label>
                 <input style="width: 50%" rows="5" type="url" name="<?php echo $this->plugin_name ?>-ai-herotitle-img" value="<?php echo get_option($this->plugin_name.'_ai_herotitle_img') ?>" />
@@ -16,7 +16,7 @@
                 <legend>Hero title</legend>
 
                 <label for="<?php echo $this->plugin_name ?>-ai-hero_title"></label>
-                <input type="text" name="<?php echo $this->plugin_name ?>-ai-hero_title" value="<?php echo get_option($this->plugin_name.'_ai_hero_title') ?>"/>
+                <input style="width: 90%" type="text" name="<?php echo $this->plugin_name ?>-ai-hero_title" value="<?php echo get_option($this->plugin_name.'_ai_hero_title') ?>"/>
             </fieldset>
 
             <fieldset>
@@ -33,7 +33,7 @@
                 <legend>Title</legend>
 
                 <label for="<?php echo $this->plugin_name ?>-ai-title-section1"></label>
-                <input type="text" name="<?php echo $this->plugin_name ?>-ai-title-section1" value="<?php echo get_option($this->plugin_name.'_ai_title_section1') ?>"/>
+                <input style="width: 90%" type="text" name="<?php echo $this->plugin_name ?>-ai-title-section1" value="<?php echo get_option($this->plugin_name.'_ai_title_section1') ?>"/>
             </fieldset>
 
             <fieldset style="margin-left: 20px">
@@ -56,7 +56,7 @@
                 <legend>Title </legend>
 
                 <label for="<?php echo $this->plugin_name ?>-ai-title-section2"></label>
-                <input type="text" name="<?php echo $this->plugin_name ?>-ai-title-section2" value="<?php echo get_option($this->plugin_name.'_ai_title_section2') ?>"/>
+                <input style="width: 90%" type="text" name="<?php echo $this->plugin_name ?>-ai-title-section2" value="<?php echo get_option($this->plugin_name.'_ai_title_section2') ?>"/>
             </fieldset>
 
             <fieldset style="margin-left: 20px">

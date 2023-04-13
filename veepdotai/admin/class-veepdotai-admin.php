@@ -124,6 +124,14 @@ class Veepdotai_Admin {
         );
         add_submenu_page(
             $this->plugin_name,
+            __( 'Veepdotai', $this->plugin_name ),
+            __( 'Configuration', $this->plugin_name ),
+            'manage_options',
+            $this->plugin_name.'-veepdotai-configuration-site',
+            array($this, 'main_admin_submenu_configuration_callback')
+        );
+        add_submenu_page(
+            $this->plugin_name,
             __( 'Veepdotai', $this->plugin_name  ),
             __( 'Menu', $this->plugin_name  ),
             'manage_options',
@@ -201,12 +209,7 @@ class Veepdotai_Admin {
         //filter subset of the post array to avoid conflict
         $veep_post = array_intersect_key($post, array_flip(preg_grep('/^'.$this->plugin_name.'/', array_keys($post))));
 
-        if (isset($post[$this->plugin_name.'-ai-save-api-key'])) {
-            if($this->security_check($post, $this->plugin_name.'-main_admin_menu')) {
-                update_option($this->plugin_name.'_ai_api_key', sanitize_text_field($post[$this->plugin_name.'-ai-api_key']));
-                echo '<script>window.location.replace("admin.php?page=veepdotai-menu")</script>';
-            }
-        } elseif (isset($post[$this->plugin_name.'-ai-generate-menu'])) {
+        if (isset($post[$this->plugin_name.'-ai-generate-menu'])) {
             if($this->security_check($post, $this->plugin_name.'-main_admin_menu')) {
                 update_option($this->plugin_name.'_ai_context', sanitize_text_field($post[$this->plugin_name.'-ai-context']));
 
@@ -274,19 +277,6 @@ class Veepdotai_Admin {
                 update_option($this->plugin_name.'_ai_menu', $result);
 
             }
-        } elseif (isset($post[$this->plugin_name.'-ai-generate-site'])) {
-            if($this->security_check($post, $this->plugin_name.'-main_admin_menu')) {
-                update_option($this->plugin_name.'_ai_menu', sanitize_text_field($post[$this->plugin_name.'-ai-menu']));
-                $generator = new Veepdotai_Menu_Generator();
-                $menu = [];
-                $menu["name"] = "Test menu";
-                $menu["items"] = [
-                    "Accueil" => "Accueil menu",
-                    "Blog" => "Blog menu"
-                ];
-                $generator->generateMenu($menu);
-                echo '<script>window.location.replace("admin.php?page=veepdotai-menu")</script>';
-            }
         }
 
         //generate the form
@@ -315,12 +305,7 @@ class Veepdotai_Admin {
         //filter subset of the post array to avoid conflict
         $veep_post = array_intersect_key($post, array_flip(preg_grep('/^'.$this->plugin_name.'/', array_keys($post))));
 
-        if (isset($post[$this->plugin_name.'-ai-save-api-key'])) {
-            if($this->security_check($post, $this->plugin_name.'-main_admin_site')) {
-                update_option($this->plugin_name.'_ai_api_key', sanitize_text_field($post[$this->plugin_name.'-ai-api_key']));
-                echo '<script>window.location.replace("admin.php?page=veepdotai")</script>';
-            }
-        } elseif (isset($post[$this->plugin_name.'-ai-save'])) {
+        if (isset($post[$this->plugin_name.'-ai-save'])) {
             if($this->security_check($post, $this->plugin_name.'-main_admin_site')) {
                 update_option($this->plugin_name.'_ai_section1_img', sanitize_text_field($post[$this->plugin_name.'-ai-herotitle-img']));
                 update_option($this->plugin_name.'_ai_hero_title', sanitize_text_field($post[$this->plugin_name.'-ai-hero_title']));
@@ -425,21 +410,36 @@ class Veepdotai_Admin {
 
     }
 
-//    /**
-//     * Render the main admin site and save data to the db
-//     *
-//     * @since  1.0.0
-//     */
-//    public function main_admin_submenu_page_callback() {
-//
-//        //generate the form
-//        ob_start();
-//        include( 'partials/main-admin-page.php' );
-//        $admin_site_html = ob_get_contents();
-//        ob_end_clean();
-//        echo $admin_site_html;
-//
-//    }
+    /**
+     * Render the main admin menu and save data to the db
+     *
+     * @since  1.0.0
+     */
+    public function main_admin_submenu_configuration_callback() {
+        global $wpdb;
+
+        $categories = get_categories();
+        $tags = get_tags();
+
+        //due to very strange behaviour of WP slashing POST data
+        // --> https://stackoverflow.com/questions/8949768/with-magic-quotes-disabled-why-does-php-wordpress-continue-to-auto-escape-my
+        $post = array_map('stripslashes_deep', $_POST);
+        //filter subset of the post array to avoid conflict
+        $veep_post = array_intersect_key($post, array_flip(preg_grep('/^'.$this->plugin_name.'/', array_keys($post))));
+
+        if (isset($post[$this->plugin_name.'-ai-save-api-key'])) {
+            if($this->security_check($post, $this->plugin_name.'-main_admin_menu')) {
+                update_option($this->plugin_name.'_ai_api_key', sanitize_text_field($post[$this->plugin_name.'-ai-api_key']));
+            }
+        }
+
+        //generate the form
+        ob_start();
+        include( 'partials/main-admin-configuration.php' );
+        $admin_menu_html = ob_get_contents();
+        ob_end_clean();
+        echo $admin_menu_html;
+    }
 
 
 	public function var_error_log( $object=null ){
