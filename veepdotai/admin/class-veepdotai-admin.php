@@ -332,7 +332,7 @@ class Veepdotai_Admin {
                 if($post[$this->plugin_name.'-templates']==$this->plugin_name.'-template1' && $post[$this->plugin_name.'-generation']==$this->plugin_name.'-genshortcodes'){
                     update_option($this->plugin_name.'_ai_site', sanitize_text_field($post[$this->plugin_name.'-ai-site']));
                     $new_page = array(
-                        'post_title' => 'Veepdotai',
+                        'post_title' => get_option($this->plugin_name.'-ai-hero-title'),
                         'post_content' => '<!-- wp:shortcode -->
                                         [veep_header_section]
                                         <!-- /wp:shortcode -->
@@ -351,7 +351,7 @@ class Veepdotai_Admin {
                     update_option($this->plugin_name.'_ai_site', sanitize_text_field($post[$this->plugin_name.'-ai-site']));
                     $postcontentTemplate1 = ''.generate_header_section().'<br>'.generate_section1().'<br>'.generate_section2().'';
                     $new_page = array(
-                        'post_title' => 'Veepdotai',
+                        'post_title' => get_option($this->plugin_name.'-ai-hero-title'),
                         'post_content' => $postcontentTemplate1,
                         'post_status' => 'publish',
                         'post_type' => 'page'
@@ -359,7 +359,7 @@ class Veepdotai_Admin {
                 } elseif ($post[$this->plugin_name.'-templates']==$this->plugin_name.'-template2' && $post[$this->plugin_name.'-generation']==$this->plugin_name.'-genshortcodes') {
                     update_option($this->plugin_name.'_ai_site', sanitize_text_field($post[$this->plugin_name.'-ai-site']));
                     $new_page = array(
-                        'post_title' => 'Veepdotai',
+                        'post_title' => get_option($this->plugin_name.'-ai-hero-title'),
                         'post_content' => '<!-- wp:shortcode -->
                                         [veep_header_section]
                                         <!-- /wp:shortcode -->
@@ -378,7 +378,7 @@ class Veepdotai_Admin {
                     update_option($this->plugin_name.'_ai_site', sanitize_text_field($post[$this->plugin_name.'-ai-site']));
                     $postcontentTemplate2 = ''.generate_header_section().'<br>'.generate_section2().'<br>'.generate_section1().'';
                     $new_page = array(
-                        'post_title' => 'Veepdotai',
+                        'post_title' => get_option($this->plugin_name.'-ai-hero-title'),
                         'post_content' => $postcontentTemplate2,
                         'post_status' => 'publish',
                         'post_type' => 'page'

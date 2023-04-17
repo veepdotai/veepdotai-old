@@ -3,11 +3,10 @@
     <hr>
     <form method="post" action="">
         <?php wp_nonce_field( $this->plugin_name.'-main_admin_site', $this->plugin_name.'-main_admin_site_nonce' ) ?>
-
         <div>
             <?php echo display("Image", $this->plugin_name."-ai-hero-img", "img")?>
 
-            <?php echo display("Hero Title", $this->plugin_name."-ai-hero-title", "text")?>
+            <?php echo display("Hero title", $this->plugin_name."-ai-hero-title", "text")?>
 
             <?php echo display("Tagline", $this->plugin_name."-ai-hero-tagline", "textarea")?>
         </div>
