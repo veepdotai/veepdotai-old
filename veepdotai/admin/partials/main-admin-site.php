@@ -5,74 +5,30 @@
         <?php wp_nonce_field( $this->plugin_name.'-main_admin_site', $this->plugin_name.'-main_admin_site_nonce' ) ?>
 
         <div>
-            <fieldset>
-                <legend>Image</legend>
+            <?php echo display("Image", $this->plugin_name."-ai-hero-img", "img")?>
 
-                <label for="<?php echo $this->plugin_name ?>-ai-herotitle-img"></label>
-                <input style="width: 50%" rows="5" type="url" name="<?php echo $this->plugin_name ?>-ai-herotitle-img" value="<?php echo get_option($this->plugin_name.'_ai_herotitle_img') ?>" />
-            </fieldset>
+            <?php echo display("Hero Title", $this->plugin_name."-ai-hero-title", "text")?>
 
-            <fieldset>
-                <legend>Hero title</legend>
-
-                <label for="<?php echo $this->plugin_name ?>-ai-hero_title"></label>
-                <input style="width: 90%" type="text" name="<?php echo $this->plugin_name ?>-ai-hero_title" value="<?php echo get_option($this->plugin_name.'_ai_hero_title') ?>"/>
-            </fieldset>
-
-            <fieldset>
-                <legend>Tagline</legend>
-
-                <label for="<?php echo $this->plugin_name ?>-ai-tagline"></label>
-                <textarea style="width: 90%" rows="5" type="text" name="<?php echo $this->plugin_name ?>-ai-tagline"><?php echo get_option($this->plugin_name.'_ai_tagline') ?></textarea>
-            </fieldset>
+            <?php echo display("Tagline", $this->plugin_name."-ai-hero-tagline", "textarea")?>
         </div>
         <hr>
-        <div style="box-shadow: lightgrey -5px 5px 7px; padding: 10px; padding: 10px; margin: 15px 0px">
+        <div style="box-shadow: lightgrey -5px 5px 7px; padding: 10px; margin: 15px 0px">
             <label><b>Section 1 :</b></label>
-            <fieldset style="margin-left: 20px">
-                <legend>Title</legend>
+            <?php echo display("Title", $this->plugin_name."-ai-section1-title", "text", true)?>
 
-                <label for="<?php echo $this->plugin_name ?>-ai-title-section1"></label>
-                <input style="width: 90%" type="text" name="<?php echo $this->plugin_name ?>-ai-title-section1" value="<?php echo get_option($this->plugin_name.'_ai_title_section1') ?>"/>
-            </fieldset>
+            <?php echo display("Article 1", $this->plugin_name."-ai-section1-text", "textarea", true)?>
 
-            <fieldset style="margin-left: 20px">
-                <legend>Article 1</legend>
-
-                <label for="<?php echo $this->plugin_name ?>-ai-section1-article1"></label>
-                <textarea style="width: 90%" rows="5" type="text" name="<?php echo $this->plugin_name ?>-ai-section1-article1"><?php echo get_option($this->plugin_name.'_ai_section1_article1') ?></textarea>
-            </fieldset>
-
-            <fieldset style="margin-left: 20px">
-                <legend>Image</legend>
-
-                <label for="<?php echo $this->plugin_name ?>-ai-section1-img"></label>
-                <input style="width: 50%" rows="5" type="url" name="<?php echo $this->plugin_name ?>-ai-section1-img" value="<?php echo get_option($this->plugin_name.'_ai_section1_img') ?>" />
-            </fieldset>
+            <?php echo display("Image", $this->plugin_name."-ai-section1-img", "img", true)?>
         </div>
-        <div style="box-shadow: lightgrey -5px 5px 7px; padding: 10px; margin: 20px 0px">
+        <div style="box-shadow: lightgrey -5px 5px 7px; padding: 10px; margin: 15px 0px">
             <label><b>Section 2 :</b></label>
-            <fieldset style="margin-left: 20px">
-                <legend>Title </legend>
+            <?php echo display("Title", $this->plugin_name."-ai-section2-title", "text", true)?>
 
-                <label for="<?php echo $this->plugin_name ?>-ai-title-section2"></label>
-                <input style="width: 90%" type="text" name="<?php echo $this->plugin_name ?>-ai-title-section2" value="<?php echo get_option($this->plugin_name.'_ai_title_section2') ?>"/>
-            </fieldset>
+            <?php echo display("Article 1", $this->plugin_name."-ai-section2-text", "textarea", true)?>
 
-            <fieldset style="margin-left: 20px">
-                <legend>Article 1</legend>
-
-                <label for="<?php echo $this->plugin_name ?>-ai-section2-article1"></label>
-                <textarea style="width: 90%" rows="5" type="text" name="<?php echo $this->plugin_name ?>-ai-section2-article1"><?php echo get_option($this->plugin_name.'_ai_section2_article1') ?></textarea>
-            </fieldset>
-
-            <fieldset style="margin-left: 20px">
-                <legend>Image</legend>
-
-                <label for="<?php echo $this->plugin_name ?>-ai-section2-img"></label>
-                <input style="width: 50%" rows="5" type="url" name="<?php echo $this->plugin_name ?>-ai-section2-img" value="<?php echo get_option($this->plugin_name.'_ai_section2_img') ?>" />
-            </fieldset>
+            <?php echo display("Image", $this->plugin_name."-ai-section2-img", "img", true)?>
         </div>
+
         <div style="margin:20px 0px">
             <fieldset style="margin-bottom: 15px">
                 <legend>Template de landing page</legend>

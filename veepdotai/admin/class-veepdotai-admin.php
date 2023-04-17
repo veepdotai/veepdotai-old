@@ -294,6 +294,7 @@ class Veepdotai_Admin {
      */
 	public function main_admin_submenu_site_callback() {
         global $wpdb;
+        include('partials/veepdotai-form-functions.php');
         $selected_template='';
         $selected_generation='';
 
@@ -307,15 +308,15 @@ class Veepdotai_Admin {
 
         if (isset($post[$this->plugin_name.'-ai-save'])) {
             if($this->security_check($post, $this->plugin_name.'-main_admin_site')) {
-                update_option($this->plugin_name.'_ai_section1_img', sanitize_text_field($post[$this->plugin_name.'-ai-herotitle-img']));
-                update_option($this->plugin_name.'_ai_hero_title', sanitize_text_field($post[$this->plugin_name.'-ai-hero_title']));
-                update_option($this->plugin_name.'_ai_tagline', sanitize_text_field($post[$this->plugin_name.'-ai-tagline']));
-                update_option($this->plugin_name.'_ai_title_section1', sanitize_text_field($post[$this->plugin_name.'-ai-title-section1']));
-                update_option($this->plugin_name.'_ai_section1_article1', sanitize_text_field($post[$this->plugin_name.'-ai-section1-article1']));
-                update_option($this->plugin_name.'_ai_section1_img', sanitize_text_field($post[$this->plugin_name.'-ai-section1-img']));
-                update_option($this->plugin_name.'_ai_title_section2', sanitize_text_field($post[$this->plugin_name.'-ai-title-section2']));
-                update_option($this->plugin_name.'_ai_section2_article1', sanitize_text_field($post[$this->plugin_name.'-ai-section2-article1']));
-                update_option($this->plugin_name.'_ai_section2_img', sanitize_text_field($post[$this->plugin_name.'-ai-section2-img']));
+                update_option($this->plugin_name.'-ai-hero-img', sanitize_text_field($post[$this->plugin_name.'-ai-hero-img']));
+                update_option($this->plugin_name.'-ai-hero-title', sanitize_text_field($post[$this->plugin_name.'-ai-hero-title']));
+                update_option($this->plugin_name.'-ai-hero-tagline', sanitize_text_field($post[$this->plugin_name.'-ai-hero-tagline']));
+                update_option($this->plugin_name.'-ai-section1-title', sanitize_text_field($post[$this->plugin_name.'-ai-section1-title']));
+                update_option($this->plugin_name.'-ai-section1-text', sanitize_text_field($post[$this->plugin_name.'-ai-section1-text']));
+                update_option($this->plugin_name.'-ai-section1-img', sanitize_text_field($post[$this->plugin_name.'-ai-section1-img']));
+                update_option($this->plugin_name.'-ai-section2-title', sanitize_text_field($post[$this->plugin_name.'-ai-section2-title']));
+                update_option($this->plugin_name.'-ai-section2-text', sanitize_text_field($post[$this->plugin_name.'-ai-section2-text']));
+                update_option($this->plugin_name.'-ai-section2-img', sanitize_text_field($post[$this->plugin_name.'-ai-section2-img']));
                 $selected_template = isset($post[$this->plugin_name.'-templates']) ? $post[$this->plugin_name.'-templates'] : get_option($this->plugin_name.'-templates');
                 $selected_generation = isset($post[$this->plugin_name.'-generation']) ? $post[$this->plugin_name.'-generation'] : get_option($this->plugin_name.'-generation');
                 include_once(plugin_dir_path(__FILE__) . 'partials/veepdotai-shortcode.php');
@@ -327,11 +328,7 @@ class Veepdotai_Admin {
                     $new_page = array(
                         'post_title' => 'Veepdotai',
                         'post_content' => '<!-- wp:shortcode -->
-                                        [veep_hero_title]
-                                        <!-- /wp:shortcode -->
-                                        
-                                        <!-- wp:shortcode -->
-                                        [veep_tagline]
+                                        [veep_header_section]
                                         <!-- /wp:shortcode -->
                                         
                                         <!-- wp:shortcode -->
@@ -344,35 +341,25 @@ class Veepdotai_Admin {
                         'post_status' => 'publish',
                         'post_type' => 'page'
                     );
-                    $page_id = wp_insert_post($new_page);
-                    $page_url = get_permalink($page_id);
-                    echo '<script>window.location.replace("'.$page_url.'")</script>';
                 } elseif($post[$this->plugin_name.'-templates']==$this->plugin_name.'-template1' && $post[$this->plugin_name.'-generation']==$this->plugin_name.'-gencontenu'){
                     update_option($this->plugin_name.'_ai_site', sanitize_text_field($post[$this->plugin_name.'-ai-site']));
-                    $postcontentTemplate1 = ''.generate_hero_title().'<br>'.generate_tagline().'<br>'.generate_section1().'<br>'.generate_section2().'';
+                    $postcontentTemplate1 = ''.generate_header_section().'<br>'.generate_section1().'<br>'.generate_section2().'';
                     $new_page = array(
                         'post_title' => 'Veepdotai',
                         'post_content' => $postcontentTemplate1,
                         'post_status' => 'publish',
                         'post_type' => 'page'
                     );
-                    $page_id = wp_insert_post($new_page);
-                    $page_url = get_permalink($page_id);
-                    echo '<script>window.location.replace("'.$page_url.'")</script>';
                 } elseif ($post[$this->plugin_name.'-templates']==$this->plugin_name.'-template2' && $post[$this->plugin_name.'-generation']==$this->plugin_name.'-genshortcodes') {
                     update_option($this->plugin_name.'_ai_site', sanitize_text_field($post[$this->plugin_name.'-ai-site']));
                     $new_page = array(
                         'post_title' => 'Veepdotai',
                         'post_content' => '<!-- wp:shortcode -->
-                                        [veep_hero_title]
+                                        [veep_header_section]
                                         <!-- /wp:shortcode -->
                                         
                                         <!-- wp:shortcode -->
                                         [veep_section_1]
-                                        <!-- /wp:shortcode -->
-                                        
-                                        <!-- wp:shortcode -->
-                                        [veep_tagline]
                                         <!-- /wp:shortcode -->
                                         
                                         <!-- wp:shortcode -->
@@ -381,22 +368,19 @@ class Veepdotai_Admin {
                         'post_status' => 'publish',
                         'post_type' => 'page'
                     );
-                    $page_id = wp_insert_post($new_page);
-                    $page_url = get_permalink($page_id);
-                    echo '<script>window.location.replace("'.$page_url.'")</script>';
                 } elseif ($post[$this->plugin_name.'-templates']==$this->plugin_name.'-template2' && $post[$this->plugin_name.'-generation']==$this->plugin_name.'-gencontenu') {
                     update_option($this->plugin_name.'_ai_site', sanitize_text_field($post[$this->plugin_name.'-ai-site']));
-                    $postcontentTemplate2 = ''.generate_hero_title().'<br><!-- wp:paragraph -->'.generate_section2().'<!-- /wp:paragraph --><br><!-- wp:paragraph -->'.generate_tagline().'<!-- /wp:paragraph --><br><!-- wp:paragraph -->'.generate_section1().'<!-- /wp:paragraph -->';
+                    $postcontentTemplate2 = ''.generate_header_section().'<br>'.generate_section2().'<br>'.generate_section1().'';
                     $new_page = array(
                         'post_title' => 'Veepdotai',
                         'post_content' => $postcontentTemplate2,
                         'post_status' => 'publish',
                         'post_type' => 'page'
                     );
-                    $page_id = wp_insert_post($new_page);
-                    $page_url = get_permalink($page_id);
-                    echo '<script>window.location.replace("'.$page_url.'")</script>';
                 }
+                $page_id = wp_insert_post($new_page);
+                $page_url = get_permalink($page_id);
+                echo '<script>window.location.replace("'.$page_url.'")</script>';
             }
         }
 
