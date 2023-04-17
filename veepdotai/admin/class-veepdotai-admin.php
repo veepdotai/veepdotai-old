@@ -308,15 +308,21 @@ class Veepdotai_Admin {
 
         if (isset($post[$this->plugin_name.'-ai-save'])) {
             if($this->security_check($post, $this->plugin_name.'-main_admin_site')) {
-                update_option($this->plugin_name.'-ai-hero-img', sanitize_text_field($post[$this->plugin_name.'-ai-hero-img']));
-                update_option($this->plugin_name.'-ai-hero-title', sanitize_text_field($post[$this->plugin_name.'-ai-hero-title']));
-                update_option($this->plugin_name.'-ai-hero-tagline', sanitize_text_field($post[$this->plugin_name.'-ai-hero-tagline']));
-                update_option($this->plugin_name.'-ai-section1-title', sanitize_text_field($post[$this->plugin_name.'-ai-section1-title']));
-                update_option($this->plugin_name.'-ai-section1-text', sanitize_text_field($post[$this->plugin_name.'-ai-section1-text']));
-                update_option($this->plugin_name.'-ai-section1-img', sanitize_text_field($post[$this->plugin_name.'-ai-section1-img']));
-                update_option($this->plugin_name.'-ai-section2-title', sanitize_text_field($post[$this->plugin_name.'-ai-section2-title']));
-                update_option($this->plugin_name.'-ai-section2-text', sanitize_text_field($post[$this->plugin_name.'-ai-section2-text']));
-                update_option($this->plugin_name.'-ai-section2-img', sanitize_text_field($post[$this->plugin_name.'-ai-section2-img']));
+                $fields = array(
+                    'ai-hero-img',
+                    'ai-hero-title',
+                    'ai-hero-tagline',
+                    'ai-section1-title',
+                    'ai-section1-text',
+                    'ai-section1-img',
+                    'ai-section2-title',
+                    'ai-section2-text',
+                    'ai-section2-img');
+                foreach ($fields as $field){
+                    if (isset($post[$this->plugin_name.'-'.$field])){
+                        update_option($this->plugin_name.'-'.$field, sanitize_text_field($post[$this->plugin_name.'-'.$field]));
+                    }
+                }
                 $selected_template = isset($post[$this->plugin_name.'-templates']) ? $post[$this->plugin_name.'-templates'] : get_option($this->plugin_name.'-templates');
                 $selected_generation = isset($post[$this->plugin_name.'-generation']) ? $post[$this->plugin_name.'-generation'] : get_option($this->plugin_name.'-generation');
                 include_once(plugin_dir_path(__FILE__) . 'partials/veepdotai-shortcode.php');
