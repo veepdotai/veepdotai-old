@@ -10,7 +10,7 @@
         <?php wp_nonce_field( $this->plugin_name.'-main_admin_configuration', $this->plugin_name.'-main_admin_configuration_nonce' ) ?>
 
         <fieldset>
-            <legend>Clé de licence</legend>
+            <legend><?php _e('License key', $this->plugin_name)?></legend>
 
             <label for="<?php echo $this->plugin_name ?>-ai-api_key"></label>
             <input type="text" name="<?php echo $this->plugin_name ?>-ai-api_key" value="<?php echo get_option($this->plugin_name.'_ai_api_key') ?>" required/>

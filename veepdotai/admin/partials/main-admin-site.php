@@ -12,7 +12,7 @@
         </div>
         <hr>
         <div style="box-shadow: lightgrey -5px 5px 7px; padding: 10px; margin: 15px 0px">
-            <label><b>Section 1 :</b></label>
+            <label><b><?php _e('Section', $this->plugin_name) ?> 1 :</b></label>
             <?php echo display("Title", $this->plugin_name."-ai-section1-title", "text", true)?>
 
             <?php echo display("Article 1", $this->plugin_name."-ai-section1-text", "textarea", true)?>
@@ -20,7 +20,7 @@
             <?php echo display("Image", $this->plugin_name."-ai-section1-img", "img", true)?>
         </div>
         <div style="box-shadow: lightgrey -5px 5px 7px; padding: 10px; margin: 15px 0px">
-            <label><b>Section 2 :</b></label>
+            <label><b><?php _e('Section', $this->plugin_name) ?> 2 :</b></label>
             <?php echo display("Title", $this->plugin_name."-ai-section2-title", "text", true)?>
 
             <?php echo display("Article 1", $this->plugin_name."-ai-section2-text", "textarea", true)?>
@@ -30,21 +30,21 @@
 
         <div style="margin:20px 0px">
             <fieldset style="margin-bottom: 15px">
-                <legend>Template de landing page</legend>
+                <legend><?php _e('Landing page template', $this->plugin_name) ?> :</legend>
 
                 <label for="<?php echo $this->plugin_name ?>-templates"></label>
                 <select name="<?php echo $this->plugin_name ?>-templates">
-                    <option value="<?php echo $this->plugin_name ?>-template1" <?php selected($selected_template, $this->plugin_name.'-template1') ?>>Template 1</option>
-                    <option value="<?php echo $this->plugin_name ?>-template2" <?php selected($selected_template, $this->plugin_name.'-template2') ?>>Template 2</option>
+                    <option value="<?php echo $this->plugin_name ?>-template1" <?php selected($selected_template, $this->plugin_name.'-template1') ?>><?php _e('First template', $this->plugin_name) ?> :</option>
+                    <option value="<?php echo $this->plugin_name ?>-template2" <?php selected($selected_template, $this->plugin_name.'-template2') ?>><?php _e('Second template', $this->plugin_name) ?> :</option>
                 </select>
             </fieldset>
             <fieldset>
-                <legend>Génération de contenu</legend>
+                <legend><?php _e('Content generation', $this->plugin_name) ?> :</legend>
 
                 <label for="<?php echo $this->plugin_name ?>-generation"></label>
                 <select name="<?php echo $this->plugin_name ?>-generation">
-                    <option value="<?php echo $this->plugin_name ?>-genshortcodes" <?php selected($selected_generation, $this->plugin_name.'-genshortcodes') ?>>Shortcodes</option>
-                    <option value="<?php echo $this->plugin_name ?>-gencontenu" <?php selected($selected_generation, $this->plugin_name.'-gencontenu') ?>>Contenu HTML</option>
+                    <option value="<?php echo $this->plugin_name ?>-genshortcodes" <?php selected($selected_generation, $this->plugin_name.'-genshortcodes') ?>><?php _e('Shortcodes', $this->plugin_name) ?></option>
+                    <option value="<?php echo $this->plugin_name ?>-gencontenu" <?php selected($selected_generation, $this->plugin_name.'-gencontenu') ?>><?php _e('HTML content', $this->plugin_name) ?></option>
                 </select>
             </fieldset>
         </div>

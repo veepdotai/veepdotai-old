@@ -4,7 +4,7 @@
         <?php wp_nonce_field( $this->plugin_name.'-main_admin_menu', $this->plugin_name.'-main_admin_menu_nonce' ) ?>
 
         <fieldset>
-            <legend>Contexte</legend>
+            <legend><?php _e('Context', $this->plugin_name) ?></legend>
             <label for="<?php echo $this->plugin_name ?>-ai-context"></label>
             <textarea style="width: 90%" rows="5" type="text" name="<?php echo $this->plugin_name ?>-ai-context"><?php echo get_option($this->plugin_name.'_ai_context') ?></textarea>
             <p><?php _e( 'Context to make the generation more interesting.', $this->plugin_name ) ?></p>
@@ -12,7 +12,7 @@
         </fieldset>
 
         <fieldset>
-            <legend>Menu</legend>
+            <legend><?php _e('Menu', $this->plugin_name) ?></legend>
 
             <label for="<?php echo $this->plugin_name ?>-ai-menu"></label>
             <textarea id="context" style="width: 90%" rows="20" type="text" name="<?php echo $this->plugin_name ?>-ai-menu"><?php echo get_option($this->plugin_name.'_ai_menu') ?></textarea>

@@ -32,3 +32,67 @@ msgstr ""
 #. Name of the plugin
 msgid "Veepdotai"
 msgstr ""
+
+#Menu de WordPress
+msgid "Configuration"
+msgstr ""
+
+msgid "Menu"
+msgstr ""
+
+msgid "Site"
+msgstr ""
+
+#main-admin-configuration.php
+msgid "If you enjoy the plugin, we would really appreciate if you could drop us a review or support us with a donation"
+msgstr ""
+
+msgid "If you find a bug or have any suggestion, create a new topic in the plugin support"
+msgstr ""
+
+msgid "If you need detailed information about the plugin, have a look at the user guide"
+msgstr ""
+
+msgid "License key"
+msgstr ""
+
+msgid "Open API Key. If you dont have one, get an API Key"
+msgstr ""
+
+#main-admin-menu.php
+msgid "Context"
+msgstr ""
+
+msgid "Context to make the generation more interesting."
+msgstr ""
+
+msgid "Generate menu"
+msgstr ""
+
+#main-admin-site.php
+msgid "Section"
+msgstr ""
+
+msgid "Landing page template"
+msgstr ""
+
+msgid "Content generation"
+msgstr ""
+
+msgid "First template"
+msgstr ""
+
+msgid "Second template"
+msgstr ""
+
+msgid "Shortcodes"
+msgstr ""
+
+msgid "HTML content"
+msgstr ""
+
+msgid "Save"
+msgstr ""
+
+msgid "Generate site"
+msgstr ""
