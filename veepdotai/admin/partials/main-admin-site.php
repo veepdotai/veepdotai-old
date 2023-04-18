@@ -34,8 +34,8 @@
 
                 <label for="<?php echo $this->plugin_name ?>-templates"></label>
                 <select name="<?php echo $this->plugin_name ?>-templates">
-                    <option value="<?php echo $this->plugin_name ?>-template1" <?php selected($selected_template, $this->plugin_name.'-template1') ?>><?php _e('First template', $this->plugin_name) ?> :</option>
-                    <option value="<?php echo $this->plugin_name ?>-template2" <?php selected($selected_template, $this->plugin_name.'-template2') ?>><?php _e('Second template', $this->plugin_name) ?> :</option>
+                    <option value="<?php echo $this->plugin_name ?>-template1" <?php selected($selected_template, $this->plugin_name.'-template1') ?>><?php _e('First template', $this->plugin_name) ?></option>
+                    <option value="<?php echo $this->plugin_name ?>-template2" <?php selected($selected_template, $this->plugin_name.'-template2') ?>><?php _e('Second template', $this->plugin_name) ?></option>
                 </select>
             </fieldset>
             <fieldset>

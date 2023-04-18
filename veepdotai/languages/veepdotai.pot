@@ -44,19 +44,22 @@ msgid "Site"
 msgstr ""
 
 #main-admin-configuration.php
-msgid "If you enjoy the plugin, we would really appreciate if you could drop us a review or support us with a donation"
+msgid "If you enjoy the plugin, we would really appreciate if you could <a href=\"https://wordpress.org/support/plugin/veep/reviews/\" target=\"_blank\">drop us a review</a> or support us with <a href=\"https://www.paypal.me/veep\" target=\"_blank\">a donation</a>"
 msgstr ""
 
-msgid "If you find a bug or have any suggestion, create a new topic in the plugin support"
+msgid "If you find a bug or have any suggestion, create a <a href=\"https://wordpress.org/support/plugin/veep\" target=\"_blank\">new topic in the plugin support</a>"
 msgstr ""
 
-msgid "If you need detailed information about the plugin, have a look at the user guide"
+msgid "If you need detailed information about the plugin, have a look at <a href=\"https://www.veep.ai/veep-user-guide/\" target=\"_blank\">the user guide</a>"
 msgstr ""
 
 msgid "License key"
 msgstr ""
 
-msgid "Open API Key. If you dont have one, get an API Key"
+msgid "Open API Key. If you dont have one, <a href=\"https://platform.openai.com/account/api-\" target=\"_blank\">get an API Key</a>"
+msgstr ""
+
+msgid "Save API key"
 msgstr ""
 
 #main-admin-menu.php
