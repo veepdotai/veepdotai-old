@@ -7,18 +7,18 @@ function generate_header_section(){
     }
     $result="
 <!-- wp:group -->
-<div style='margin-top: 100px'>
+<div>
     <section style='display:flex; flex-direction: row-reverse; justify-content: space-around'>
-        <article style='text-align: center; margin-left:50px'>
+        <article style='width:50%; text-align: center; padding:30px; display:flex; flex-direction: column; align-items: center'>
             <!-- wp:heading {\"level\":1} -->
-                <h1 style='text-align:center'>".get_option('veepdotai-ai-hero-title')."</h1>
+                <h1>".get_option('veepdotai-ai-hero-title')."</h1>
             <!-- /wp:heading -->
             <!-- wp:paragraph -->
-                <p style='text-align:center'><em>".get_option('veepdotai-ai-hero-tagline')."</em></p>
+                <p><em>".get_option('veepdotai-ai-hero-tagline')."</em></p>
             <!-- /wp:paragraph -->
-            <button href='#' style='width: auto'>En savoir plus</button>
+            <button href='#'>En savoir plus</button>
         </article>
-        <aside style='max-width: 40%; margin:10px'>
+        <aside style='width: 40%; display: flex; justify-content: center; align-items: center'>
             <!-- wp:image -->
             <img src=$img style='height: 250px'>
             <!-- /wp:image -->
@@ -40,7 +40,7 @@ function generate_section1() {
 <!-- wp:group -->
 <div style='margin-top: 100px'>
     <section style='display:flex; justify-content: space-around'>
-        <article style='margin-right:50px'>
+        <article style='width:50%; padding:30px'>
             <!-- wp:heading {\"level\":2} -->
                 <h2 style='text-align:center; font-size: 2.5rem'>".get_option('veepdotai-ai-section1-title')."</h2>
             <!-- /wp:heading -->
@@ -49,7 +49,7 @@ function generate_section1() {
             <!-- /wp:paragraph -->
             <button href='#'>En savoir plus</button>
         </article>
-        <aside style='max-width: 40%; margin:10px'>
+        <aside style='width: 40%; display: flex; justify-content: center; align-items: center'>
             <!-- wp:image -->
             <img src=$img style='height: 250px'>
             <!-- /wp:image -->
@@ -70,7 +70,7 @@ function generate_section2() {
 <!-- wp:group -->
 <div style='margin-top: 100px'>
     <section style='display:flex; flex-direction: row-reverse; justify-content: space-around'>
-        <article style='margin-left:50px'>
+        <article style='width:50%; padding:30px'>
             <!-- wp:heading {\"level\":2} -->
                 <h2 style='text-align:center; font-size: 2.5rem'>".get_option('veepdotai-ai-section2-title')."</h2>
             <!-- /wp:heading -->
@@ -79,7 +79,7 @@ function generate_section2() {
             <!-- /wp:paragraph -->
             <button href='#'>En savoir plus</button>
         </article>
-        <aside style='max-width: 40%; margin:10px'>
+        <aside style='width: 40%; display: flex; justify-content: center; align-items: center'>
             <!-- wp:image -->
                 <img src=$img style='height: 250px'>
             <!-- /wp:image -->

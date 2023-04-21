@@ -295,8 +295,11 @@ class Veepdotai_Admin {
 	public function main_admin_submenu_site_callback() {
         global $wpdb;
         include('partials/veepdotai-form-functions.php');
-        $selected_template='';
+        $selected_lp_template='';
         $selected_generation='';
+        $selected_wp_template='';
+
+        $page_templates = get_page_templates();
 
 		$categories = get_categories();
         $tags = get_tags();
@@ -323,13 +326,14 @@ class Veepdotai_Admin {
                         update_option($this->plugin_name.'-'.$field, sanitize_text_field($post[$this->plugin_name.'-'.$field]));
                     }
                 }
-                $selected_template = isset($post[$this->plugin_name.'-templates']) ? $post[$this->plugin_name.'-templates'] : get_option($this->plugin_name.'-templates');
+                $selected_lp_template = isset($post[$this->plugin_name.'-lp-templates']) ? $post[$this->plugin_name.'-lp-templates'] : get_option($this->plugin_name.'-lp-templates');
                 $selected_generation = isset($post[$this->plugin_name.'-generation']) ? $post[$this->plugin_name.'-generation'] : get_option($this->plugin_name.'-generation');
+                $selected_wp_template = isset($post[$this->plugin_name.'-wp-templates']) ? $post[$this->plugin_name.'-wp-templates'] : get_option($this->plugin_name.'-wp-templates');
                 include_once(plugin_dir_path(__FILE__) . 'partials/veepdotai-shortcode.php');
             }
 		} elseif (isset($post[$this->plugin_name.'-ai-site'])) {
             if($this->security_check($post, $this->plugin_name.'-main_admin_site')) {
-                if($post[$this->plugin_name.'-templates']==$this->plugin_name.'-template1' && $post[$this->plugin_name.'-generation']==$this->plugin_name.'-genshortcodes'){
+                if($post[$this->plugin_name.'-lp-templates']==$this->plugin_name.'-lp-template1' && $post[$this->plugin_name.'-generation']==$this->plugin_name.'-genshortcodes'){
                     update_option($this->plugin_name.'_ai_site', sanitize_text_field($post[$this->plugin_name.'-ai-site']));
                     $new_page = array(
                         'post_title' => get_option($this->plugin_name.'-ai-hero-title'),
@@ -345,18 +349,21 @@ class Veepdotai_Admin {
                                         [veep_section_2]
                                         <!-- /wp:shortcode -->',
                         'post_status' => 'publish',
-                        'post_type' => 'page'
+                        'post_type' => 'page',
+                        'page_template' => $post[$this->plugin_name.'-wp-templates']
                     );
-                } elseif($post[$this->plugin_name.'-templates']==$this->plugin_name.'-template1' && $post[$this->plugin_name.'-generation']==$this->plugin_name.'-gencontenu'){
+                } elseif($post[$this->plugin_name.'-lp-templates']==$this->plugin_name.'-lp-template1' && $post[$this->plugin_name.'-generation']==$this->plugin_name.'-gencontenu'){
                     update_option($this->plugin_name.'_ai_site', sanitize_text_field($post[$this->plugin_name.'-ai-site']));
                     $postcontentTemplate1 = ''.generate_header_section().'<br>'.generate_section1().'<br>'.generate_section2().'';
                     $new_page = array(
                         'post_title' => get_option($this->plugin_name.'-ai-hero-title'),
                         'post_content' => $postcontentTemplate1,
                         'post_status' => 'publish',
-                        'post_type' => 'page'
+                        'post_type' => 'page',
+                        'post_name' => '',
+                        'page_template' => $post[$this->plugin_name.'-wp-templates']
                     );
-                } elseif ($post[$this->plugin_name.'-templates']==$this->plugin_name.'-template2' && $post[$this->plugin_name.'-generation']==$this->plugin_name.'-genshortcodes') {
+                } elseif ($post[$this->plugin_name.'-lp-templates']==$this->plugin_name.'-lp-template2' && $post[$this->plugin_name.'-generation']==$this->plugin_name.'-genshortcodes') {
                     update_option($this->plugin_name.'_ai_site', sanitize_text_field($post[$this->plugin_name.'-ai-site']));
                     $new_page = array(
                         'post_title' => get_option($this->plugin_name.'-ai-hero-title'),
@@ -372,16 +379,18 @@ class Veepdotai_Admin {
                                         [veep_section_2]
                                         <!-- /wp:shortcode -->',
                         'post_status' => 'publish',
-                        'post_type' => 'page'
+                        'post_type' => 'page',
+                        'page_template' => $post[$this->plugin_name.'-wp-templates']
                     );
-                } elseif ($post[$this->plugin_name.'-templates']==$this->plugin_name.'-template2' && $post[$this->plugin_name.'-generation']==$this->plugin_name.'-gencontenu') {
+                } elseif ($post[$this->plugin_name.'-lp-templates']==$this->plugin_name.'-lp-template2' && $post[$this->plugin_name.'-generation']==$this->plugin_name.'-gencontenu') {
                     update_option($this->plugin_name.'_ai_site', sanitize_text_field($post[$this->plugin_name.'-ai-site']));
                     $postcontentTemplate2 = ''.generate_header_section().'<br>'.generate_section2().'<br>'.generate_section1().'';
                     $new_page = array(
                         'post_title' => get_option($this->plugin_name.'-ai-hero-title'),
                         'post_content' => $postcontentTemplate2,
                         'post_status' => 'publish',
-                        'post_type' => 'page'
+                        'post_type' => 'page',
+                        'page_template' => $post[$this->plugin_name.'-wp-templates']
                     );
                 }
                 $page_id = wp_insert_post($new_page);

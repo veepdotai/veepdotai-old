@@ -25,3 +25,12 @@ function display(string $legend, string $class_name, string $type, bool $in_sect
     return $section;
 }
 
+function generate_formsection(string $class_name, int $num_section){
+    $section = '<div style="box-shadow: lightgrey -5px 5px 7px; padding: 10px; margin: 15px 0px">
+            <label><b>Section '.$num_section.' :</b></label>'.
+        display("Title", $class_name."-ai-section".$num_section."-title", "text", true).''.
+        display("Article 1", $class_name."-ai-section".$num_section."-text", "textarea", true).''.
+        display("Image", $class_name."-ai-section".$num_section."-img", "img", true).
+        '</div>';
+    return $section;
+}
