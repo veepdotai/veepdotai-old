@@ -4,16 +4,15 @@
     <form method="post" action="">
         <?php wp_nonce_field( $this->plugin_name.'-main_admin_site', $this->plugin_name.'-main_admin_site_nonce' ) ?>
         <div>
-            <?php echo display("Image", $this->plugin_name."-ai-hero-img", "img")?>
-
-            <?php echo display("Hero title", $this->plugin_name."-ai-hero-title", "text")?>
-
-            <?php echo display("Tagline", $this->plugin_name."-ai-hero-tagline", "textarea")?>
+            <?php
+                echo display("Image", $this->plugin_name."-ai-hero-img", "img");
+                echo display("Hero title", $this->plugin_name."-ai-hero-title", "text");
+                echo display("Tagline", $this->plugin_name."-ai-hero-tagline", "textarea");
+            ?>
         </div>
         <hr>
 
         <?php echo generate_formsection($this->plugin_name, 1)?>
-
         <?php echo generate_formsection($this->plugin_name, 2)?>
 
         <div style="margin:20px 0px">
@@ -50,15 +49,9 @@
                     echo 'Aucun modèle de page disponible.';
                 }?>
             </fieldset>
-
-
         </div>
 
         <input class="button-primary" type="submit" name="<?php echo $this->plugin_name ?>-ai-save" value="<?php _e( 'Save', $this->plugin_name ) ?>" />
-
-
         <input class="button-primary" type="submit" name="<?php echo $this->plugin_name ?>-ai-site" value="<?php _e( 'Generate site', $this->plugin_name ) ?>" /><br>
-
-
     </form>
 </div>
