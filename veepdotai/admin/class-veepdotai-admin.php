@@ -19,7 +19,12 @@
  * @subpackage Veepdotai/admin
  * @author     Jean-Christophe Kermagoret <jc@kermagoret.net>
  */
-use Orhanerday\OpenAi\OpenAi;
+//require "vendor/autoload.php";
+use PHPHtmlParser\Dom;
+use PHPHtmlParser\Options;
+
+
+ use Orhanerday\OpenAi\OpenAi;
 
 class Veepdotai_Admin {
 
@@ -191,7 +196,7 @@ class Veepdotai_Admin {
         include( 'partials/main-admin-home.php' );
     }
 
-		/**
+	/**
      * Render the main admin menu and save data to the db
      *
      * @since  1.0.0
@@ -207,7 +212,7 @@ class Veepdotai_Admin {
         // --> https://stackoverflow.com/questions/8949768/with-magic-quotes-disabled-why-does-php-wordpress-continue-to-auto-escape-my
         $post = array_map('stripslashes_deep', $_POST);
         //filter subset of the post array to avoid conflict
-        $veep_post = array_intersect_key($post, array_flip(preg_grep('/^'.$this->plugin_name.'/', array_keys($post))));
+        $veep_post = array_intersect_key($post, array_flip(preg_grep('/^'. $pn .'/', array_keys($post))));
 
         if (isset($post[$this->plugin_name.'-ai-generate-menu'])) {
             if($this->security_check($post, $this->plugin_name.'-main_admin_menu')) {
@@ -287,118 +292,154 @@ class Veepdotai_Admin {
         echo $admin_menu_html;
     }
 
-		/**
+	public function update_option_if_set($post, $pn, $field) {
+        $r = null;
+        if (isset($post[$pn .'-' .$field])){
+            $field_name = $pn .'-' . $field;
+            $field_value = sanitize_text_field($post[$field_name]);
+            error_log('field_name : ' . $field_name . ' = ' . $field_value);
+            $r = update_option($field_name, $field_value);
+        }
+        return $r;
+    }
+
+	/**
      * Render the main admin site and save data to the db
      *
      * @since  1.0.0
      */
 	public function main_admin_submenu_site_callback() {
         global $wpdb;
+        $pn = $this->plugin_name;
+
         include('partials/veepdotai-form-functions.php');
         $selected_lp_template='';
         $selected_generation='';
         $selected_wp_template='';
 
         $page_templates = get_page_templates();
-
 		$categories = get_categories();
         $tags = get_tags();
+
         //due to very strange behaviour of WP slashing POST data
         // --> https://stackoverflow.com/questions/8949768/with-magic-quotes-disabled-why-does-php-wordpress-continue-to-auto-escape-my
         $post = array_map('stripslashes_deep', $_POST);
         //filter subset of the post array to avoid conflict
-        $veep_post = array_intersect_key($post, array_flip(preg_grep('/^'.$this->plugin_name.'/', array_keys($post))));
+        $veep_post = array_intersect_key($post, array_flip(preg_grep('/^' . $pn .'/', array_keys($post))));
 
-        if (isset($post[$this->plugin_name.'-ai-save'])) {
-            if($this->security_check($post, $this->plugin_name.'-main_admin_site')) {
-                $fields = array(
-                    'ai-hero-img',
-                    'ai-hero-title',
-                    'ai-hero-tagline',
-                    'ai-section1-title',
-                    'ai-section1-text',
-                    'ai-section1-img',
-                    'ai-section2-title',
-                    'ai-section2-text',
-                    'ai-section2-img');
-                foreach ($fields as $field){
-                    if (isset($post[$this->plugin_name.'-'.$field])){
-                        update_option($this->plugin_name.'-'.$field, sanitize_text_field($post[$this->plugin_name.'-'.$field]));
-                    }
+        if (isset($post[$pn .'-ai-save'])) {
+            if($this->security_check($post, $pn .'-main_admin_site')) {
+                for ($i = 0; $i < 6; $i++) {
+                    $this->update_option_if_set($post, $pn, 'ai-section' . $i . '-img');
+                    $this->update_option_if_set($post, $pn, 'ai-section' . $i . '-title');
+                    $this->update_option_if_set($post, $pn, 'ai-section' . $i . '-text');
+                    $this->update_option_if_set($post, $pn, 'ai-section' . $i . '-cta-text');
+                    $this->update_option_if_set($post, $pn, 'ai-section' . $i . '-cta-href');
                 }
-                $selected_lp_template = isset($post[$this->plugin_name.'-lp-templates']) ? $post[$this->plugin_name.'-lp-templates'] : get_option($this->plugin_name.'-lp-templates');
-                $selected_generation = isset($post[$this->plugin_name.'-generation']) ? $post[$this->plugin_name.'-generation'] : get_option($this->plugin_name.'-generation');
-                $selected_wp_template = isset($post[$this->plugin_name.'-wp-templates']) ? $post[$this->plugin_name.'-wp-templates'] : get_option($this->plugin_name.'-wp-templates');
+                $selected_lp_template = isset($post[$pn .'-lp-templates']) ? $post[$pn .'-lp-templates'] : get_option($pn .'-lp-templates');
+                $selected_generation = isset($post[$pn .'-generation']) ? $post[$pn .'-generation'] : get_option($pn .'-generation');
+                //$selected_wp_template = isset($post[$pn .'-wp-templates']) ? $post[$pn .'-wp-templates'] : get_option($pn .'-wp-templates');
                 include_once(plugin_dir_path(__FILE__) . 'partials/veepdotai-shortcode.php');
             }
-		} elseif (isset($post[$this->plugin_name.'-ai-site'])) {
-            if($this->security_check($post, $this->plugin_name.'-main_admin_site')) {
-                if($post[$this->plugin_name.'-lp-templates']==$this->plugin_name.'-lp-template1' && $post[$this->plugin_name.'-generation']==$this->plugin_name.'-genshortcodes'){
-                    update_option($this->plugin_name.'_ai_site', sanitize_text_field($post[$this->plugin_name.'-ai-site']));
-                    $new_page = array(
-                        'post_title' => get_option($this->plugin_name.'-ai-hero-title'),
-                        'post_content' => '<!-- wp:shortcode -->
-                                        [veep_header_section]
-                                        <!-- /wp:shortcode -->
-                                        
-                                        <!-- wp:shortcode -->
-                                        [veep_section_1]
-                                        <!-- /wp:shortcode -->
-                                        
-                                        <!-- wp:shortcode -->
-                                        [veep_section_2]
-                                        <!-- /wp:shortcode -->',
-                        'post_status' => 'publish',
-                        'post_type' => 'page',
-                        'page_template' => $post[$this->plugin_name.'-wp-templates']
-                    );
-                } elseif($post[$this->plugin_name.'-lp-templates']==$this->plugin_name.'-lp-template1' && $post[$this->plugin_name.'-generation']==$this->plugin_name.'-gencontenu'){
-                    update_option($this->plugin_name.'_ai_site', sanitize_text_field($post[$this->plugin_name.'-ai-site']));
-                    $postcontentTemplate1 = ''.generate_header_section().'<br>'.generate_section1().'<br>'.generate_section2().'';
-                    $new_page = array(
-                        'post_title' => get_option($this->plugin_name.'-ai-hero-title'),
-                        'post_content' => $postcontentTemplate1,
-                        'post_status' => 'publish',
-                        'post_type' => 'page',
-                        'post_name' => '',
-                        'page_template' => $post[$this->plugin_name.'-wp-templates']
-                    );
-                } elseif ($post[$this->plugin_name.'-lp-templates']==$this->plugin_name.'-lp-template2' && $post[$this->plugin_name.'-generation']==$this->plugin_name.'-genshortcodes') {
-                    update_option($this->plugin_name.'_ai_site', sanitize_text_field($post[$this->plugin_name.'-ai-site']));
-                    $new_page = array(
-                        'post_title' => get_option($this->plugin_name.'-ai-hero-title'),
-                        'post_content' => '<!-- wp:shortcode -->
-                                        [veep_header_section]
-                                        <!-- /wp:shortcode -->
-                                        
-                                        <!-- wp:shortcode -->
-                                        [veep_section_1]
-                                        <!-- /wp:shortcode -->
-                                        
-                                        <!-- wp:shortcode -->
-                                        [veep_section_2]
-                                        <!-- /wp:shortcode -->',
-                        'post_status' => 'publish',
-                        'post_type' => 'page',
-                        'page_template' => $post[$this->plugin_name.'-wp-templates']
-                    );
-                } elseif ($post[$this->plugin_name.'-lp-templates']==$this->plugin_name.'-lp-template2' && $post[$this->plugin_name.'-generation']==$this->plugin_name.'-gencontenu') {
-                    update_option($this->plugin_name.'_ai_site', sanitize_text_field($post[$this->plugin_name.'-ai-site']));
-                    $postcontentTemplate2 = ''.generate_header_section().'<br>'.generate_section2().'<br>'.generate_section1().'';
-                    $new_page = array(
-                        'post_title' => get_option($this->plugin_name.'-ai-hero-title'),
-                        'post_content' => $postcontentTemplate2,
-                        'post_status' => 'publish',
-                        'post_type' => 'page',
-                        'page_template' => $post[$this->plugin_name.'-wp-templates']
-                    );
+		} elseif (isset($post[$pn .'-ai-generate-site'])) {
+            if ($this->security_check($post, $pn .'-main_admin_site')) {
+                //update_option($pn . '_ai_site', sanitize_text_field($post[$pn .'-ai-site']));
+                $id = 20477;
+                $initial_content = get_post($id)->post_content;
+                //$initial_content2 = file_get_contents(plugin_dir_path(__FILE__) . '../data/template.html');
+
+                $dom = new Dom;
+                /*
+                $dom->setOptions((new Options())
+                        ->setPreserveLineBreaks(true)
+                        ->setCleanupInput(true)
+                        ->setFixComments(true)
+                        ->setRemoveComments(false)
+                );
+                */
+
+                $dom->loadStr($initial_content,
+                    (new Options())
+                    ->setPreserveLineBreaks(true)
+                    ->setCleanupInput(true)
+                    ->setFixComments(true)
+                    ->setRemoveComments(false)
+                );
+
+/*
+                $veep_title = get_option($pn . '-ai-section0-title');
+                $veep_text = get_option($pn . '-ai-section0-text');
+                $veep_image = get_option($pn . '-ai-section0-img');
+//                $veep_cta_href = get_option($pn . '-ai-section0-cta-href');
+//                $veep_cta_text = get_option($pn . '-ai-section0-cta-text');
+                $veep_cta_href = "https://www.lemonde.fr";
+                $veep_cta_text = "This is the new link!";
+*/
+                $sections = $dom->find('.veep_section');
+                for ($i = 0; $i < count($sections); $i++) {
+                    $veep_title = get_option("$pn-ai-section$i-title");
+                    $veep_text = get_option("$pn-ai-section$i-text");
+                    $veep_image = get_option("$pn-ai-section$i-img");
+                    $veep_cta_href = get_option("$pn-ai-section$i-cta-href");
+                    $veep_cta_text = get_option("$pn-ai-section$i-cta-text");
+
+                    error_log("Processing $i");
+                    try {
+                        /**
+                         * Syntax NOK :
+                         *   $dom->find(".veep_section[$i] .veep_title")[0]->firstChild()->setText($veep_title);
+                         */ 
+                        /*
+                        $dom->find('.veep_section')[$i]->find('.veep_title')[0]->firstChild()->setText($veep_title);
+                        $dom->find('.veep_section')[$i]->find('.veep_text')[0]->firstChild()->setText($veep_text);
+                        $dom->find('.veep_section')[$i]->find('.veep_cta a')[0]->setAttribute('href', $veep_cta_href);
+                        $dom->find('.veep_section')[$i]->find('.veep_cta a')[0]->firstChild()->setText($veep_cta_text);
+                        */
+                        $section = $dom->find('.veep_section')[$i];
+                        $section->find('.veep_title')[0]->firstChild()->setText($veep_title);
+                        $section->find('.veep_text')[0]->firstChild()->setText($veep_text);
+                        $section->find('.veep_cta a')[0]->setAttribute('href', $veep_cta_href);
+                        $section->find('.veep_cta a')[0]->firstChild()->setText($veep_cta_text);
+
+                    } catch (\Exception $e) {
+                        error_log("One of the value doesn't exist for the $i section.");
+                        error_log("Exeption: " . $e->getMessage() . "\n");
+                    }
                 }
-                $page_id = wp_insert_post($new_page);
-                $page_url = get_permalink($page_id);
-                echo '<script>window.location.replace("'.$page_url.'")</script>';
+
+                //error_log('DOM: ' . $dom);
+                $content = $dom->export();
+                $new_page = array(
+                    'post_title' => get_option($pn .'-ai-section0-title'),
+                    'post_content' => $content,
+                    'post_status' => 'publish',
+                    'post_type' => 'page',
+                    'post_name' => '',
+                    'page_template' => $post[$pn .'-wp-templates']
+                );
             }
+            $page_id = wp_insert_post($new_page);
+            $page_url = get_permalink($page_id);
+            echo '<script>window.location.replace("' .$page_url.'")</script>';
         }
 
+        /*
+
+        $hero_title = "This is the new Title";
+        $hero_tagline = "This is the tagline";
+        $hero_image = "https://media.istockphoto.com/id/1212064060/fr/photo/abs-hologram-data-flow-grid.jpg?s=612x612&w=0&k=20&c=8gcR3tSm1etZp0JL0aZAs5VwnGQrvgigVKq9tMdgjJI=";
+        $hero_cta_href = "https://www.veep.ai";
+        $hero_cta_text = "This is the new text link";
+
+        //$r = preg_replace('/(veep-lp-hero-title[^\>]*>)[^\<]*(<.*)/', "${1}$hero_title${2}", $html);
+        //$r = preg_replace('/("veep-lp-hero-title"[^>]*)>(.*)/', "${1}$hero_title${2}", $html);
+        $r1 = preg_replace('/(veep-lp-hero-title[^\>]*\>)[^\<]*(.*)/', "$1$hero_title$2", $html);
+        $r2 = preg_replace('/(veep-lp-hero-tagline[^\>]*\>)[^\<]*(.*)/', "$1$hero_tagline$2", $r1);
+        $r3 = preg_replace('/(veep-lp-hero-cta-href[^\>]*\>)(.*href=\")[^\"]*(\"[^\>]*>)(.*<\/a><\/div>)/', "$1$2$hero_cta_href$3$hero_cta_text$4", $r2);
+//      $r4 = preg_replace('/(veep-lp-hero-cta-text[^\>]*\>)[^\<]*(.*)/', "$1$cta_text$2", $r3);
+
+        error_log("hero_cta_text: " . $r3);
+        */
 
         //generate the form
         ob_start();
@@ -424,11 +465,11 @@ class Veepdotai_Admin {
         // --> https://stackoverflow.com/questions/8949768/with-magic-quotes-disabled-why-does-php-wordpress-continue-to-auto-escape-my
         $post = array_map('stripslashes_deep', $_POST);
         //filter subset of the post array to avoid conflict
-        $veep_post = array_intersect_key($post, array_flip(preg_grep('/^'.$this->plugin_name.'/', array_keys($post))));
+        $veep_post = array_intersect_key($post, array_flip(preg_grep('/^'. $pn .'/', array_keys($post))));
 
-        if (isset($post[$this->plugin_name.'-ai-save-api-key'])) {
-            if($this->security_check($post, $this->plugin_name.'-main_admin_menu')) {
-                update_option($this->plugin_name.'_ai_api_key', sanitize_text_field($post[$this->plugin_name.'-ai-api_key']));
+        if (isset($post[$pn .'-ai-save-api-key'])) {
+            if($this->security_check($post, $pn .'-main_admin_menu')) {
+                update_option($pn .'_ai_api_key', sanitize_text_field($post[$this->plugin_name.'-ai-api_key']));
             }
         }
 

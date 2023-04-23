@@ -38,51 +38,7 @@ Class Veepdotai_Site_Generator {
      */
     public static function generateSite($site) {
 
-        $jsonMenu = <<<_EOF_
-[
-    {
-        "hero_title": "Veep.ai : ton jumeau digital qui réalise automatiquement à ta place toutes les tâches répétitives et chronophages pour les professionnels du numérique"
-    },
-    {
-        "tagline": "Solution d’IA assistée par l’homme pour lui dégager du temps et le désaliéner de sa condition de travailleur."
-    },
-    {
-        "title": "Features",
-        "subsection": [
-            {
-                "title": "Automatisation à 100%",
-                "contenu": "Veep.ai réalise la mise en place d’une présence virtuelle en réalisant toutes les tâches associées à votre place. Vous avez toujours la possibilité de passer derrière avec l’outil de votre choix pour corriger ou améliorer le travail réalisé."
-            },
-            {
-                "title": "Intelligence artificielle"
-            },
-            {
-                "title": "Autonomie"
-            },
-            {
-                "title": "Personnalisation"
-            }
-        ]
-    },
-    {
-        "title": "Valeurs",
-        "subsection": [
-            {
-                "title": "Modération"
-            },
-            {
-                "title": "Climat"
-            },
-            {
-                "title": "Environnement"
-            },
-            {
-                "title": "Respect"
-            }
-        ]
-    }
-]
-_EOF_;
+        $jsonMenu = file_get_contents(__FILE__ . 'data/generated/menu.json');
 
         $sitename = $site["name"];
         $site_exists = wp_get_nav_menu_object( $sitename );
@@ -105,9 +61,6 @@ _EOF_;
                     'menu-item-url' => home_url( strtolower($item) ), 
                     'menu-item-status' => 'publish'));
             }
-
-            /*
-*/
 
             // Grab the theme locations and assign our newly-created menu
             // to the BuddyPress menu location.
