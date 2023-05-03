@@ -54,6 +54,7 @@ class Veepdotai_Admin {
 		//require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-veep-loader.php';
 		require plugin_dir_path( __FILE__ ) . './class-veepdotai-admin-configuration.php';
 		require plugin_dir_path( __FILE__ ) . './class-veepdotai-admin-menu.php';
+		require plugin_dir_path( __FILE__ ) . './class-veepdotai-admin-interview.php';
 		require plugin_dir_path( __FILE__ ) . './class-veepdotai-admin-site.php';
 	}
 
@@ -99,7 +100,7 @@ class Veepdotai_Admin {
             'manage_options',
             $this->plugin_name,
             array($this, 'main_admin_menu_callback'),
-            plugin_dir_url( __FILE__ ) .'assets/images/veepdotai-admin-icon.svg'
+            plugin_dir_url( __FILE__ ) .'images/veep.ai-white-bg-icon.png'
         );
 
         add_submenu_page(
@@ -118,6 +119,15 @@ class Veepdotai_Admin {
             'manage_options',
             $this->plugin_name.'-veepdotai-menu-logo',
             array($this, 'main_admin_submenu_menu_callback')
+        );
+
+        add_submenu_page(
+            $this->plugin_name,
+            __( 'Veepdotai', $this->plugin_name  ),
+            __( 'Interview', $this->plugin_name  ),
+            'manage_options',
+            $this->plugin_name.'-veepdotai-menu-interview',
+            array($this, 'main_admin_submenu_interview_callback')
         );
 
         add_submenu_page(
@@ -145,6 +155,15 @@ class Veepdotai_Admin {
         include( 'partials/main-admin-home.php' );
     }
 
+    /**
+     * Render the main admin menu and save data to the db
+     *
+     * @since  1.0.0
+     */
+    public function main_admin_submenu_configuration_callback() {
+        (new Veepdotai_Admin_Configuration( $this->plugin_name, $this->version ))->manageAction();
+    }
+
 	/**
      * Render the main admin menu and save data to the db
      *
@@ -154,6 +173,15 @@ class Veepdotai_Admin {
         (new Veepdotai_Admin_Menu( $this->plugin_name, $this->version ))->manageAction();
     }
 
+    /**
+     * Render the main admin site and save data to the db
+     *
+     * @since  1.0.0
+     */
+	public function main_admin_submenu_interview_callback() {
+        (new Veepdotai_Admin_Interview( $this->plugin_name, $this->version ))->manageAction();
+    }
+
 	/**
      * Render the main admin site and save data to the db
      *
@@ -161,15 +189,6 @@ class Veepdotai_Admin {
      */
 	public function main_admin_submenu_site_callback() {
         (new Veepdotai_Admin_Site( $this->plugin_name, $this->version ))->manageAction();
-    }
-
-    /**
-     * Render the main admin menu and save data to the db
-     *
-     * @since  1.0.0
-     */
-    public function main_admin_submenu_configuration_callback() {
-        (new Veepdotai_Admin_Configuration( $this->plugin_name, $this->version ))->manageAction();
     }
 
 	public function var_error_log( $object=null ){
