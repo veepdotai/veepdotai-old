@@ -1,0 +1,38 @@
+<html>
+<head>
+<script>
+	var recognition = new webkitSpeechRecognition();
+	recognition.continuous = true;
+	recognition.interimResults = true;
+	function start(obj){
+        console.log("Start");
+		recognition.onresult = function(event) { 
+			//console.log(event);
+			var output = document.getElementById("output");
+            output = obj;
+			output.innerHTML = "";
+            var msg = null;
+			for(var i=0; i < event.results.length; i++){
+                msg = event.results[i][0].transcript;
+				output.innerHTML = output.innerHTML + msg;
+			}
+            //console.log("Log: " + msg);
+		}
+		recognition.start();
+	}
+
+    function stop(obj) {
+        console.log("Stop");
+		recognition.stop();
+    }
+</script>
+</head>
+<body>
+	<h1>Speach to text</h1>
+	<input id="bStart" type = "button" value = "Start" onclick = "start();"></input>
+	<input id="bStop" type = "button" value = "Stop" onclick = "stop();"></input>
+	<textarea id="section0" style="width: 100%; height: 100px" onclick="start(this)" onmouseleave="stop(this)"></textarea>
+	<textarea id="section1" style="width: 100%; height: 100px" onclick="start(this)" onmouseleave="stop(this)"></textarea>
+	<textarea id="section2" style="width: 100%; height: 100px" onclick="start(this)" onmouseleave="stop(this)"></textarea>
+</body>
+</html>

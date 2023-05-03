@@ -1,29 +1,13 @@
 <?php
 
-Class Veepdotai_Site_Generator {
+Class Veepdotai_Generator_Site {
 
     function __construct() {
     }
 
-    /**
-     * 
-     */
-    public static function generatePage($pageTitle, $pageContent, $pageAuthor, $pageParent = "") {
-        $page_id = wp_insert_post(
-            array(
-            'comment_status' => 'close',
-            'ping_status'    => 'close',
-            'post_author'    => $pageAuthor,
-            'post_title'     => ucfirst($pageTitle),
-            'post_name'      => sanitize_title($pageTitle),
-            'post_status'    => 'publish',
-            'post_content'   => $pageContent,
-            'post_type'      => 'page',
-            'post_parent'    => $pageParent
-            )
-        );
-    }
+    public function manageAction() {
 
+    }
 
     /**
      * site = json object that describes a complete site on 2 levels.
@@ -36,7 +20,7 @@ Class Veepdotai_Site_Generator {
      *   - Section 2.1
      *   - Section 2.2
      */
-    public static function generateSite($site) {
+    public static function generateMenu($site) {
 
         $jsonMenu = file_get_contents(__FILE__ . 'data/generated/menu.json');
 
@@ -74,7 +58,23 @@ Class Veepdotai_Site_Generator {
         }
     }
 
-    public static function injectMenu() {
+    /**
+     * 
+     */
+    public static function generatePage($pageTitle, $pageContent, $pageAuthor, $pageParent = "") {
+        $page_id = wp_insert_post(
+            array(
+            'comment_status' => 'close',
+            'ping_status'    => 'close',
+            'post_author'    => $pageAuthor,
+            'post_title'     => ucfirst($pageTitle),
+            'post_name'      => sanitize_title($pageTitle),
+            'post_status'    => 'publish',
+            'post_content'   => $pageContent,
+            'post_type'      => 'page',
+            'post_parent'    => $pageParent
+            )
+        );
     }
 
 }

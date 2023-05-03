@@ -7,18 +7,22 @@ function init_nonce() {
     return wp_nonce_field( $pn . '-main_admin_site', $pn . '-main_admin_site_nonce' );
 }
 
-function display(string $legend, string $field_name, string $type, bool $in_section = false) {
+function display(string $legend, string $field_name, string $_type, bool $in_section = false) {
     $fieldform = '';
     $fieldstyle = '';
+    $value = get_option($field_name);
+    $type = 'type="' . ($_type == 'img' ? 'url' : 'text') . '"';
+    $name = 'name="' . $field_name . '"';
 
-    if ($type == "text") {
-        $field_element = '<input type="text" name="' . $field_name . '" value="' . get_option($field_name) . '"/>';
-    } elseif ($type == "textarea") {
-        $field_element = '<textarea rows="5" type="text" name="'.$field_name.'">'.get_option($field_name).'</textarea>';
-    } elseif ($type == "img") {
-        $field_element = '<input rows="5" type="url" name="' . $field_name . '" value="' . get_option($field_name) . '" />';
+    $events = 'onclick="start_listening(this)"';
+//                . 'onmouseleave="stop(this)"';
+    $common_attrs = "$events $type $name";
+    if ($_type == "textarea") {
+        $style = 'style="width: 100%; height: 100px;"';
+        $field_element = "<textarea $style $common_attrs >$value</textarea>";
     } else {
-        $field_element = '<input type="text" name="' . $field_name . '" value="' . get_option($field_name) . '"/>';
+        $style = 'style="width: 100%;"';
+        $field_element = "<input $style $common_attrs value=\"$value\" />";
     }
     
     $section = '<fieldset>'
@@ -30,13 +34,28 @@ function display(string $legend, string $field_name, string $type, bool $in_sect
     return $section;
 }
 
-function generate_form_section(int $num_section){
+function generate_context($context) {
+    $content = '<div>'
+                . '<p id="context" class="context">' . $context . '</p>'
+                . '</div>';
+
+    return $content;
+}
+
+function generate_hero_section($intent, $section_title, int $num_section, $context = '') {
+}
+
+function generate_contact_section($intent, $section_title, int $num_section, $context = '') {
+}
+
+function generate_form_section($intent, $section_title, int $num_section, $context = '') {
     //$pn = $this->plugin_name;
     $pn = 'veepdotai';
-    $section = '<div>'
-                . '<label>Section ' . $num_section . '</label>'
+    $section = '<div class="veep_section">'
+                . '<label>' . $section_title . ' [' . $num_section . ']</label>'
+                . '<p id="context-' . $num_section . '" class="veep_context">' . $context . '</p>'
                 . display("Title", $pn . "-ai-section" . $num_section . "-title", "text", true).''
-                . display("Article", $pn . "-ai-section" . $num_section . "-text", "textarea", true)
+                . display("Contenu", $pn . "-ai-section" . $num_section . "-text", "textarea", true)
                 . display("Image", $pn . "-ai-section" . $num_section . "-img", "img", true)
                 . display("CTA text", $pn . "-ai-section" . $num_section . "-cta-text", "text", true)
                 . display("CTA href", $pn . "-ai-section" . $num_section . "-cta-href", "text", true)
@@ -55,18 +74,20 @@ function generate_template_selector($pages) {
     $select = '<select name="' . $pn . '-lp-templates">';
     if ( ! empty( $pages ) ) {
         foreach ( $pages as $page ) {
-            $option = '<option value="' . esc_attr( $page->ID ) .'">'
-                        . esc_html( $page->post_title )
-                        . '</option>';
-            //echo $option;
-            $select .= $option;
+            if (preg_match('/^mod(è|e)le/i', $page->post_title)) {
+                $option = '<option value="' . esc_attr( $page->ID ) .'">'
+                            . esc_html( $page->post_title )
+                            . '</option>';
+                //echo $option;
+                $select .= $option;
+            }
         }
     } else {
         echo 'Aucun modèle de page disponible.';
     }
     $select .= '</select>';
 
-    $fieldset = '<fieldset>'
+    $fieldset = '<fieldset class="template-selector">'
                     .'<legend>' . _e('Landing page template', $pn) . '</legend>'
                     .'<label for="' . $pn . '"-lp-templates"></label>'
                     . $select

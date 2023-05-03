@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>annyang! Easily add speech recognition to your site</title>
+  <script src="annyang.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+  <script>
+  "use strict";
+
+  // first we make sure annyang started succesfully
+  if (annyang) {
+
+    // define the functions our commands will run.
+    var hello = function() {
+      $("#hello").slideDown("slow");
+    };
+
+    var bonjour = function(person) {
+	    alert('bonjour ' + person);
+    };
+
+    var next = function(person) {
+	    alert('next quesstion ' + person);
+    };
+
+    var show = function(request) {
+	    alert('show ' + request);
+    };
+
+    var showTPS = function(type) {
+      alert('Show TPS report for ' + type);
+    };
+
+    // define our commands.
+    // * The key is the phrase you want your users to say.
+    // * The value is the action to do.
+    //   You can pass a function, a function name (as a string), or write your function as part of the commands object.
+    var commands = {
+      'Question suivante':  next,
+      'requete *search':      show,
+      'show :type report':    showTPS,
+      'let\'s get started':   hello,
+      'bonjour coucou *person':      bonjour,
+    };
+
+    // OPTIONAL: activate debug mode for detailed logging in the console
+    annyang.debug();
+
+    // Add voice commands to respond to
+    annyang.addCommands(commands);
+
+    // OPTIONAL: Set a language for speech recognition (defaults to English)
+    // For a full list of language codes, see the documentation:
+    // https://github.com/TalAter/annyang/blob/master/docs/FAQ.md#what-languages-are-supported
+    annyang.setLanguage('fr');
+
+    // Start listening. You can call this here, or attach this call to an event, button, etc.
+    //annyang.start();
+  }
+  </script>
+  <link rel="stylesheet" href="css/main.min.css" />
+</head>
+<body>
+  <input type="button" value="Start" onclick="annyang.start()"/>
+  <input type="button" value="Stop" onclick="annyang.stop()"/>
+  <div>
+	<textarea id="context" cols="40" rows="5">Un peu de texte</textarea>
+  </div>
+	<div id="hello" cols="40" rows="5">Un peu de texte</div>
+
+</body>
+</html>

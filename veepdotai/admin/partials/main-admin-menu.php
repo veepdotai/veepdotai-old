@@ -18,7 +18,9 @@
             <textarea id="context" style="width: 90%" rows="20" type="text" name="<?php echo $this->plugin_name ?>-ai-menu"><?php echo get_option($this->plugin_name.'_ai_menu') ?></textarea>
         </fieldset>
 
-
-        <?php if (isset($post[$this->plugin_name.'-ai-generate-menu'])){print_r($menu_lines);} ?>
+        <?php
+            if (isset($post[$this->plugin_name.'-ai-generate-menu'])) {
+                print_r($menu_lines);}
+        ?>
     </form>
 </div>

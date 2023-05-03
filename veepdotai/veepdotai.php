@@ -91,5 +91,11 @@ function run_veepdotai() {
 	$plugin->run();
 
 }
+
+function veepdotai_cat_pages() {
+	register_taxonomy_for_object_type('category', 'page');
+}
+add_action('init', 'veepdotai_cat_pages');
+
 run_veepdotai();
 

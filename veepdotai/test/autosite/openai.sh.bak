@@ -1,0 +1,17 @@
+#!/bin/sh
+
+API_KEY=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
+PROMPT=$1
+MAX_TOKENS=4000
+TEMP=1.0
+
+curl -s https://api.openai.com/v1/completions \
+  -H 'Content-Type: application/json' \
+  -H "Authorization: Bearer $API_KEY" \
+  -d '{
+  	"model": "text-davinci-003",
+  	"prompt": "$PROMPT",
+  	"max_tokens": $MAX_TOKENS,
+  	"temperature": $TEMP
+	}' \
+  --insecure | jq .choices[].text;
