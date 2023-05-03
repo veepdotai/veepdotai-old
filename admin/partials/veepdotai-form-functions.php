@@ -42,14 +42,41 @@ function generate_context($context) {
     return $content;
 }
 
+/**
+ * Simple form to input interview
+ */
+function generate_interview_hero_section($intent, $section_title, int $num_section, $context = '') {
+    return generate_interview_form_section($intent, $section_title, $num_section, $context);
+}
+
+function generate_interview_contact_section($intent, $section_title, int $num_section, $context = '') {
+    return generate_interview_form_section($intent, $section_title, $num_section, $context);
+}
+
+function generate_interview_form_section($intent, $section_title, int $num_section, $context = '') {
+    $pn = 'veepdotai';
+    $section = '<div class="veep_section">'
+                . '<label>' . $section_title . ' [' . $num_section . ']</label>'
+                . '<p id="context-' . $num_section . '" class="veep_context">' . $context . '</p>'
+                . display("Contenu", $pn . "-ai-section" . $num_section . "-text-interview", "textarea", true)
+                . '</div>';
+                
+    return $section;
+}
+
+/**
+ * Complete form with AI generated data
+ */
 function generate_hero_section($intent, $section_title, int $num_section, $context = '') {
+    return generate_form_section($intent, $section_title, $num_section, $context);
 }
 
 function generate_contact_section($intent, $section_title, int $num_section, $context = '') {
+    return generate_form_section($intent, $section_title, $num_section, $context);
 }
 
 function generate_form_section($intent, $section_title, int $num_section, $context = '') {
-    //$pn = $this->plugin_name;
+        //$pn = $this->plugin_name;
     $pn = 'veepdotai';
     $section = '<div class="veep_section">'
                 . '<label>' . $section_title . ' [' . $num_section . ']</label>'
@@ -74,7 +101,7 @@ function generate_template_selector($pages) {
     $select = '<select name="' . $pn . '-lp-templates">';
     if ( ! empty( $pages ) ) {
         foreach ( $pages as $page ) {
-            if (preg_match('/^mod(è|e)le/i', $page->post_title)) {
+            if (preg_match('/^mod(è|e)le\sde/i', $page->post_title)) {
                 $option = '<option value="' . esc_attr( $page->ID ) .'">'
                             . esc_html( $page->post_title )
                             . '</option>';

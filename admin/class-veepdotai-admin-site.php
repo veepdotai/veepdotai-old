@@ -103,6 +103,33 @@ Class Veepdotai_Admin_Site {
         return;
     }
 
+    public function set_section_data($_section, $selector, $value) {
+        $section = $_section;
+        try {
+            $section->find($selector)[0]->firstChild()->setText($value);
+        } catch (e) {
+            error_log("Error while getting first-child of $selector. Does it exist?");
+            return $section;
+        } finally {
+            return $section;
+        }
+
+    }
+
+    public function set_section_ahref($_section, $selector, $href, $text) {
+        $section = $_section;
+        try {
+            $a = $section->find($selector)[0];
+            $a->setAttribute('href', $href);
+            $a->firstChild()->setText($text);
+        } catch (e) {
+            error_log("Error while getting first-child of $selector. Does it exist?");
+            return $section;
+        } finally {
+            return $section;
+        }
+    }
+
     /**
      * 
      */
@@ -140,11 +167,18 @@ Class Veepdotai_Admin_Site {
                      *   $dom->find(".veep_section[$i] .veep_title")[0]->firstChild()->setText($veep_title);
                      */ 
                     $section = $dom->find('.veep_section')[$i];
+                    $this->set_section_data($section, '.veep_title', $veep_title);
+                    $this->set_section_data($section, '.veep_text', $veep_text);
+                    //set_section_data($section, '.veep_img', $veep_img);
+                    $this->set_section_ahref($section, '.veep_cta a', $veep_cta_href, $veep_cta_text);
+
+/*
                     $section->find('.veep_title')[0]->firstChild()->setText($veep_title);
                     $section->find('.veep_text')[0]->firstChild()->setText($veep_text);
                     //$section->find('.veep_img')[0]->firstChild()->setText($veep_img);
                     $section->find('.veep_cta a')[0]->setAttribute('href', $veep_cta_href);
                     $section->find('.veep_cta a')[0]->firstChild()->setText($veep_cta_text);
+*/
 
                 } catch (\Exception $e) {
                     error_log("One of the value doesn't exist for the $i section.");
