@@ -40,12 +40,12 @@ Class Veepdotai_Admin_Interview {
         $this->post = $veep_post;
     }
 
-    public function manageAction() {
+    public function manage_action() {
         $self = $this;
         $pn = $this->plugin_name;
         $vp = $this->post;
 
-        include('partials/veepdotai-form-functions.php');
+        include('partials/veepdotai-form-interview-functions.php');
 
         if (isset($vp[$pn .'-ai-save'])) {
             $self->save_configuration($vp);

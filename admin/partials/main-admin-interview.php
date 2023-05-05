@@ -30,12 +30,12 @@ _EOC_;
 
             echo generate_context($context);
 
-            echo generate_interview_hero_section('benefices', 'Bénéfice', 0, '');
-            echo generate_interview_form_section('besoins', 'Besoins',1);
-            echo generate_interview_form_section('solutions', 'Solutions', 2);
-            echo generate_interview_form_section('differenciation', 'Différenciation', 3);
-            echo generate_interview_form_section('faq', 'FAQ', 4);
-            echo generate_interview_contact_section('contact', 'Prise de contact', 5);
+            echo generate_interview_hero_section(true, 'benefices', 'Bénéfice', 0, '');
+            echo generate_interview_form_section(true, 'besoins', 'Besoins',1);
+            echo generate_interview_form_section(true, 'solutions', 'Solutions', 2);
+            echo generate_interview_form_section(true, 'differenciation', 'Différenciation', 3);
+            echo generate_interview_form_section(true, 'faq', 'FAQ', 4);
+            echo generate_interview_contact_section(true, 'contact', 'Prise de contact', 5);
 
             echo generate_template_selector(get_pages());
         ?>

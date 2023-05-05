@@ -39,7 +39,7 @@ Class Veepdotai_Admin_Menu {
         $this->post = $veep_post;
     }
 
-    public function manageAction() {
+    public function manage_action() {
 
         $self = $this;
         $pn = $this->plugin_name;

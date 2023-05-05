@@ -55,14 +55,14 @@ Class Veepdotai_Admin_Configuration {
 		return true;
 	}
 
-    public function manageAction() {
+    public function manage_action() {
 
         $self = $this;
         $pn = $this->plugin_name;
         $vp = $this->post;
 
         if (isset($vp[$pn .'-ai-save-api-key'])) {
-            $self->saveConfiguration($vp);
+            $self->save_configuration($vp);
         }
 
         //generate the form
@@ -76,7 +76,7 @@ Class Veepdotai_Admin_Configuration {
     /**
      * 
      */
-    public function saveConfiguration($post) {
+    public function save_configuration($post) {
 
         $pn = $this->plugin_name;
         $vp = $this->post;

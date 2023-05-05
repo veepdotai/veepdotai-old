@@ -40,18 +40,18 @@ Class Veepdotai_Admin_Site {
         $this->post = $veep_post;
     }
 
-    public function manageAction() {
+    public function manage_action() {
         $self = $this;
         $pn = $this->plugin_name;
         $vp = $this->post;
 
-        include('partials/veepdotai-form-functions.php');
+        include('partials/veepdotai-form-site-functions.php');
 
         if (isset($vp[$pn .'-ai-save'])) {
-            //$this.saveConfiguration($post);
-            $self->saveConfiguration($vp);
+            //$this.save_configuration($post);
+            $self->save_configuration($vp);
 		} elseif (isset($vp[$pn .'-ai-generate-site'])) {
-            $page_url = $self->generatePageFromTemplate($vp);
+            $page_url = $self->generate_page_from_template($vp);
 
             if ($page_url) {
                 echo '<script>window.location.replace("' . $page_url . '")</script>';
@@ -83,7 +83,7 @@ Class Veepdotai_Admin_Site {
     /**
      * 
      */
-    public function saveConfiguration($post) {
+    public function save_configuration($post) {
         $pn = $this->plugin_name;
 
         if($this->security_check($post, $pn .'-main_admin_site')) {
@@ -133,8 +133,8 @@ Class Veepdotai_Admin_Site {
     /**
      * 
      */
-    public function generatePageFromTemplate($post) {
-        $this->saveConfiguration($post);
+    public function generate_page_from_template($post) {
+        $this->save_configuration($post);
         $pn = $this->plugin_name;
         
         if ($this->security_check($post, $pn .'-main_admin_site')) {
@@ -171,15 +171,6 @@ Class Veepdotai_Admin_Site {
                     $this->set_section_data($section, '.veep_text', $veep_text);
                     //set_section_data($section, '.veep_img', $veep_img);
                     $this->set_section_ahref($section, '.veep_cta a', $veep_cta_href, $veep_cta_text);
-
-/*
-                    $section->find('.veep_title')[0]->firstChild()->setText($veep_title);
-                    $section->find('.veep_text')[0]->firstChild()->setText($veep_text);
-                    //$section->find('.veep_img')[0]->firstChild()->setText($veep_img);
-                    $section->find('.veep_cta a')[0]->setAttribute('href', $veep_cta_href);
-                    $section->find('.veep_cta a')[0]->firstChild()->setText($veep_cta_text);
-*/
-
                 } catch (\Exception $e) {
                     error_log("One of the value doesn't exist for the $i section.");
                     error_log("Exeption: " . $e->getMessage() . "\n");
