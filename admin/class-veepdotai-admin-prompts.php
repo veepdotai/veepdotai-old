@@ -274,6 +274,8 @@ Class Veepdotai_Admin_Prompts {
                     $section = $r;
                 } elseif (is_null($section)) {
                     $section = $r->sections[0];
+                } elseif (is_array($section)) {
+                    $section = $json->section[0];
                 } else {
                     error_log("The format of the result is not known.");
                 }
