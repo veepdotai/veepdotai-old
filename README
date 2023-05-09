@@ -1,14 +1,14 @@
 === Plugin Name ===
 Contributors: (this should be a list of wordpress.org userid's)
-Donate link: https://www.veepd.ai
+Donate link: https://www.veep.ai
 Tags: voice, vocal, assistant, ia, ai, website, siteweb, site, web, autonome, wordpress
 Requires at least: 6.0.0
-Tested up to: 6.0.2
-Stable tag: 4.3
+Tested up to: 6.0.0
+Stable tag: 6.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Veepdotai is a project to create a complete autonomous web site through voice. A true no code solution.
+Veepdotai is a project to create a complete autonomous virtual presence through voice, from web site to LinkedIn page and, at the end, each social network. A true #nosouci solution :-)
 
 == Description ==
 
@@ -17,11 +17,6 @@ The Veep project aims at providing thanks to voice recognition a solution to cre
 * one LinkedIn profile, autonomous
 
 Autonomous means content is created each day, week, month by the AI for the website, then declined in posts (with carroussel) for LinkedIn, while the LinkedIn audience is augmented through automatic connections each week.
-
-*   "Tested up to" is the highest version that you've *successfully used to test the plugin*. Note that it might work on
-higher versions... this is just the highest one you've verified.
-*   Stable tag should indicate the Subversion "tag" of the latest stable version, or "trunk," if you use `/trunk/` for
-stable.
 
 == Installation ==
 
@@ -35,68 +30,14 @@ e.g.
 
 == Frequently Asked Questions ==
 
-Feel free to ask.
+Feel free to ask to the wordpress forum, the discord forum or the github discussion feature.
 
 == Screenshots ==
 
-1. This screen shot description corresponds to screenshot-1.(png|jpg|jpeg|gif). Note that the screenshot is taken from
-the /assets directory or the directory that contains the stable readme.txt (tags or trunk). Screenshots in the /assets
-directory take precedence. For example, `/assets/screenshot-1.png` would win over `/tags/4.3/screenshot-1.png`
-(or jpg, jpeg, gif).
-2. This is the second screen shot
+1. /assets/screenshot-1.png
+2. /assets/screenshot-2.png
 
 == Changelog ==
 
-= 1.0 =
-* A change since the previous version.
-* Another change.
+See CHANGELOG.md for more informatino
 
-= 0.5 =
-* List versions from most recent at top to oldest at bottom.
-
-== Upgrade Notice ==
-
-= 1.0 =
-Upgrade notices describe the reason a user should upgrade.  No more than 300 characters.
-
-= 0.5 =
-This version fixes a security related bug.  Upgrade immediately.
-
-== Arbitrary section ==
-
-composer.phar init
-composer.phar dump-autoload
-
-Added in veep.php:
-* require_once dirname(__FILE__)."/vendor/autoload.php";
-
-== Configuration GitPod ==
-
-When correctly enabled, this tool permits you to test the plugin in a safe envrironment. The same thing exists in the github environment called CodeSpaces.
-
-At the time of the writing of this content, Gitpod is free for 50 hours a month.
-
-=== Step 1 : Workspace GitPod ===
-
-To open Gitpod you have to go to your github repository and put https://gitpod.io at the beginning of the URL of the git project URL.
-
-Once the workspace is open, put all the folders and files of the plugin in a single folder if it is not already done.
-
-=== Step 2: Installing DDEV ===
-
-Install DDEV : brew install ddev/ddev/ddev
-Configure DDEV as a WordPress project: ddev config --project-type=wordpress
-Start DDEV : ddev start
-
-=== Step 3 : Installing WordPress ===
-
-Download WordPress : ddev wp core download
-Put the extension under wp-content/plugins
-
-=== Step 4 : Launch DDEV ===
-
-ddev launch
-
-=== Step 5 : Activate extension ===
-
-Configure WordPress and then activate the add-on in the WordPress extension menu.

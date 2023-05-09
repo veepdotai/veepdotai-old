@@ -2,20 +2,8 @@
     <h2><?php esc_html_e(get_admin_page_title())?></h2>
     <hr>
     <form method="post" action="">
-        <input type="button" value="Je suis prêt" onclick="start(document.getElementById('context').innerHTML)"/>
         <?php
             echo init_nonce();
-$context = <<<_EOC_
-Bonjour, je me présente, je suis Vipe.
-
-Je suis une IA, une intelligence artificielle, et je vais construire votre
-landing page à l'issue de cette interview.
-
-Je vais donc vous poser quelques questions.
-
-Prêt ? Allons-y !
-_EOC_;
-            echo generate_context($context);
 
             echo generate_hero_section(false, 'benefices', 'Bénéfice', 0, '');
             echo generate_form_section(false, 'besoins', 'Besoins',1);

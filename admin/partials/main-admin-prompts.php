@@ -2,22 +2,8 @@
     <h2><?php esc_html_e(get_admin_page_title())?></h2>
     <hr>
     <form method="post" action="">
-        <input type="button" value="Je suis prêt" onclick="start(document.getElementById('context').innerHTML)"/>
         <?php
             echo init_nonce();
-
-$context = <<<_EOC_
-Bonjour, je me présente, je suis Vipe.
-
-Je suis une IA, une intelligence artificielle, et je vais vous interviewer.
-
-N'hésitez pas à répondre aux questions de manière détaillée. Je me chargerai
-de corriger nos échanges par la suite (ponctuation...).
-
-Prêt ? Allons-y !
-_EOC_;
-
-            echo generate_context($context);
 
             echo generate_checkbox();
 
