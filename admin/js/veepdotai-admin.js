@@ -56,6 +56,34 @@
 
 })( jQuery );
 
+  function fillWithSameValues(o) {
+	function getValueByClassName(className) {
+		return document.getElementsByClassName(className)[0].value;
+	}
+	function setValueByClassName(className, value) {
+		document.getElementsByClassName(className)[0].value = value;
+		return document.getElementsByClassName(className)[0].value;
+	}
+
+	var value = o.checked;
+	var sections = jQuery('.veep_section');
+	prompt_pre = getValueByClassName('veepdotai-ai-section0-text-prompt-pre');
+	prompt_post = getValueByClassName('veepdotai-ai-section0-text-prompt-post');
+	for(i = 1; i < sections.length; i++) {
+		var cn = 'veepdotai-ai-section' + i + '-text-prompt-';
+		if (value == true) {
+			//alert('Value is on');
+			setValueByClassName(cn + 'pre', prompt_pre);
+			setValueByClassName(cn + 'post', prompt_post);
+		} else {
+			//alert('Value is off');
+			setValueByClassName(cn + 'pre', '');
+			setValueByClassName(cn + 'post', '');
+		}
+	}
+
+  }
+
   function getVoice(lang) {
     let voices = getVoices();
 	let voice = null;

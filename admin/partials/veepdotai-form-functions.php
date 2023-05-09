@@ -13,11 +13,12 @@ function display(bool $enable_voice, string $legend, string $field_name, string 
     $value = get_option($field_name);
     $type = 'type="' . ($_type == 'img' ? 'url' : 'text') . '"';
     $name = 'name="' . $field_name . '"';
+    $class = 'class="' . $field_name . '"';
 
     $events = $enable_voice ? 'onclick="start_listening(this)"' : "";
                //                . 'onmouseleave="stop(this)"';
 
-    $common_attrs = "$events $type $name";
+    $common_attrs = "$events $type $name $class";
     if ($_type == "textarea") {
         $style = 'style="width: 100%; height: 100px;"';
         $field_element = "<textarea $style $common_attrs >$value</textarea>";

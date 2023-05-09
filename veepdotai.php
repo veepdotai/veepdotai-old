@@ -15,8 +15,10 @@
  * @wordpress-plugin
  * Plugin Name:       Veepdotai
  * Plugin URI:        https://www.veep.ai
- * Description:       Content generator
+ * Description:       Veepdotai is a project to create a complete autonomous virtual presence through voice, from web site to LinkedIn page and, at the end, each social network. A true #nosouci solution :-) 
  * Version:           1.0.0
+ * Requires at least: 8.0
+ * Requires PHP:      8.0
  * Author:            Jean-Christophe Kermagoret
  * Author URI:        https://www.veep.ai
  * License:           GPL-2.0+
