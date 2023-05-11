@@ -193,7 +193,19 @@ Class Veepdotai_Admin_Prompts {
         update_option($field_name, $field_value);
     }
 
+    /**
+     * 
+     */
     function replace_special_chars($string) {
+
+/* Another way to replace chars. Seems to be buggy.
+        $normalized_raw = "";
+        if (mb_detect_encoding($raw, 'utf-8', true) === false) {
+            $normalized_raw = mb_convert_encoding($raw, 'utf-8', 'iso-8859-1');
+        }
+        $r = $this->convert_to_valid_json($normalized_raw);
+*/
+
         $unwanted_array = array(    'Š'=>'S', 'š'=>'s', 'Ž'=>'Z', 'ž'=>'z', 'À'=>'A', 'Á'=>'A', 'Â'=>'A', 'Ã'=>'A', 'Ä'=>'A', 'Å'=>'A', 'Æ'=>'A', 'Ç'=>'C', 'È'=>'E', 'É'=>'E',
         'Ê'=>'E', 'Ë'=>'E', 'Ì'=>'I', 'Í'=>'I', 'Î'=>'I', 'Ï'=>'I', 'Ñ'=>'N', 'Ò'=>'O', 'Ó'=>'O', 'Ô'=>'O', 'Õ'=>'O', 'Ö'=>'O', 'Ø'=>'O', 'Ù'=>'U',
         'Ú'=>'U', 'Û'=>'U', 'Ü'=>'U', 'Ý'=>'Y', 'Þ'=>'B', 'ß'=>'Ss', 'à'=>'a', 'á'=>'a', 'â'=>'a', 'ã'=>'a', 'ä'=>'a', 'å'=>'a', 'æ'=>'a', 'ç'=>'c',
@@ -204,45 +216,144 @@ Class Veepdotai_Admin_Prompts {
 
         return $str;
     }
+
+    /**
+     * 
+     */
+    public function create_prompt($content_title, $i) {
+        $pn = $this->plugin_name;
+        // We don't concat content anymore because the prompt becomes too big
+        //$content .= "\nSection " . $content_titles[$i] . "\n\n";
+        $content = "\nSection " . $content_title . "\n\n";
+        $key = $pn . '-ai-section' . $i . '-text-interview';
+        error_log("Key: " . $key . ".");
+        $content .= get_option($key);
+        $content .= "\n";
+
+        $prefix = $pn . '-ai-section' . $i . '-text-prompt-';
+
+        $prompt_pre = get_option($prefix . 'pre');
+        $prompt_post = get_option($prefix . 'post');
+
+        $prompt = $this->replace_special_chars($prompt_pre . "\n\n"
+        . $content
+        . "\n\n" . $prompt_post);
+
+        return $prompt;
+    }
+
+    /**
+     * 
+     */
+    public function get_data($i) {
+        $pn = $this->plugin_name;
+
+        // Gets an already computed data, for example: 20230509-135300
+        $ts = get_option($pn . '_ai_site_ts');
+        if ($ts) {
+            $raw = file_get_contents(WP_PLUGIN_DIR
+                    . "/$pn/data/$ts-$pn-ai-section$i-result.txt");
+        } else {
+            $raw = "";
+        }
+
+        return $raw;
+    }
+    /**
+     * Stores computed data to check errors or enables users
+     * to replay a previous prompt or reuse previous results
+     */
+    public function store_data($date, $i, $params, $raw, $r) {
+
+        $pn = $this->plugin_name;
+
+        // It would be better to store data according to user/yyyy/mm/dd
+        $filename = WP_PLUGIN_DIR . "/$pn/data/$date-$pn-ai-section$i";
+
+        $filename_prompt = $filename . "-prompt.txt";
+        $filename_result = $filename . "-result_raw.txt";
+        $filename_json = $filename . "-result_json.txt";
+        file_put_contents($filename_prompt, $params["prompt"]);
+        file_put_contents($filename_result, $raw);
+        file_put_contents($filename_json, json_encode($r));  
+
+        return $r;
+    }
+
+    /**
+     * 
+     */
+    public function fix_results($r) {
+        // $section is a global var
+        if (property_exists($r, 'section')) {
+            $section = $r->section;
+            if (is_string($section)) {
+                $section = $r;
+            } elseif (is_null($section)) {
+                $section = $r->sections[0];
+            } elseif (is_array($section)) {
+                $section = $r->section[0];
+            } else {
+                error_log("The format of the r->section is not known.");
+            }    
+        } elseif (property_exists($r, 'sections')) {
+            if (is_array($r->sections)) {
+                $section = $r->sections[0];
+            } else {
+                error_log("The format of the r->sections is not known.");
+            }
+        }
+
+        return $section;
+    }
+
+    /**
+     * 
+     */
+    public function create_text_with_ai($open_ai, $ts, $prompt, $i) {
+        $pn = $this->plugin_name;
+
+        $raw = $this->get_data($i);
+        $r;
+        //error_log($this->plugin_name . '_ai_site_ts' . ': ' . $ts . '.');
+        if (! $raw) {
+            $params = [
+                'model' => 'text-davinci-003',
+                'prompt' => $prompt,
+                'temperature' => 0.7,
+                'max_tokens' => 2000,
+                'frequency_penalty' => 0,
+                'presence_penalty' => 0.6,
+            ];
+
+            $raw = $open_ai->completion($params);
+            $r = $this->convert_to_valid_json($raw);
+            $this->store_data($ts, $i, $params, $raw, $r);
+        } else {
+            $r = $this->convert_to_valid_json($raw);
+            // $params = []; // should contain prompt
+            // $this->store_data($ts, $i, $params, $raw, $r);
+        }
+
+        error_log($raw);
+
+        $section = $this->fix_results($r);
+        return $section;
+    }
+
     /**
      * Improve provided content with AI (openai in our case)
+     * 
+     * @TODO Storage needs to be reworked completely with a db!!!
      */
     public function improve($post) {
         $this->save_configuration($post);
         $pn = $this->plugin_name;
 
-        $prompt_pre1 = <<<_EOF_
-        Agis comme un copywriter à qui on demande d'écrire des résumés de contenu. Tu n’utilises jamais ou très rarement les mêmes tournures de phrases et ton style est journalistique. Chacun de tes résumés est unique et permet de comprendre clairement les idées des textes.
-    
-        Le texte à résumer est le suivant :
-        _EOF_;
-    
-        $prompt_post1 = <<<_EOF2_
-        Tâche : Rédige une synthèse de ce texte en utilisant un format json valide avec la méthode suivante
-    
-        1 - Ajoute de la ponctuation au texte et fais des retours à la ligne quand tu le juges nécessaire
-    
-        2 - Commence par des informations générales sur le texte :
-    
-            "title" : titre de la section
-            "themes" : thèmes abordés dans la section
-    
-        Puis suis cette structure pour chaque section identifiée dans le texte
-    
-        "section" : rappel du titre de la section
-        "title" : hero title pour la section
-        "text" : résumé en 3 lignes de la section
-        "cta-text" : CTA court pour la section
-        "themes" : 5 thèmes uniques liés à cette section en particulier
-        "img" : prompt pour générer une image sur mid-journey en rapport avec le thème principal de la section
-
-        Attention à bien utiliser du format JSON valide.
-        _EOF2_;
-
         $results = [];
         if($this->security_check($post, $pn .'-main_admin_site')) {
+
             $content_titles = ["Bénéfices", "Besoins", "Solutions", "Avantages concurrentiels"];
-            $content = "";
 
             // Process each prompt through the content of the corresponding field
             // input through voice during the interview ?
@@ -251,100 +362,24 @@ Class Veepdotai_Admin_Prompts {
 
             $date = date("Ymd-His");
             for ($i = 0; $i < 4; $i++) {
-                // We don't concat content anymore because the prompt becomes too big
-                //$content .= "\nSection " . $content_titles[$i] . "\n\n";
-                $content = "\nSection " . $content_titles[$i] . "\n\n";
-                $key = $this->plugin_name . '-ai-section' . $i . '-text-interview';
-                error_log("Key: " . $key . ".");
-                $content .= get_option($key);
-                $content .= "\n";
-
-                $prefix = $this->plugin_name . '-ai-section' . $i . '-text-prompt-';
-                $prompt_pre = get_option($prefix . 'pre');
-                $prompt_post = get_option($prefix . 'post');
+                $prompt = $this->create_prompt($content_titles[$i], $i);
 
                 $open_ai_key = get_option($this->plugin_name.'_ai_api_key');
                 $open_ai = new OpenAi($open_ai_key);
-
-                //$prompt = get_option($this->plugin_name . 'ai-section' . $i . '-text-prompt');
-         
-                $prompt = $this->replace_special_chars($prompt_pre . "\n\n"
-                            . $content
-                            . "\n\n" . $prompt_post);
-
-
-
-                // 20230509-135300
-                $ts = get_option($this->plugin_name . '_ai_site_ts');
-                if ($ts) {
-                    $raw = file_get_contents(WP_PLUGIN_DIR . "/$pn/data/$ts-$pn-ai-section$i-result.txt");
-                } else {
-                    $raw = "";
-                }
-
-                //error_log($this->plugin_name . '_ai_site_ts' . ': ' . $ts . '.');
-                if (! $raw) {
-                    $raw = $open_ai->completion([
-                        'model' => 'text-davinci-003',
-                        'prompt' => $prompt,
-                        'temperature' => 0.7,
-                        'max_tokens' => 2000,
-                        'frequency_penalty' => 0,
-                        'presence_penalty' => 0.6,
-                    ]);
-                }
-
-                error_log($raw);
-                $filename = WP_PLUGIN_DIR . "/$pn/data/$date-$pn-ai-section$i";
-                $filename_result = $filename . "-result.txt";
-                $filename_prompt = $filename . "-prompt.txt";
-                $filename_json = $filename . "-json.txt";
-                file_put_contents($filename_prompt, $prompt);
-                file_put_contents($filename_result, $raw);
-/*
-                $normalized_raw = "";
-                if (mb_detect_encoding($raw, 'utf-8', true) === false) {
-                    $normalized_raw = mb_convert_encoding($raw, 'utf-8', 'iso-8859-1');
-                }
-                $r = $this->convert_to_valid_json($normalized_raw);
-*/
-                $r = $this->convert_to_valid_json($raw);
-                file_put_contents($filename_json, json_encode($r));
-                //print_r($r);
-
-                // veepdotai-ai-section0-title
-                $prefix = $pn .'-ai-section' . $i . '-';
-
-                error_log("Processing section " . $prefix);
-                // $section is a global var
-                if (property_exists($r, 'section')) {
-                    $section = $r->section;
-                    if (is_string($section)) {
-                        $section = $r;
-                    } elseif (is_null($section)) {
-                        $section = $r->sections[0];
-                    } elseif (is_array($section)) {
-                        $section = $r->section[0];
-                    } else {
-                        error_log("The format of the r->section is not known.");
-                    }    
-                } elseif (property_exists($r, 'sections')) {
-                    if (is_array($r->sections)) {
-                        $section = $r->sections[0];
-                    } else {
-                        error_log("The format of the r->sections is not known.");
-                    }
-                }
+ 
+                $section = $this->create_text_with_ai($open_ai, $date, $prompt, $i);
                 
-                //$section = $r->section; //We process one section at a time
+                $prefix = $pn . '-ai-section' . $i . '-';
 
-                $res = $this->update_option($prefix . 'title', $section->title);
-                $res = $this->update_option($prefix . 'text', $section->text);
+                $this->update_option($prefix . 'title', $section->title);
+                $this->update_option($prefix . 'text', $section->text);
                 //$r = $this->update_option($prefix . 'cta-href', $section->{"cta-href"});
-                $r = $this->update_option($prefix . 'cta-text', $section->{"cta-text"});
-                //$res = $this->update_option($prefix . 'img', $section->img);
+                $this->update_option($prefix . 'cta-text', $section->{"cta-text"});
+                $this->update_option($prefix . 'img-prompt', $section->img);
 
-                $results[] = $r;
+                //$img = $this->create_image_with_ai($open_ai, $date, $prompt, $i);
+
+                //$results[] = $r;
             }
         }
         return $results;

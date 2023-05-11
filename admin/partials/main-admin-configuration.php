@@ -10,13 +10,22 @@
         <?php wp_nonce_field( $this->plugin_name.'-main_admin_configuration', $this->plugin_name.'-main_admin_configuration_nonce' ) ?>
 
         <fieldset>
-            <legend><?php _e('License key', $this->plugin_name)?></legend>
+            <legend><?php _e('Open API key configuration', $this->plugin_name)?></legend>
 
-            <label for="<?php echo $this->plugin_name ?>-ai-api_key"></label>
+            <label for="<?php echo $this->plugin_name ?>-ai-api_key">Open API key</label>
             <input type="text" name="<?php echo $this->plugin_name ?>-ai-api_key" value="<?php echo get_option($this->plugin_name.'_ai_api_key') ?>" required/>
             <p><?php _e( 'Open API Key. If you dont have one, <a href="https://platform.openai.com/account/api-keys" target="_blank">get an API Key</a>', $this->plugin_name ) ?></p>
-            <input class="button-primary" type="submit" name="<?php echo $this->plugin_name ?>-ai-save-api-key" value="<?php _e( 'Save API key', $this->plugin_name ) ?>" /><br>
         </fieldset>
+
+        <fieldset>
+            <legend><?php _e('Pexels API key configuration', $this->plugin_name)?></legend>
+
+            <label for="<?php echo $this->plugin_name ?>-pexels-api_key">Pexel API Key</label>
+            <input type="text" name="<?php echo $this->plugin_name ?>-pexels-api_key" value="<?php echo get_option($this->plugin_name.'_pexels_api_key') ?>" required/>
+            <p><?php _e( 'Pexels API Key. If you dont have one, <a href="https://www.pexels.com/fr-fr/api/new/" target="_blank">get an API Key</a>', $this->plugin_name ) ?></p>
+        </fieldset>
+
+        <input class="button-primary" type="submit" name="<?php echo $this->plugin_name ?>-ai-save-api-key" value="<?php _e( 'Save API key', $this->plugin_name ) ?>" /><br>
 
     </form>
 </div>

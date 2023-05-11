@@ -3,6 +3,14 @@
 use PHPHtmlParser\Dom;
 use PHPHtmlParser\Options;
 
+use Psr\Log\LoggerInterface;
+
+use WBW\Library\Pexels\Model\Photo;
+use WBW\Library\Pexels\Model\Source;
+use WBW\Library\Pexels\Provider\ApiProvider;
+use WBW\Library\Pexels\Request\SearchPhotosRequest;
+use WBW\Library\Pexels\Response\PhotosResponse;
+
 Class Veepdotai_Admin_Site {
 	/**
 	 * The ID of this plugin.
@@ -56,6 +64,18 @@ Class Veepdotai_Admin_Site {
             if ($page_url) {
                 echo '<script>window.location.replace("' . $page_url . '")</script>';
             }
+        } elseif (isset($vp[$pn .'-ai-generate-images'])) {
+            $page_url = $self->generate_images_from_prompts($vp);
+
+            if ($page_url) {
+                echo '<script>window.location.replace("' . $page_url . '")</script>';
+            }
+        } elseif (isset($vp[$pn .'-ai-generate-pages'])) {
+            $page_url = $self->generate_pages_from_section_informations($vp);
+
+            if ($page_url) {
+                echo '<script>window.location.replace("' . $page_url . '")</script>';
+            }
         }
 
         //generate the form
@@ -88,7 +108,12 @@ Class Veepdotai_Admin_Site {
 
         if($this->security_check($post, $pn .'-main_admin_site')) {
             for ($i = 0; $i < 6; $i++) {
-                $this->update_option_if_set($post, $pn, 'ai-section' . $i . '-img');
+                // Everything needs to be saved because all parts may have been updated
+                $this->update_option_if_set($post, $pn, 'ai-section' . $i . '-img-prompt');
+                $this->update_option_if_set($post, $pn, 'ai-section' . $i . '-img-href');
+                // img->alt = img->prompt or part of? or summarized?
+                $this->update_option_if_set($post, $pn, 'ai-section' . $i . '-img-alt');
+
                 $this->update_option_if_set($post, $pn, 'ai-section' . $i . '-title');
                 $this->update_option_if_set($post, $pn, 'ai-section' . $i . '-text');
                 $this->update_option_if_set($post, $pn, 'ai-section' . $i . '-cta-text');
@@ -116,6 +141,22 @@ Class Veepdotai_Admin_Site {
 
     }
 
+    public function set_section_image($_section, $selector, $href, $alt) {
+        $section = $_section;
+        try {
+            $image = $section->find($selector)[0];
+            $image->setAttribute('src', $href);
+            $image->setAttribute('alt', $alt);
+
+            error_log("Image: " . $image);
+        } catch (e) {
+            error_log("Image : Error while getting first-child of $selector. Does it exist?");
+            return $section;
+        } finally {
+            return $section;
+        }
+    }
+
     public function set_section_ahref($_section, $selector, $href, $text) {
         $section = $_section;
         try {
@@ -128,6 +169,200 @@ Class Veepdotai_Admin_Site {
         } finally {
             return $section;
         }
+    }
+
+    public function generate_pages_from_section_informations($post) {
+        $this->save_configuration($post);
+        $pn = $this->plugin_name;
+        
+        if ($this->security_check($post, $pn .'-main_admin_site')) {
+            $id = $post[$pn.'-article-templates'];
+            
+            $initial_content = get_post($id)->post_content;
+            //$initial_content2 = file_get_contents(plugin_dir_path(__FILE__) . '../data/template.html');
+
+            $dom = new Dom;
+            $dom->loadStr($initial_content,
+                (new Options())
+                ->setPreserveLineBreaks(true)
+                ->setCleanupInput(true)
+                ->setFixComments(true)
+                ->setRemoveComments(false)
+            );
+
+            $sections = $dom->find('.veep_section');
+            for ($i = 0; $i < count($sections); $i++) {
+                $veep_title = get_option("$pn-ai-section$i-title");
+                $veep_text = get_option("$pn-ai-section$i-text");
+                $veep_image = get_option("$pn-ai-section$i-img");
+                $veep_cta_href = get_option("$pn-ai-section$i-cta-href");
+                $veep_cta_text = get_option("$pn-ai-section$i-cta-text");
+
+                error_log("Processing JCK $i");
+                try {
+                    /**
+                     * Syntax NOK :
+                     *   $dom->find(".veep_section[$i] .veep_title")[0]->firstChild()->setText($veep_title);
+                     */ 
+                    $section = $dom->find('.veep_section')[$i];
+                    $this->set_section_data($section, '.veep_title', $veep_title);
+                    $this->set_section_data($section, '.veep_text', $veep_text);
+                    $this->set_section_ahref($section, '.veep_cta a', $veep_cta_href, $veep_cta_text);
+                    $this->set_section_image($section, 'img', $veep_img, $veep_title);
+                } catch (\Exception $e) {
+                    error_log("One of the value doesn't exist for the $i section.");
+                    error_log("Exeption: " . $e->getMessage() . "\n");
+                }
+                error_log("Content $i: " . $section->outerHtml);
+
+            }
+
+            //error_log('DOM: ' . $dom);
+            $content = $dom->export();
+            $new_page = array(
+                'post_title' => get_option($pn .'-ai-section0-title'),
+                'post_content' => $content,
+                'post_status' => 'publish',
+                'post_type' => 'page',
+                'post_name' => '',
+                'page_template' => $post[$pn .'-wp-templates']
+            );
+        }
+
+        $page_id = wp_insert_post($new_page);
+        $r = wp_set_post_categories($page_id, array(31));
+        error_log("Post $page_id has been assigned the 31 category" . $r);
+
+        $page_url = get_permalink($page_id);
+
+        return $page_url;
+    }
+
+        /**
+     * 
+     */
+    public function get_image($i) {
+        $pn = $this->plugin_name;
+
+        // Gets an already computed data, for example: 20230509-135300
+        $ts = get_option($pn . '_ai_site_ts');
+        if ($ts) {
+            $raw = file_get_contents(WP_PLUGIN_DIR
+                    . "/$pn/data/$ts-$pn-ai-section$i-result.txt");
+        } else {
+            $raw = "";
+        }
+
+        return json_encode($raw);
+    }
+    /**
+     * Stores computed data to check errors or enables users
+     * to replay a previous prompt or reuse previous results
+     */
+    public function store_image($date, $i, $params, $raw) {
+
+        $pn = $this->plugin_name;
+
+        // It would be better to store data according to user/yyyy/mm/dd
+        $filename = WP_PLUGIN_DIR . "/$pn/data/$date-$pn-ai-section$i";
+
+        $filename_prompt = $filename . "-img-prompt.txt";
+        $filename_result = $filename . "-img-result_json.txt";
+        file_put_contents($filename_prompt, $params["prompt"]);
+        file_put_contents($filename_result, $raw);
+
+        return $raw;
+    }
+
+    /**
+     * 
+     */
+    public function get_image_with_pexels($ts, $prompt, $i) {
+        $pn = $this->plugin_name;
+
+        $pexels_key = get_option($pn . '_pexels_api_key');
+        $provider = new ApiProvider($pexels_key);
+
+        // Create a Search photos request.
+        $request = new SearchPhotosRequest();
+        $request->setQuery($prompt);
+        $request->setOrientation("landscape"); // Optional
+        $request->setSize("large"); // Optional
+        $request->setLocale("fr-FR"); // Optional
+
+        $response = $provider->sendRequest($request);
+
+        $images = $response->getPhotos();
+        if (! empty($images)) {
+            $image = $images[0];
+            return $image;
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * 
+     */
+    public function create_image_with_ai($open_ai, $ts, $prompt, $i) {
+        $pn = $this->plugin_name;
+
+        $raw = $this->get_data($i);
+        if (! $raw) {
+            $params = [
+                "prompt" => $prompt,
+                "n" => 1,
+                "size" => "512x512",
+                "response_format" => "url",
+            ];
+
+            $raw = $open_ai->image($params);
+            $this->store_image($ts, $i, $params, $raw);
+        }
+
+        error_log($raw);
+
+        return $raw;
+    }
+
+    /**
+     * 
+     */
+    public function generate_images_from_prompts($post) {
+        $this->save_configuration($post);
+        $pn = $this->plugin_name;
+        
+        if ($this->security_check($post, $pn .'-main_admin_site')) {
+            $content_titles = ["Bénéfices", "Besoins", "Solutions", "Avantages concurrentiels"];
+
+            // Process each prompt through the content of the corresponding field
+            // input through voice during the interview ?
+            // Or concat everything before providing the content to AI ?
+            // Last method will be cheaper and more efficient
+
+            $date = date("Ymd-His");
+            for ($i = 0; $i < 4; $i++) {
+                $prefix = $pn . '-ai-section' . $i . '-';
+
+                // Open AI
+                // Results with AI image generation are disappointed
+                // $open_ai = new OpenAi($pexels_ai_key); 
+                // $pexels_key = get_option($this->plugin_name . '_pexels_api_key');
+                //$image = $this->create_image_with_ai($open_ai, $date, $prompt, $i);
+                //$res = $this->update_option($prefix . 'img-href', $image->data[0]->url);
+
+                // Pexels
+                // Images are better. A search is done with the provided information.
+                $prompt = get_option($prefix . 'img-prompt');
+//                $prompt = "nature";
+                $image = $this->get_image_with_pexels($date, $prompt, $i);
+                error_log("Image URL: " . $image->getSrc()->getLarge() . ".");
+                $res = update_option($prefix . 'img-href', $image->getSrc()->getLarge()); // $this->update_option ?
+
+                $results[] = $res; // useless. @TODO Fix needed.
+            }
+        }
+        return null;
     }
 
     /**
@@ -156,7 +391,7 @@ Class Veepdotai_Admin_Site {
             for ($i = 0; $i < count($sections); $i++) {
                 $veep_title = get_option("$pn-ai-section$i-title");
                 $veep_text = get_option("$pn-ai-section$i-text");
-                $veep_image = get_option("$pn-ai-section$i-img");
+                $veep_img = get_option("$pn-ai-section$i-img-href");
                 $veep_cta_href = get_option("$pn-ai-section$i-cta-href");
                 $veep_cta_text = get_option("$pn-ai-section$i-cta-text");
 
@@ -169,8 +404,8 @@ Class Veepdotai_Admin_Site {
                     $section = $dom->find('.veep_section')[$i];
                     $this->set_section_data($section, '.veep_title', $veep_title);
                     $this->set_section_data($section, '.veep_text', $veep_text);
-                    //set_section_data($section, '.veep_img', $veep_img);
                     $this->set_section_ahref($section, '.veep_cta a', $veep_cta_href, $veep_cta_text);
+                    $this->set_section_image($section, 'img', $veep_img, $veep_title);
                 } catch (\Exception $e) {
                     error_log("One of the value doesn't exist for the $i section.");
                     error_log("Exeption: " . $e->getMessage() . "\n");
