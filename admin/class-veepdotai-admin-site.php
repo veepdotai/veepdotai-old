@@ -11,6 +11,8 @@ use WBW\Library\Pexels\Provider\ApiProvider;
 use WBW\Library\Pexels\Request\SearchPhotosRequest;
 use WBW\Library\Pexels\Response\PhotosResponse;
 
+use Orhanerday\OpenAi\OpenAi;
+
 Class Veepdotai_Admin_Site {
 	/**
 	 * The ID of this plugin.
@@ -176,64 +178,75 @@ Class Veepdotai_Admin_Site {
         $pn = $this->plugin_name;
         
         if ($this->security_check($post, $pn .'-main_admin_site')) {
-            $id = $post[$pn.'-article-templates'];
+            //$id = $post[$pn . '-article-templates'];
             
-            $initial_content = get_post($id)->post_content;
-            //$initial_content2 = file_get_contents(plugin_dir_path(__FILE__) . '../data/template.html');
+            $content_titles = ["Bénéfices", "Besoins", "Solutions", "Avantages concurrentiels"];
+            $date = date("Ymd-His");
+            for ($i = 0; $i < 1; $i++) {
+                $prompt_pre = "Ecris à partir du contenu suivant un article de blog de 20 lignes "
+                            . "avec un style journalistique et argumenté reprenant les idées principales du texte : ";
+    
+                $content = get_option("$pn-ai-section$i-text-interview");
+                $prompt = $prompt_pre . $content;
 
-            $dom = new Dom;
-            $dom->loadStr($initial_content,
-                (new Options())
-                ->setPreserveLineBreaks(true)
-                ->setCleanupInput(true)
-                ->setFixComments(true)
-                ->setRemoveComments(false)
-            );
+                $open_ai_key = get_option($this->plugin_name.'_ai_api_key');
+                $open_ai = new OpenAi($open_ai_key);
 
-            $sections = $dom->find('.veep_section');
-            for ($i = 0; $i < count($sections); $i++) {
-                $veep_title = get_option("$pn-ai-section$i-title");
-                $veep_text = get_option("$pn-ai-section$i-text");
-                $veep_image = get_option("$pn-ai-section$i-img");
-                $veep_cta_href = get_option("$pn-ai-section$i-cta-href");
-                $veep_cta_text = get_option("$pn-ai-section$i-cta-text");
+                $params = [
+                    'model' => 'text-davinci-003',
+                    'prompt' => $prompt,
+                    'temperature' => 0.7,
+                    'max_tokens' => 2000,
+                    'frequency_penalty' => 0,
+                    'presence_penalty' => 0.6,
+                ];
 
-                error_log("Processing JCK $i");
+                print_r("Params: ");
+                print_r($params);
+
+                $raw = $open_ai->completion($params);
+                print_r("Raw: ");
+                print_r($raw);
+                $r = json_decode($raw)->choices[0];
+                $newcontent = $r->text;
+
+/*
+<!-- wp:paragraph {"className":"veep_generated_text","dynamicAttributes":{"toolsetDSVersion":"230000"}} -->
+<p class="veep_text_generated"></p>
+<!-- /wp:paragraph -->
+*/
+
+/*
+                $r = Array(
+                    "text" => $content
+                );
+
+                $newcontent = $r["text"];
+*/
                 try {
-                    /**
-                     * Syntax NOK :
-                     *   $dom->find(".veep_section[$i] .veep_title")[0]->firstChild()->setText($veep_title);
-                     */ 
-                    $section = $dom->find('.veep_section')[$i];
-                    $this->set_section_data($section, '.veep_title', $veep_title);
-                    $this->set_section_data($section, '.veep_text', $veep_text);
-                    $this->set_section_ahref($section, '.veep_cta a', $veep_cta_href, $veep_cta_text);
-                    $this->set_section_image($section, 'img', $veep_img, $veep_title);
                 } catch (\Exception $e) {
-                    error_log("One of the value doesn't exist for the $i section.");
-                    error_log("Exeption: " . $e->getMessage() . "\n");
+                    error_log("Exception's generation for the $i section.");
+                    error_log("Exception: " . $e->getMessage() . "\n");
                 }
-                error_log("Content $i: " . $section->outerHtml);
+                error_log("Content $i: " . $newcontent);
 
+                //error_log('DOM: ' . $dom);
+                $new_page = array(
+                    'post_title' => get_option($pn ."-ai-section$i-cta-text"), // Needs wp_strip_all_tags ?
+                    'post_content' => $newcontent,
+                    'post_status' => 'publish',
+                    'post_type' => 'page',  // post
+                    'post_name' => '',
+                    'page_template' => $post[$pn .'-lp-templates']
+                );
+
+                $page_id = wp_insert_post($new_page);
+                $r = wp_set_post_categories($page_id, array(31));
+                error_log("Post $page_id has been assigned the 31 category" . $r);
+        
+                $page_url = get_permalink($page_id);        
             }
-
-            //error_log('DOM: ' . $dom);
-            $content = $dom->export();
-            $new_page = array(
-                'post_title' => get_option($pn .'-ai-section0-title'),
-                'post_content' => $content,
-                'post_status' => 'publish',
-                'post_type' => 'page',
-                'post_name' => '',
-                'page_template' => $post[$pn .'-wp-templates']
-            );
         }
-
-        $page_id = wp_insert_post($new_page);
-        $r = wp_set_post_categories($page_id, array(31));
-        error_log("Post $page_id has been assigned the 31 category" . $r);
-
-        $page_url = get_permalink($page_id);
 
         return $page_url;
     }

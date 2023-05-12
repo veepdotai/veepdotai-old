@@ -49,6 +49,7 @@ Class Veepdotai_Admin_Prompts {
         if (isset($vp[$pn .'-ai-save'])) {
             $self->save_configuration($vp);
 		} elseif (isset($vp[$pn .'-ai-generate-site'])) {
+            /* Unavailable ? */
             $page_url = $self->generate_page_from_template($vp);
 
             if ($page_url) {

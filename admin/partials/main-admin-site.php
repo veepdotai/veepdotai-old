@@ -19,6 +19,7 @@
             <input class="button-primary" type="submit" name="<?php echo $this->plugin_name ?>-ai-save" value="<?php _e( 'Save', $this->plugin_name ) ?>" />
             <input class="button-primary" type="submit" name="<?php echo $this->plugin_name ?>-ai-generate-images" value="<?php _e( 'Generate images', $this->plugin_name ) ?>" />
             <input class="button-primary" type="submit" name="<?php echo $this->plugin_name ?>-ai-generate-site" value="<?php _e( 'Generate site', $this->plugin_name ) ?>" />
+            <input class="button-primary" type="submit" name="<?php echo $this->plugin_name ?>-ai-generate-pages" value="<?php _e( 'Generate pages', $this->plugin_name ) ?>" />
         </div>
     </form>
 </div>
