@@ -140,7 +140,14 @@ Feel free to ask questions with these different tools:
 1. /assets/veepdotai-3-prompts-resized.png
 1. /assets/veepdotai-4-site-resized.png
 
+== Upgrade notice ==
+
+Not relevant for the moment.
+
 == Changelog ==
+
+= 1.1 =
+* README improvements
 
 = 1.0 =
 * Initial release
