@@ -1,0 +1,56 @@
+// On créer une fonction qui va ajouter une meta_box dans les posts et les pages
+function tutowp_meta_tags_meta_boxes() {
+    add_meta_box('tutowp_meta_tags_meta_boxes', 'Référencement naturel', 'tutowp_meta_tags_meta_boxes_callback', ['post', 'page']);
+}
+// On accroche notre fonction au hook "add_meta_boxes", hook qui permet de charger les meta_boxes (d'où son nom !)
+add_action('add_meta_boxes', 'tutowp_meta_tags_meta_boxes');
+
+// On créer une fonction pour afficher la meta_box dans les pages et posts
+function tutowp_meta_tags_meta_boxes_callback($post){
+    $tutowp_meta_tag_title = get_post_meta($post->ID, 'tutowp_meta_tag_title', true);
+    $tutowp_meta_tag_description = get_post_meta($post->ID, 'tutowp_meta_tag_description', true);
+    ?>
+        <table class="form-table">
+            <tbody>
+                <tr>
+                    <th><label for="tutowp-meta-tag-title">Balise "title"</label></th>
+                    <td><input id="tutowp-meta-tag-title" class="regular-text" type="text" name="tutowp_meta_tag_title" placeholder="Entrez votre balise title" value="<?php echo $tutowp_meta_tag_title; ?>"/></td>
+                </tr>
+                <tr>
+                    <th><label for="tutowp-meta-tag-description">Balise "description"</label></th>
+                    <td><textarea id="tutowp-meta-tag-description" class="large-text" rows="6" type="text" name="tutowp_meta_tag_description" placeholder="Entrez votre balise description"><?php echo $tutowp_meta_tag_description; ?></textarea></td>
+                </tr>
+        </table>
+    <?php
+}
+
+// On créer une fonction pour sauvegarder les balises en base de données
+function tutowp_meta_tags_save_postdata($post_id){
+    if(isset($_POST['tutowp_meta_tag_title']) && isset($_POST['tutowp_meta_tag_description'])){
+        update_post_meta($post_id, 'tutowp_meta_tag_title', $_POST['tutowp_meta_tag_title']);
+        update_post_meta($post_id, 'tutowp_meta_tag_description', $_POST['tutowp_meta_tag_description']);
+    }
+}
+add_action('save_post', 'tutowp_meta_tags_save_postdata');
+
+// On créer une fonction pour afficher le titre dans WordPress
+function tutowp_wp_title_filter(){
+    if(is_singular()){
+        $post = get_queried_object();
+        $post_title = get_post_meta($post->ID, 'tutowp_meta_tag_title', true);
+        return $post_title;
+    }
+}
+// On accroche cette fonction au filtre "wp_title"
+add_filter('wp_title', 'tutowp_wp_title_filter', 20, 2);
+
+// On créer une fonction pour afficher la meta description dans WordPress
+function tutowp_meta_description_action(){
+    if(is_singular()){
+        $post = get_queried_object();
+        $post_meta_description = get_post_meta($post->ID, 'tutowp_meta_tag_description', true);
+        echo '<meta name="description" content="'.$post_meta_description.'">';
+    }
+}
+// On accroche la fonction au header de WordPress
+add_action('wp_head', 'tutowp_meta_description_action', 1);
