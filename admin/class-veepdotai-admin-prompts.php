@@ -1,5 +1,7 @@
 <?php
 
+require_once "class-veepdotai-util.php";
+
 use Orhanerday\OpenAi\OpenAi;
 
 Class Veepdotai_Admin_Prompts {
@@ -92,6 +94,7 @@ Class Veepdotai_Admin_Prompts {
             $this->update_option_if_set($post, $pn, 'ai-section' . $i . '-img', '');
             $this->update_option_if_set($post, $pn, 'ai-section' . $i . '-title', '');
             $this->update_option_if_set($post, $pn, 'ai-section' . $i . '-text', '');
+            $this->update_option_if_set($post, $pn, 'ai-section' . $i . '-page', '');
             $this->update_option_if_set($post, $pn, 'ai-section' . $i . '-cta-text', '');
             $this->update_option_if_set($post, $pn, 'ai-section' . $i . '-cta-href', '');
         }
@@ -212,7 +215,7 @@ Class Veepdotai_Admin_Prompts {
         $prompt_pre = get_option($prefix . 'pre');
         $prompt_post = get_option($prefix . 'post');
 
-        $prompt = $this->replace_special_chars($prompt_pre . "\n\n"
+        $prompt = Veepdotai_Util::replace_special_chars($prompt_pre . "\n\n"
         . $content
         . "\n\n" . $prompt_post);
 
@@ -350,6 +353,7 @@ Class Veepdotai_Admin_Prompts {
 
                 $this->update_option($prefix . 'title', $section->title);
                 $this->update_option($prefix . 'text', $section->text);
+                $this->update_option($prefix . 'page', $section->page);
                 //$r = $this->update_option($prefix . 'cta-href', $section->{"cta-href"});
                 $this->update_option($prefix . 'cta-text', $section->{"cta-text"});
                 $this->update_option($prefix . 'img-prompt', $section->img);

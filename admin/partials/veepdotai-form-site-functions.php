@@ -20,12 +20,13 @@ function generate_form_section($enable_voice, $intent, $section_title, int $num_
                 . '<label>' . $section_title . ' [' . $num_section . ']</label>'
                 . '<p id="context-' . $num_section . '" class="veep_context">' . $context . '</p>'
                 . display($enable_voice, "Title", $pn . "-ai-section" . $num_section . "-title", "text", true).''
-                . display($enable_voice, "Contenu", $pn . "-ai-section" . $num_section . "-text", "textarea", true)
+                . display($enable_voice, "Résumé", $pn . "-ai-section" . $num_section . "-text", "textarea", true)
+                . display($enable_voice, "Contenu", $pn . "-ai-section" . $num_section . "-page", "textarea", true)
                 . display($enable_voice, "Image prompt", $pn . "-ai-section" . $num_section . "-img-prompt", "text", true)
-                . display($enable_voice, "Image href", $pn . "-ai-section" . $num_section . "-img-href", "img", true)
+                . display(false, "Image href", $pn . "-ai-section" . $num_section . "-img-href", "img", true)
                 . display($enable_voice, "Image alt", $pn . "-ai-section" . $num_section . "-img-alt", "text", true)
                 . display($enable_voice, "CTA text", $pn . "-ai-section" . $num_section . "-cta-text", "text", true)
-                . display($enable_voice, "CTA href", $pn . "-ai-section" . $num_section . "-cta-href", "text", true)
+                . display(false, "CTA href", $pn . "-ai-section" . $num_section . "-cta-href", "text", true)
                 . '</div>';
     return $section;
 }

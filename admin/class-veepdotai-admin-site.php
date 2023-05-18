@@ -1,6 +1,6 @@
 <?php
 
-require "class-veepdotai-util.php";
+require_once "class-veepdotai-util.php";
 
 use PHPHtmlParser\Dom;
 use PHPHtmlParser\Options;
@@ -175,7 +175,7 @@ Class Veepdotai_Admin_Site {
         }
     }
 
-    public function generate_pages_from_section_informations($post) {
+    public function generate_pages_from_section_informations($post, $reset = false) {
         $this->save_configuration($post);
         $pn = $this->plugin_name;
         
@@ -185,37 +185,45 @@ Class Veepdotai_Admin_Site {
             $content_titles = ["Bénéfices", "Besoins", "Solutions", "Avantages concurrentiels"];
             $date = date("Ymd-His");
             for ($i = 0; $i < 4; $i++) {
-                $section_field = "$pn-ai-section$i-text-interview";
-                Veepdotai_Util::log_direct("<h2>Processing section: " . $section_field . ".</h2>");
+                // Is page already computed?
+                $newcontent = get_option($pn ."-ai-section$i-page");
+                if ($newcontent == "" || $reset) {
+                    $section_field = "$pn-ai-section$i-text-interview";
+                    Veepdotai_Util::log_direct("<h2>Processing section: " . $section_field . ".</h2>");
 
-                $prompt_pre = "Ecris à partir du contenu suivant un article de blog de 20 lignes "
-                            . "avec un style journalistique et argumenté reprenant les idées principales du texte sans écrire ce que tu fais : ";
-    
-                $content = get_option("$section_field");
-                $prompt = $prompt_pre . $content;
+                    $prompt_pre = "Ecris à partir du contenu suivant un article de blog de 20 lignes "
+                                . "avec un style journalistique et argumenté reprenant les idées principales du texte sans écrire ce que tu fais : ";
+        
+                    $content = get_option("$section_field");
+                    $prompt = $prompt_pre . $content;
 
-                Veepdotai_Util::log_direct("<p class='prompt'>" . $prompt . ".</p>");
+                    Veepdotai_Util::log_direct("<p class='prompt'>" . $prompt . ".</p>");
 
-                $open_ai_key = get_option($this->plugin_name.'_ai_api_key');
-                $open_ai = new OpenAi($open_ai_key);
+                    $open_ai_key = get_option($this->plugin_name.'_ai_api_key');
+                    $open_ai = new OpenAi($open_ai_key);
 
-                $params = [
-                    'model' => 'text-davinci-003',
-                    'prompt' => $prompt,
-                    'temperature' => 0.7,
-                    'max_tokens' => 2000,
-                    'frequency_penalty' => 0,
-                    'presence_penalty' => 0.6,
-                ];
+                    $params = [
+                        'model' => 'text-davinci-003',
+                        'prompt' => $prompt,
+                        'temperature' => 0.7,
+                        'max_tokens' => 2000,
+                        'frequency_penalty' => 0,
+                        'presence_penalty' => 0.6,
+                    ];
 
-                print_r("Params: ");
-                print_r($params);
-                Veepdotai_Util::log_direct("<p class='params'>" . $params . ".</p>");
-/*
-<!-- wp:paragraph {"className":"veep_generated_text","dynamicAttributes":{"toolsetDSVersion":"230000"}} -->
-<p class="veep_text_generated"></p>
-<!-- /wp:paragraph -->
-*/
+                    print_r("Params: ");
+                    print_r($params);
+                    Veepdotai_Util::log_direct("<p class='params'>" . $params . ".</p>");
+
+                    $raw = $open_ai->completion($params);
+                    print_r("Raw: ");
+                    print_r($raw);
+                    $r = json_decode($raw)->choices[0];
+                    $newcontent = $r->text;
+
+                    // Stores content in the corresponding option
+                    update_option($pn ."-ai-section$i-page", $newcontent);
+                }
 
                 // Compute post_name for future reference by welcome|landing page
                 $cta_text = get_option($pn ."-ai-section$i-cta-text");
@@ -229,21 +237,30 @@ Class Veepdotai_Admin_Site {
                 Veepdotai_Util::log_direct("<p class='post_name'>Post_name for this generation: " . $post_name . ".</p>");
                 Veepdotai_Util::log_direct("<p class='template'>Template for this generation: " . $template . ".</p>");
 
-exit();
-
-                $raw = $open_ai->completion($params);
-                print_r("Raw: ");
-                print_r($raw);
-                $r = json_decode($raw)->choices[0];
-                $newcontent = $r->text;
-
                 $image_href = get_option($pn ."-ai-section$i-img-href");
-                $newcontent = "<img src=\"$image_href\" />" . $newcontent;
+                $image_alt = get_option($pn ."-ai-section$i-img-prompt");
+
+                $tpl_group_pre = '<!-- wp:group {"className":"veep_page","layout":{"type":"constrained"}} -->'
+                                    . '<div class="wp-block-group veep_page">';
+                $tpl_group_post = '</div>'
+                                    .'<!-- /wp:group -->';
+
+                $tpl_image = '<!-- wp:image {"align":"center","style":{"border":{"radius":"5px","width":"10px"}},"className":"size-full has-custom-border is-style-rounded","dynamicAttributes":{"toolsetDSVersion":"230000"}} -->'
+                                . '<figure class="wp-block-image aligncenter has-custom-border size-full is-style-rounded">'
+                                . '<img src="' . $image_href . '" alt="' . $image_alt . '" style="border-width:10px;border-radius:5px"/>'
+                                . '</figure>'
+                                . '<!-- /wp:image -->';
+
+                $tpl_para = '<!-- wp:paragraph {"className":"veep_generated_text","dynamicAttributes":{"toolsetDSVersion":"230000"}} -->'
+                            . '<p class="veep_text_generated">' . $newcontent . '</p>'
+                            . '<!-- /wp:paragraph -->';
+
+                $content = $tpl_group_pre . $tpl_image . $tpl_para . $tpl_group_post;
 
                 //error_log('DOM: ' . $dom);
                 $new_page = array(
                     'post_title' => get_option($pn ."-ai-section$i-cta-text"), // Needs wp_strip_all_tags ?
-                    'post_content' => $newcontent,
+                    'post_content' => $content,
                     'post_status' => 'publish',
                     'post_type' => 'page',  // post
                     'post_name' => $post_name,
@@ -420,7 +437,7 @@ exit();
 
                 if ($veep_cta_href == "") {
                     // Compute post_name for future reference by welcome|landing page
-                    $post_name = $this->replace_special_chars($veep_cta_text);
+                    $post_name = Veepdotai_Util::replace_special_chars($veep_cta_text);
                     $post_name = strtr($post_name, ["'" => "_", " " => "_"]);
                     $post_name = strtolower($post_name);
                     $veep_cta_href = $post_name;
