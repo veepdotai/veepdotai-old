@@ -9,18 +9,17 @@
  * that starts the plugin.
  *
  * @link              https://www.veep.ai
- * @since             1.0.0
+ * @since             1.1.0
  * @package           Veepdotai
  *
  * @wordpress-plugin
  * Plugin Name:       Veepdotai
  * Plugin URI:        https://www.veep.ai
- * Description:       Veepdotai is a project to create a complete autonomous virtual presence through voice, from web site to LinkedIn page and, at the end, each social network. A true #nosouci solution :-) 
- * Version:           1.0.0
+ * Description:       Veepdotai is a project to create a complete autonomous virtual presence through voice and AI (ChatGPT).
+ * Version:           1.1.0
  * Requires at least: 6.0
  * Requires PHP:      8.0
  * Author:            Jean-Christophe Kermagoret
- * Author URI:        https://www.veep.ai
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
  * Text Domain:       veepdotai
@@ -115,4 +114,3 @@ function veepdotai_cat_pages() {
 add_action('init', 'veepdotai_cat_pages');
 
 run_veepdotai();
-
