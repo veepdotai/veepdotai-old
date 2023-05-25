@@ -45,7 +45,7 @@ Class Veepdotai_Admin_Site {
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
 
-        $post = array_map('stripslashes_deep', $_POST);
+        $post = $_POST;
         $veep_post = array_intersect_key(
                         $post,
                         array_flip(preg_grep('/^' . $this->plugin_name .'/', array_keys($post))));
@@ -456,12 +456,18 @@ Class Veepdotai_Admin_Site {
                     $this->set_section_image($section, 'img', $veep_img, $veep_title);
                 } catch (\Exception $e) {
                     error_log("One of the value doesn't exist for the $i section.");
-                    error_log("Exeption: " . $e->getMessage() . "\n");
+                    error_log("Exception: " . $e->getMessage() . "\n");
                 }
             }
 
             //error_log('DOM: ' . $dom);
             $content = $dom->export();
+            $content = preg_replace(
+                '/(>[a-zA-Z\s]*)\*([a-zA-Z\s]*)\*/',
+                "\\1<span>\\2</span>", $content);
+
+            error_log($content);
+
             $new_page = array(
                 'post_title' => get_option($pn .'-ai-section0-title'),
                 'post_content' => $content,

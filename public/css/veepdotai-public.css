@@ -2,3 +2,81 @@
  * All of the CSS for your public-facing functionality should be
  * included in this file.
  */
+
+ body .is-layout-constrained > :where(:not(.alignleft):not(.alignright):not(.alignfull)) {
+    max-width: 100% ! important;
+ }
+
+ header, footer {
+    display: none;
+ }
+
+.veep_section:first-child {
+  display: flex;
+  /*flex-direction: column;*/
+  justify-content: center;
+  flex-grow: 1;
+  min-height: 80vh;
+  /*
+  background: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/162656/city.jpg) no-repeat center / cover;
+  background-blend-mode: luminosity;
+  */
+}
+
+ .veep_section:not(first-child) + .veep_section {
+    padding-bottom: 50px;
+ }
+
+ .veep_section img {
+    border-radius: 5px;
+    width: 80%;
+    margin: auto;
+    display: block;
+ }
+
+ .veep_section:first-child .veep_title span {
+    display: inline flow-root list-item;
+    background-color: black;
+    padding: 5px;
+    color:white;
+    transform: rotate(358deg);
+    border-radius: 5px;
+ }
+ 
+ .veep_section:first-child .veep_title {
+    font-weight: 900;
+ }
+
+ .veep_section .veep_title {
+    font-size: 3em;
+    font-weight: 600;
+ }
+
+ .veep_section .veep_text {
+    /* */
+ }
+
+ .veep_section .veep_cta {
+    width: 50%;
+    /*
+    margin-left: auto;
+    margin-right: auto;
+    */
+ }
+
+ .veep_page {
+    width: 70%;
+ }
+
+ .veep_page figure {
+    display: block ! important;
+ }
+
+ .veep_page img {
+    border-radius: 5px;
+    width: 100%;
+ }
+
+ .veep_page .veep_text_generated {
+    width: 100%;   
+ }
