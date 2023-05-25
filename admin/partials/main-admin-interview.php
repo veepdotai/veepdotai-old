@@ -36,13 +36,10 @@ _EOC_;
             echo generate_interview_form_section(true, 'differenciation', 'Différenciation', 3);
             echo generate_interview_form_section(true, 'faq', 'FAQ', 4);
             echo generate_interview_contact_section(true, 'contact', 'Prise de contact', 5);
-
-            echo generate_template_selector(get_pages());
         ?>
         <div class="veep_actions">
             <input class="button-primary" type="submit" name="<?php echo $this->plugin_name ?>-ai-save" value="<?php _e( 'Save', $this->plugin_name ) ?>" />
-            <input class="button-primary" type="submit" name="<?php echo $this->plugin_name ?>-ai-improve" value="<?php _e( 'Improve', $this->plugin_name ) ?>" />
-            <input class="button-primary" type="submit" name="<?php echo $this->plugin_name ?>-ai-generate-site" value="<?php _e( 'Generate site', $this->plugin_name ) ?>" />
+            <input class="button-primary" type="submit" name="<?php echo $this->plugin_name ?>-ai-next" value="<?php _e( 'Next', $this->plugin_name ) ?>" />
         </div>
     </form>
 </div>

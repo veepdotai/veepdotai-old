@@ -16,6 +16,8 @@
         ?>
         <div class="veep_actions">
             <input class="button-primary" type="submit" name="<?php echo $this->plugin_name ?>-ai-save" value="<?php _e( 'Save', $this->plugin_name ) ?>" />
+            <input class="button-primary" type="submit" name="<?php echo $this->plugin_name ?>-ai-next" value="<?php _e( 'Next', $this->plugin_name ) ?>" />
+            
             <input class="button-primary" type="submit" name="<?php echo $this->plugin_name ?>-ai-transform" value="<?php _e( 'Transform', $this->plugin_name ) ?>" />
             <input class="veepdotai_ai_site_ts" name="veepdotai_ai_site_ts" />
         </div>
