@@ -59,6 +59,7 @@ function veepdotai_load_textdomain() {
  * Rename this for your plugin and update it as you release new versions.
  */
 define( 'VEEPDOTAI_VERSION', '1.0.0' );
+define( 'VEEPDOTAI_PLUGIN_DIR', __DIR__);
 
 /**
  * The code that runs during plugin activation.
@@ -93,6 +94,12 @@ require_once dirname(__FILE__)."/vendor/autoload.php";
 require plugin_dir_path( __FILE__ ) . 'includes/class-veepdotai.php';
 
 /**
+ * External plugins to add common behaviors
+ */
+require plugin_dir_path( __FILE__ ) . 'plugins/veepdotai-seo.php';
+require plugin_dir_path( __FILE__ ) . 'plugins/veepdotai-saas.php';
+
+/**
  * Begins execution of the plugin.
  *
  * Since everything within the plugin is registered via hooks,
@@ -107,10 +114,5 @@ function run_veepdotai() {
 	$plugin->run();
 
 }
-
-function veepdotai_cat_pages() {
-	register_taxonomy_for_object_type('category', 'page');
-}
-add_action('init', 'veepdotai_cat_pages');
 
 run_veepdotai();
