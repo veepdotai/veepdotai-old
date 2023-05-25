@@ -34,7 +34,7 @@ Class Veepdotai_Admin_Prompts {
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
 
-        $post = array_map('stripslashes_deep', $_POST);
+        $post = $_POST;
         $veep_post = array_intersect_key(
                         $post,
                         array_flip(preg_grep('/^' . $this->plugin_name .'/', array_keys($post))));
@@ -59,7 +59,10 @@ Class Veepdotai_Admin_Prompts {
             }
 		} elseif (isset($vp[$pn .'-ai-transform'])) {
             $page_url = $self->improve($vp);
-        }
+        } elseif (isset($vp[$pn .'-ai-next'])) {
+			Veepdotai_Util::go_to_url('site');
+		}
+
         //generate the form
         ob_start();
         include( 'partials/main-admin-prompts.php' );

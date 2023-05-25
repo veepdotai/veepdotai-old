@@ -1,5 +1,7 @@
 <?php
 
+require_once "class-veepdotai-util.php";
+
 use PHPHtmlParser\Dom;
 use PHPHtmlParser\Options;
 
@@ -33,7 +35,7 @@ Class Veepdotai_Admin_Interview {
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
 
-        $post = array_map('stripslashes_deep', $_POST);
+        $post = $_POST;
         $veep_post = array_intersect_key(
                         $post,
                         array_flip(preg_grep('/^' . $this->plugin_name .'/', array_keys($post))));
@@ -57,7 +59,10 @@ Class Veepdotai_Admin_Interview {
             }
 		} elseif (isset($vp[$pn .'-ai-improve'])) {
             $page_url = $self->improve($vp);
-        }
+        } else if (isset($vp[$pn .'-ai-next'])) {
+			Veepdotai_Util::go_to_url('prompts');
+		}
+
         //generate the form
         ob_start();
         include( 'partials/main-admin-interview.php' );
@@ -95,101 +100,6 @@ Class Veepdotai_Admin_Interview {
         }
 
         return;
-    }
-
-    /**
-     * Improve provided content with AI (openai in our case)
-     */
-    public function improve($post) {
-        $pn = $this->plugin_name;
-
-        return;
-    }
-
-    public function set_section_data($_section, $selector, $value) {
-        $section = $_section;
-        try {
-            $section->find($selector)[0]->firstChild()->setText($value);
-        } catch (e) {
-            error_log("Error while getting first-child of $selector. Does it exist?");
-            return $section;
-        } finally {
-            return $section;
-        }
-
-    }
-
-    public function set_section_ahref($_section, $selector, $href, $text) {
-        $section = $_section;
-        try {
-            $a = $section->find($selector)[0];
-            $a->setAttribute('href', $href);
-            $a->firstChild()->setText($text);
-        } catch (e) {
-            error_log("Error while getting first-child of $selector. Does it exist?");
-            return $section;
-        } finally {
-            return $section;
-        }
-    }
-
-    /**
-     * 
-     */
-    public function generate_page_from_template($post) {
-        $this->save_configuration($post);
-        $pn = $this->plugin_name;
-        
-        if ($this->security_check($post, $pn .'-main_admin_site')) {
-            $id = $post[$pn.'-lp-templates'];
-            
-            $initial_content = get_post($id)->post_content;
-            //$initial_content2 = file_get_contents(plugin_dir_path(__FILE__) . '../data/template.html');
-
-            $dom = new Dom;
-            $dom->loadStr($initial_content,
-                (new Options())
-                ->setPreserveLineBreaks(true)
-                ->setCleanupInput(true)
-                ->setFixComments(true)
-                ->setRemoveComments(false)
-            );
-
-            $sections = $dom->find('.veep_section');
-            for ($i = 0; $i < count($sections); $i++) {
-                $veep_text = get_option("$pn-ai-section$i-text-interview");
-
-                error_log("Processing $i");
-                /**
-                 * Syntax NOK :
-                 *   $dom->find(".veep_section[$i] .veep_title")[0]->firstChild()->setText($veep_title);
-                 */ 
-                $section = $dom->find('.veep_section')[$i];
-                $this->set_section_data($section, '.veep_text', $veep_text);
-            }
-
-            //error_log('DOM: ' . $dom);
-            $content = $dom->export();
-            //$title = get_option($pn .'-ai-section0-title');
-            $title = date("Ymd-His");
-            $new_page = array(
-                'post_parent' => $post[$pn .'-lp-templates'],
-                'post_title' => $title,
-                'post_content' => $content,
-                'post_status' => 'publish',
-                'post_type' => 'page',
-                'post_name' => '',
-                'page_template' => $post[$pn .'-wp-templates']
-            );
-        }
-
-        $page_id = wp_insert_post($new_page);
-        $r = wp_set_post_categories($page_id, array(31));
-        error_log("Post $page_id has been assigned the 31 category" . $r);
-
-        $page_url = get_permalink($page_id);
-
-        return $page_url;
     }
 
     /**

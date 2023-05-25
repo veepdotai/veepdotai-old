@@ -40,7 +40,7 @@ Class Veepdotai_Admin_Configuration {
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
 
-        $post = array_map('stripslashes_deep', $_POST);
+		$post = $_POST;
         $veep_post = array_intersect_key($post, array_flip(preg_grep('/^'. $this->plugin_name .'/', array_keys($post))));
 
         $this->post = $veep_post;
@@ -63,7 +63,9 @@ Class Veepdotai_Admin_Configuration {
 
         if (isset($vp[$pn .'-ai-save-api-key'])) {
             $self->save_configuration($vp);
-        }
+        } else if (isset($vp[$pn .'-ai-next'])) {
+			Veepdotai_Util::go_to_url('interview');
+		}
 
         //generate the form
         ob_start();

@@ -44,7 +44,7 @@ class Veepdotai_Admin {
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
 
-        $post = array_map('stripslashes_deep', $_POST);
+        $post = $_POST;
         $veep_post = array_intersect_key($post, array_flip(preg_grep('/^'. $this->plugin_name .'/', array_keys($post))));
 
 		$this->load_dependencies();
@@ -53,7 +53,7 @@ class Veepdotai_Admin {
 	private function load_dependencies() {
 		//require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-veep-loader.php';
 		require plugin_dir_path( __FILE__ ) . './class-veepdotai-admin-configuration.php';
-		require plugin_dir_path( __FILE__ ) . './class-veepdotai-admin-menu.php';
+		//require plugin_dir_path( __FILE__ ) . './class-veepdotai-admin-menu.php';
 		require plugin_dir_path( __FILE__ ) . './class-veepdotai-admin-interview.php';
 		require plugin_dir_path( __FILE__ ) . './class-veepdotai-admin-prompts.php';
 		require plugin_dir_path( __FILE__ ) . './class-veepdotai-admin-site.php';
@@ -113,6 +113,7 @@ class Veepdotai_Admin {
             array($this, 'main_admin_submenu_configuration_callback')
         );
 
+        /*
         add_submenu_page(
             $this->plugin_name,
             __( 'Veepdotai', $this->plugin_name  ),
@@ -121,6 +122,7 @@ class Veepdotai_Admin {
             $this->plugin_name.'-veepdotai-menu-logo',
             array($this, 'main_admin_submenu_menu_callback')
         );
+        */
 
         add_submenu_page(
             $this->plugin_name,
