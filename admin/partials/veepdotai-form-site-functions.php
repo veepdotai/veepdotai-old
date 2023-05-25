@@ -16,7 +16,7 @@ function generate_contact_section($enable_voice, $intent, $section_title, int $n
 function generate_form_section($enable_voice, $intent, $section_title, int $num_section, $context = '') {
         //$pn = $this->plugin_name;
     $pn = 'veepdotai';
-    $section = '<div class="veep_section">'
+    $section = '<div id="veep_id_' . $intent . '" class="veep_section">'
                 . '<label>' . $section_title . ' [' . $num_section . ']</label>'
                 . '<p id="context-' . $num_section . '" class="veep_context">' . $context . '</p>'
                 . display($enable_voice, "Title", $pn . "-ai-section" . $num_section . "-title", "text", true).''

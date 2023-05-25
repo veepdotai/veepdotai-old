@@ -7,6 +7,21 @@ function init_nonce() {
     return wp_nonce_field( $pn . '-main_admin_site', $pn . '-main_admin_site_nonce' );
 }
 
+function generate_tabs() {
+    $questions = [
+        'benefices' => 'Bénéfices',
+        'besoins' => 'Besoins',
+        'solutions' => 'Solutions',
+        'differenciation' => 'Différenciation',
+    ];
+
+    $list_items = '';
+    foreach($questions as $key => $label) {
+        $list_items .= '<li onclick="toggle_display(\'veep_id_' . $key . '\')">' . $label . '</li>';
+    }
+    return '<ul class="tabs_questions">' . $list_items . '</ul>';
+}
+
 function display(bool $enable_voice, string $legend, string $field_name, string $_type, bool $in_section = false) {
     $fieldform = '';
     $fieldstyle = '';

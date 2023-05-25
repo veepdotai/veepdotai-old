@@ -19,7 +19,7 @@ function generate_prompt_contact_section($enable_voice, $intent, $section_title,
 
 function generate_prompt_form_section($enable_voice, $intent, $section_title, int $num_section, $context = '') {
     $pn = 'veepdotai';
-    $section_head = '<div class="veep_section">'
+    $section_head = '<div id="veep_id_' . $intent . '" class="veep_section">'
                 . '<label>' . $section_title . ' [' . $num_section . ']</label>';
 
     $section_pre = '<p id="context-' . $num_section . '" class="veep_context veep_context_pre">' . $context . '</p>'
