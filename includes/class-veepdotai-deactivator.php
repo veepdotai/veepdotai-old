@@ -1,5 +1,7 @@
 <?php
 
+require_once  VEEPDOTAI_PLUGIN_DIR . '/admin/class-veepdotai-util.php';
+
 /**
  * Fired during plugin deactivation
  *
@@ -30,7 +32,7 @@ class Veepdotai_Deactivator {
 	 * @since    1.0.0
 	 */
 	public static function deactivate() {
-
+		Veepdotai_Util::log('Deactivating Veepdotai plugin.');
 	}
 
 }

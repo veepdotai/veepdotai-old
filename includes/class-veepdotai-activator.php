@@ -1,5 +1,7 @@
 <?php
 
+require_once  VEEPDOTAI_PLUGIN_DIR . '/admin/class-veepdotai-util.php';
+
 /**
  * Fired during plugin activation
  *
@@ -30,6 +32,61 @@ class Veepdotai_Activator {
 	 * @since    1.0.0
 	 */
 	public static function activate() {
+		Veepdotai_Util::log('Activating Veepdotai plugin.');
+
+		Veepdotai_Util::log('Prepare to configure roles and caps.');
+		Veepdotai_Activator::create_roles_and_caps();
+		//register_activation_hook( __FILE__, 'Veepdotai_Activator::create_roles_and_caps');
+		//add_action('init', 'Veepdotai_Activator::create_roles_and_caps');
+	}
+
+	public static function create_roles_and_caps() {
+		Veepdotai_Util::log('Configuring roles and caps 3.');
+
+		Veepdotai_Util::log('Configuring Veepdotai_role_admin.');
+		add_role(
+			'veepdotai_role_admin',
+			'Veepdotai Admin Role',
+			array(
+				'veepdotai_generate'  => true,
+				'veepdotai_configure' => true,
+				'veepdotai_interview' => true,
+				'veepdotai_prompt'    => true,
+			),
+		);
+
+		Veepdotai_Util::log('Configuring Veepdotai_role_user.');
+		add_role(
+			'veepdotai_role_user',
+			'Veepdotai User Role',
+			array(
+				'veepdotai_generate'  => true,
+				'veepdotai_interview' => true,
+			),
+		);
+
+		Veepdotai_Util::log('Configuring Veepdotai_role_advanced.');
+		add_role(
+			'veepdotai_role_advanced',
+			'Veepdotai Advanced Role',
+			array(
+				'veepdotai_generate'  => true,
+				'veepdotai_interview' => true,
+				'veepdotai_prompt'    => true,
+			),
+		);
+
+		Veepdotai_Util::log('Configuring Veepdotai_role_agency.');
+		add_role(
+			'veepdotai_role_agency',
+			'Veepdotai Agency Role',
+			array(
+				'veepdotai_generate'  => true,
+				'veepdotai_configure' => true,
+				'veepdotai_interview' => true,
+				'veepdotai_prompt'    => true,
+			),
+		);
 	}
 
 }
