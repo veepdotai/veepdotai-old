@@ -1,1 +1,2 @@
-data/
+data/generated
+composer.lock
