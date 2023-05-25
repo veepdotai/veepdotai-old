@@ -146,8 +146,10 @@ Not relevant for the moment.
 
 == Changelog ==
 
-= 1.1 =
+=== 1.1 ===
+
 * README improvements
 
-= 1.0 =
+=== 1.0 ===
+
 * Initial release
