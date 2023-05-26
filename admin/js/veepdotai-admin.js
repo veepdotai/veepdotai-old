@@ -30,31 +30,67 @@
 	 */
 
 	 $( window ).load(function() {
+
 		var last = "";
-	 	var input = $.find("#context"); 
-		input[0].addEventListener("keyup", function(e) {
-			if ('Enter' == e.key) {
-				last = "";
-			} else {
-				var re = /exécute/i;
-
-				// Gets the last line because the user may have been back and insert a char somewhere
-				var lines = this.value.split('\n');
-				last = lines[lines.length - 1];
-
-				if (last.match(re)) {
-					console.log("match exécute");
-					window.location = "https://www.google.com";
+	 	var input = jQuery.find("#context"); 
+		if (input && input.length > 0) {
+			input[0].addEventListener("keyup", function(e) {
+				if ('Enter' == e.key) {
+					last = "";
 				} else {
-					console.log(e.key);
+					var re = /exécute/i;
+
+					// Gets the last line because the user may have been back and insert a char somewhere
+					var lines = this.value.split('\n');
+					last = lines[lines.length - 1];
+
+					if (last.match(re)) {
+						console.log("match exécute");
+						window.location = "https://www.google.com";
+					} else {
+						console.log(e.key);
+					}
 				}
-			}
-		});
+			});			
+		}
+
+		init_sections();
+
 	});
 
-	 
-
 })( jQuery );
+
+  function init_sections() {
+	if (jQuery('.veep_section')) {
+		toggle_display(jQuery('.veep_section')[0].id);
+	}
+  }
+
+  function hide_sections() {
+	sections = jQuery('.veep_section');
+	if (sections) {
+		menus = jQuery('ul.tabs_questions li');
+		for (i = 0; i < sections.length; i++) {
+			sections[i].style.display = 'none';
+			if (i < menus.length) {
+				menus[i].classList.remove('displayed');
+			}
+		}
+	}
+  }
+
+  function toggle_display(eltName) {
+	hide_sections();
+
+	section = jQuery('#' + eltName)[0];
+	menu = jQuery('#' + eltName + '_menu')[0];
+	if (section.style.display == 'none') {
+		section.style = 'display: block';
+		menu.classList.add('displayed');
+	} else {
+		section.style = 'display: none';
+	}
+  }
 
   function fillWithSameValues(o) {
 	function getValueByClassName(className) {

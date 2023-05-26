@@ -31,3 +31,33 @@
     margin: 10px;
     padding : 5px;
 }
+
+.veep_actions .button-primary {
+    margin: 5px;
+}
+
+
+.tabs_questions {
+}
+
+.tabs_questions li {
+    padding: 5px;
+    display: inline;
+}
+
+.tabs_questions li:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.tabs_questions li.displayed {
+    background: black;
+    color: white;
+    text-decoration: underline;
+}
+
+/*
+.tabs_questions li:not(:last-child):after {
+    content: ' | ';
+}
+*/
