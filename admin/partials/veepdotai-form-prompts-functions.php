@@ -23,10 +23,10 @@ function generate_prompt_form_section($enable_voice, $intent, $section_title, in
                 . '<label>' . $section_title . ' [' . $num_section . ']</label>';
 
     $section_pre = '<p id="context-' . $num_section . '" class="veep_context veep_context_pre">' . $context . '</p>'
-                . display($enable_voice, "Pré-prompt", $pn . "-ai-section" . $num_section . "-text-prompt-pre", "textarea", true);
+                . display_escaped($enable_voice, "Pré-prompt", $pn . "-ai-section" . $num_section . "-text-prompt-pre", "textarea", true);
 
     $section_post = '<p id="context-' . $num_section . '" class="veep_context veep_context_post">' . $context . '</p>'
-    . display($enable_voice, "Post-prompt", $pn . "-ai-section" . $num_section . "-text-prompt-post", "textarea", true);
+    . display_escaped($enable_voice, "Post-prompt", $pn . "-ai-section" . $num_section . "-text-prompt-post", "textarea", true);
 
     $section = $section_head
                 . $section_pre

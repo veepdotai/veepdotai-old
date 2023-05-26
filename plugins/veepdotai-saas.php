@@ -53,6 +53,12 @@ define( 'VEEPDOTAI_SAAS_VERSION', '1.0.0' );
  * This action is documented in includes/class-veepdotai-activator.php
  */
 
+function veepdotai_cat_pages() {
+	register_taxonomy_for_object_type('category', 'page');
+}
+add_action('init', 'veepdotai_cat_pages');
+
+
 add_action('pre_get_posts', 'veepdotai_query_disable_post_media' );
 function veepdotai_query_disable_post_media( $wp_query ) {
  global $current_user;
@@ -62,7 +68,6 @@ function veepdotai_query_disable_post_media( $wp_query ) {
     add_filter('views_upload', 'veepdotai_show_media_counts');
  }
 }
-
 
 function veepdotai_show_post_counts($views) {
 	global $current_user, $wp_query;

@@ -98,7 +98,7 @@ class Veepdotai_Admin {
         add_menu_page(
             'Veepdotai Admin',
             'Veepdotai',
-            'manage_options',
+            'veepdotai',
             $this->plugin_name,
             array($this, 'main_admin_menu_callback'),
             plugin_dir_url( __FILE__ ) .'images/veep.ai-white-bg-icon.png'
@@ -108,7 +108,7 @@ class Veepdotai_Admin {
             $this->plugin_name,
             __( 'Veepdotai', $this->plugin_name ),
             __( 'Configuration', $this->plugin_name ),
-            'manage_options',
+            'veepdotai_configure',
             $this->plugin_name.'-veepdotai-configuration-site',
             array($this, 'main_admin_submenu_configuration_callback')
         );
@@ -118,7 +118,7 @@ class Veepdotai_Admin {
             $this->plugin_name,
             __( 'Veepdotai', $this->plugin_name  ),
             __( 'Menu', $this->plugin_name  ),
-            'manage_options',
+            'veepdotai_menu',
             $this->plugin_name.'-veepdotai-menu-logo',
             array($this, 'main_admin_submenu_menu_callback')
         );
@@ -128,7 +128,7 @@ class Veepdotai_Admin {
             $this->plugin_name,
             __( 'Veepdotai', $this->plugin_name  ),
             __( 'Interview', $this->plugin_name  ),
-            'manage_options',
+            'veepdotai_interview',
             $this->plugin_name.'-veepdotai-menu-interview',
             array($this, 'main_admin_submenu_interview_callback')
         );
@@ -137,7 +137,7 @@ class Veepdotai_Admin {
             $this->plugin_name,
             __( 'Veepdotai', $this->plugin_name  ),
             __( 'Prompts', $this->plugin_name  ),
-            'manage_options',
+            'veepdotai_prompt',
             $this->plugin_name.'-veepdotai-menu-prompts',
             array($this, 'main_admin_submenu_prompts_callback')
         );
@@ -146,7 +146,7 @@ class Veepdotai_Admin {
             $this->plugin_name,
             __( 'Veepdotai', $this->plugin_name ),
             __( 'Site', $this->plugin_name ),
-            'manage_options',
+            'veepdotai_generate',
             $this->plugin_name.'-veepdotai-menu-site',
             array($this, 'main_admin_submenu_site_callback')
         );

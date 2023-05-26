@@ -55,7 +55,7 @@ Class Veepdotai_Admin_Prompts {
             $page_url = $self->generate_page_from_template($vp);
 
             if ($page_url) {
-                echo '<script>window.location.replace("' . $page_url . '")</script>';
+                Veepdotai_Util::go_to_url($page_url);
             }
 		} elseif (isset($vp[$pn .'-ai-transform'])) {
             $page_url = $self->improve($vp);
@@ -64,11 +64,11 @@ Class Veepdotai_Admin_Prompts {
 		}
 
         //generate the form
-        ob_start();
+        //ob_start();
         include( 'partials/main-admin-prompts.php' );
-        $page_html = ob_get_contents();
-        ob_end_clean();
-        echo $page_html;
+        //$page_html = ob_get_contents();
+        //ob_end_clean();
+        //echo $page_html;
     }
 
     /**

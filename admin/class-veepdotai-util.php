@@ -39,13 +39,24 @@ class Veepdotai_Util {
     /**
 	 * Moves the user to the provided admin page for the Veepdotai plugin.
 	 */
-	public static function go_to_url($page) {
-		$admin_url = get_admin_url();
-		$prefix_menu = "/admin.php?page=veepdotai-veepdotai-menu-";
-		$page_url = $admin_url . $prefix_menu . $page;
+	public static function go_to_url($page, $move = true) {
+        if (! str_contains($page, 'https')) {
+            $admin_url = get_admin_url();
+            $prefix_menu = "/admin.php?page=veepdotai-veepdotai-menu-";
+            $page_url = $admin_url . $prefix_menu . $page;    
+        } else {
+            $page_url = $page;
+        }
 
-		echo '<script>window.location.replace("' . $page_url . '")</script>';
-	}
+        Veepdotai_Util::log('Page_url: ' . $page_url);
+
+        if ($move) {
+            echo '<script>window.location.replace("' . $page_url . '")</script>';
+            //echo wp_kses_post( '<script>window.location.replace("' . $page_url . '")</script>' );
+        } else {
+            return $page_url;
+        }
+    }
 
     public static function log_direct( $o ){
         ob_end_flush();
@@ -56,8 +67,12 @@ class Veepdotai_Util {
         ob_end_flush();
     }
 
-	public static function var_error_log( $object=null ){
-		ob_start();                    // start buffer capture
+	public static function log( $object=null ){
+        return Veepdotai_Util::var_error_log($object);
+    }
+
+    public static function var_error_log( $object=null ){
+        ob_start();                    // start buffer capture
 		var_dump( $object );           // dump the values
 		$contents = ob_get_contents(); // put the buffer into a variable
 		ob_end_clean();                // end capture

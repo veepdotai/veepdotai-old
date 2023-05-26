@@ -57,6 +57,8 @@ Class Veepdotai_Admin_Configuration {
 
     public function manage_action() {
 
+		include('partials/veepdotai-form-functions.php');
+
         $self = $this;
         $pn = $this->plugin_name;
         $vp = $this->post;
@@ -68,11 +70,11 @@ Class Veepdotai_Admin_Configuration {
 		}
 
         //generate the form
-        ob_start();
+        //ob_start();
         include( 'partials/main-admin-configuration.php' );
-        $page_html = ob_get_contents();
-        ob_end_clean();
-        echo $page_html;
+        //$page_html = ob_get_contents();
+        //ob_end_clean();
+        //echo $page_html;
     }
 
     /**

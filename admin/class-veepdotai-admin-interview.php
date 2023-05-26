@@ -55,20 +55,24 @@ Class Veepdotai_Admin_Interview {
             $page_url = $self->generate_page_from_template($vp);
 
             if ($page_url) {
-                echo '<script>window.location.replace("' . $page_url . '")</script>';
+                Veepdotai_Util::go_to_url($page_url);
             }
 		} elseif (isset($vp[$pn .'-ai-improve'])) {
             $page_url = $self->improve($vp);
         } else if (isset($vp[$pn .'-ai-next'])) {
-			Veepdotai_Util::go_to_url('prompts');
+            if (current_user_can('veepdotai_prompt')) {
+                Veepdotai_Util::go_to_url('prompts', true);
+            } else {
+                Veepdotai_Util::go_to_url('site', true);
+            }
 		}
 
         //generate the form
-        ob_start();
+        //ob_start();
         include( 'partials/main-admin-interview.php' );
-        $page_html = ob_get_contents();
-        ob_end_clean();
-        echo $page_html;
+        //$page_html = ob_get_contents();
+        //ob_end_clean();
+        //echo $page_html;
     }
 
     /**

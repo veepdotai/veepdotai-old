@@ -1,20 +1,10 @@
-<div class="wrap <?php echo $this->plugin_name.'-main-admin-site' ?>">
+<div class="wrap <?php esc_attr( $this->plugin_name.'-main-admin-site' ) ?>">
     <h2><?php esc_html_e(get_admin_page_title())?></h2>
     <hr>
     <form method="post" action="">
         <input type="button" value="Je suis prêt" onclick="start(document.getElementById('context').innerHTML)"/>
         <?php
-            echo init_nonce();
-$context1 = <<<_EOC_
-Bonjour, je me présente, je suis Vipe.
-
-Je suis une IA, une intelligence artificielle, et je vais construire votre
-landing page à l'issue de cette interview.
-
-Je vais donc vous poser quelques questions.
-
-Prêt ? Allons-y !
-_EOC_;
+            echo wp_kses_post( init_nonce() );
 
 $context = <<<_EOC_
 Bonjour, je me présente, je suis Vipe.
@@ -28,18 +18,22 @@ Prêt ? Allons-y !
 _EOC_;
 
 
-            echo generate_context($context);
+            echo wp_kses_post( generate_context($context) );
 
-            echo generate_interview_hero_section(true, 'benefices', 'Bénéfice', 0, '');
-            echo generate_interview_form_section(true, 'besoins', 'Besoins',1);
-            echo generate_interview_form_section(true, 'solutions', 'Solutions', 2);
-            echo generate_interview_form_section(true, 'differenciation', 'Différenciation', 3);
-            echo generate_interview_form_section(true, 'faq', 'FAQ', 4);
-            echo generate_interview_contact_section(true, 'contact', 'Prise de contact', 5);
+            echo( generate_tabs_escaped() );
+
+            echo wp_kses_post( generate_interview_hero_section(true, 'benefices', 'Bénéfice', 0, '') );
+            echo wp_kses_post( generate_interview_form_section(true, 'besoins', 'Besoins',1) );
+            echo wp_kses_post( generate_interview_form_section(true, 'solutions', 'Solutions', 2) );
+            echo wp_kses_post( generate_interview_form_section(true, 'differenciation', 'Différenciation', 3) );
+            echo wp_kses_post( generate_interview_form_section(true, 'faq', 'FAQ', 4) );
+            echo wp_kses_post( generate_interview_contact_section(true, 'contact', 'Prise de contact', 5) );
         ?>
         <div class="veep_actions">
-            <input class="button-primary" type="submit" name="<?php echo $this->plugin_name ?>-ai-save" value="<?php _e( 'Save', $this->plugin_name ) ?>" />
-            <input class="button-primary" type="submit" name="<?php echo $this->plugin_name ?>-ai-next" value="<?php _e( 'Next', $this->plugin_name ) ?>" />
+            <?php
+                echo generate_button_escaped($pn, 'ai-save', 'Save');
+                echo generate_button_escaped($pn, 'ai-next', 'Next');
+            ?>
         </div>
     </form>
 </div>

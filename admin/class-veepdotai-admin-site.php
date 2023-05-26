@@ -59,35 +59,40 @@ Class Veepdotai_Admin_Site {
 
         include('partials/veepdotai-form-site-functions.php');
 
+        $page_url = "";
         if (isset($vp[$pn .'-ai-save'])) {
             //$this.save_configuration($post);
             $self->save_configuration($vp);
 		} elseif (isset($vp[$pn .'-ai-generate-site'])) {
             $page_url = $self->generate_page_from_template($vp);
 
-            if ($page_url) {
-                echo '<script>window.location.replace("' . $page_url . '")</script>';
-            }
+            Veepdotai_Util::go_to_url( $page_url );
         } elseif (isset($vp[$pn .'-ai-generate-images'])) {
             $page_url = $self->generate_images_from_prompts($vp);
 
-            if ($page_url) {
-                echo '<script>window.location.replace("' . $page_url . '")</script>';
-            }
+            Veepdotai_Util::go_to_url( $page_url );
         } elseif (isset($vp[$pn .'-ai-generate-pages'])) {
             $page_url = $self->generate_pages_from_section_informations($vp);
 
-            if ($page_url) {
-                echo '<script>window.location.replace("' . $page_url . '")</script>';
-            }
+            Veepdotai_Util::go_to_url( $page_url );
+        } elseif (isset($vp[$pn .'-ai-generate-articles'])) {
+            $page_url = $self->generate_articles_from_section_informations($vp);
+
+            Veepdotai_Util::go_to_url( $page_url );
+        } elseif (isset($vp[$pn .'-ai-generate-all'])) {
+            $page_url = $self->generate_all($vp);
+        }
+
+        if ($page_url) {
+            Veepdotai_Util::go_to_url( $page_url );
         }
 
         //generate the form
-        ob_start();
+        //ob_start();
         include( 'partials/main-admin-site.php' );
-        $page_html = ob_get_contents();
-        ob_end_clean();
-        echo $page_html;
+        //$page_html = ob_get_contents();
+        //ob_end_clean();
+        //echo $page_html;
     }
 
     /**
@@ -97,7 +102,8 @@ Class Veepdotai_Admin_Site {
         $r = null;
         if (isset($post[$pn .'-' .$field])){
             $field_name = $pn .'-' . $field;
-            $field_value = sanitize_text_field($post[$field_name]);
+            //$field_value = sanitize_text_field($post[$field_name]);
+            $field_value = str_replace('\\\'', '\'', sanitize_text_field($post[$field_name]));
             error_log('field_name : ' . $field_name . ' = ' . $field_value);
             $r = update_option($field_name, $field_value);
         }
@@ -120,6 +126,7 @@ Class Veepdotai_Admin_Site {
 
                 $this->update_option_if_set($post, $pn, 'ai-section' . $i . '-title');
                 $this->update_option_if_set($post, $pn, 'ai-section' . $i . '-text');
+                $this->update_option_if_set($post, $pn, 'ai-section' . $i . '-page');
                 $this->update_option_if_set($post, $pn, 'ai-section' . $i . '-cta-text');
                 $this->update_option_if_set($post, $pn, 'ai-section' . $i . '-cta-href');
             }
@@ -173,6 +180,11 @@ Class Veepdotai_Admin_Site {
         } finally {
             return $section;
         }
+    }
+
+    public function generate_articles_from_section_informations($post, $reset = false) {
+        $this->save_configuration($post);
+        $pn = $this->plugin_name;
     }
 
     public function generate_pages_from_section_informations($post, $reset = false) {
@@ -269,7 +281,7 @@ Class Veepdotai_Admin_Site {
 
                 $page_id = wp_insert_post($new_page);
                 $r = wp_set_post_categories($page_id, array(31));
-                error_log("Post $page_id has been assigned the 31 category" . $r);
+                //error_log("Post $page_id has been assigned the 31 category" . $r);
         
                 $page_url = get_permalink($page_id);        
             }
@@ -363,6 +375,18 @@ Class Veepdotai_Admin_Site {
         error_log($raw);
 
         return $raw;
+    }
+
+    /**
+     * 
+     */
+    public function generate_all($post) {
+        $page = $this->generate_images_from_prompts($post);
+        $page = $this->generate_pages_from_section_informations($post);
+        $page = $this->generate_page_from_template($post);
+        //$this->generate_articles_from_section_informations($post);
+
+        //Veepdotai_Util::go_to_url($page);
     }
 
     /**
@@ -474,13 +498,13 @@ Class Veepdotai_Admin_Site {
                 'post_status' => 'publish',
                 'post_type' => 'page',
                 'post_name' => '',
-                'page_template' => $post[$pn .'-wp-templates']
+                //'page_template' => $post[$pn .'-wp-templates']
             );
         }
 
         $page_id = wp_insert_post($new_page);
         $r = wp_set_post_categories($page_id, array(31));
-        error_log("Post $page_id has been assigned the 31 category" . $r);
+        //error_log("Post $page_id has been assigned the 31 category" . $r);
 
         $page_url = get_permalink($page_id);
 
