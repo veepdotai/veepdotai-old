@@ -48,6 +48,8 @@ class Veepdotai_Activator {
 			'veepdotai_role_admin',
 			'Veepdotai Admin Role',
 			array(
+				'read'  => true,
+				'veepdotai'  => true,
 				'veepdotai_generate'  => true,
 				'veepdotai_configure' => true,
 				'veepdotai_interview' => true,
@@ -60,6 +62,8 @@ class Veepdotai_Activator {
 			'veepdotai_role_user',
 			'Veepdotai User Role',
 			array(
+				'read'  => true,
+				'veepdotai'  => true,
 				'veepdotai_generate'  => true,
 				'veepdotai_interview' => true,
 			),
@@ -70,6 +74,8 @@ class Veepdotai_Activator {
 			'veepdotai_role_advanced',
 			'Veepdotai Advanced Role',
 			array(
+				'read'  => true,
+				'veepdotai'  => true,
 				'veepdotai_generate'  => true,
 				'veepdotai_interview' => true,
 				'veepdotai_prompt'    => true,
@@ -81,6 +87,8 @@ class Veepdotai_Activator {
 			'veepdotai_role_agency',
 			'Veepdotai Agency Role',
 			array(
+				'read'  => true,
+				'veepdotai'  => true,
 				'veepdotai_generate'  => true,
 				'veepdotai_configure' => true,
 				'veepdotai_interview' => true,
