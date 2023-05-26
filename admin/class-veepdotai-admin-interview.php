@@ -82,9 +82,10 @@ Class Veepdotai_Admin_Interview {
         $r = null;
         if (isset($post[$pn .'-' .$field])){
             $field_name = $pn .'-' . $field;
+            //$field_value = sanitize_text_field($post[$field_name]);
             $field_value = sanitize_text_field($post[$field_name]);
             error_log('field_name : ' . $field_name . ' = ' . $field_value);
-            $r = update_option($field_name, $field_value);
+            $r = update_option($field_name, wp_unslash( $field_value ));
         }
         return $r;
     }

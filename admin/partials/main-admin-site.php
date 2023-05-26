@@ -1,5 +1,5 @@
 <div class="wrap <?php esc_attr( $this->plugin_name.'-main-admin-site' ) ?>">
-    <h2><?php esc_html_e(get_admin_page_title())?></h2>
+    <h2><?php esc_html_e(get_admin_page_title() . ' / Site')?></h2>
     <hr>
     <form method="post" action="">
         <?php

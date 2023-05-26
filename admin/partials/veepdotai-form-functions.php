@@ -28,7 +28,9 @@ function generate_tabs_escaped() {
 
     $list_items = '';
     foreach($questions as $key => $label) {
-        $list_items .= '<li onclick="toggle_display(\'' . esc_js('veep_id_' . $key ) . '\')">'
+        $list_items .= '<li'
+                        . ' id=' . esc_attr('veep_id_' . $key . '_menu')
+                        . ' onclick="toggle_display(\'' . esc_js('veep_id_' . $key ) . '\')">'
                         . esc_html( $label )
                         . '</li>';
     }

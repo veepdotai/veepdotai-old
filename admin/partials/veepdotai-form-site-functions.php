@@ -22,7 +22,9 @@ function generate_form_section_escaped($enable_voice, $intent, $section_title, i
                 . '<p id="context-' . $num_section . '" class="veep_context">' . $context . '</p>'
                 . display_escaped($enable_voice, 'Title', $name_escaped . '-title', 'text', true).''
                 . display_escaped($enable_voice, 'Résumé', $name_escaped . '-text', 'textarea', true)
+//                . display_escaped($enable_voice, 'Transcription', $name_escaped . '-transcription', 'textarea', true)
                 . display_escaped($enable_voice, 'Contenu', $name_escaped . '-page', 'textarea', true)
+//                . display_escaped($enable_voice, 'Themes', $name_escaped . '-themes', 'textarea', true)
                 . display_escaped($enable_voice, 'Image prompt', $name_escaped . '-img-prompt', 'text', true)
                 . display_escaped(false, 'Image href', $name_escaped . '-img-href', 'img', true)
                 . display_escaped($enable_voice, 'Image alt', $name_escaped . '-img-alt', 'text', true)

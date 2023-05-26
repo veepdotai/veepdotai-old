@@ -1,5 +1,5 @@
 <div class="wrap <?php esc_attr(  $this->plugin_name.'-main-admin-site' ) ?>">
-    <h2><?php esc_html_e(get_admin_page_title())?></h2>
+    <h2><?php esc_html_e(get_admin_page_title() . ' / Prompts')?></h2>
     <hr>
     <form method="post" action="">
         <?php
@@ -7,7 +7,7 @@
 
             echo( generate_tabs_escaped() );
 
-            echo wp_kses_post( generate_checkbox() );
+            echo ( generate_checkbox() );
 
             echo wp_kses_post( generate_prompt_form_section(false, 'benefices', 'Bénéfice', 0, '') );
             echo wp_kses_post( generate_prompt_form_section(false, 'besoins', 'Besoins',1) );

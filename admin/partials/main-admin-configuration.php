@@ -1,5 +1,5 @@
 <div class="wrap <?php esc_attr( $this->plugin_name . '-main-admin-configuration') ?>">
-    <h2><?php esc_html_e(get_admin_page_title())?></h2>
+    <h2><?php esc_html_e(get_admin_page_title() . ' / Configure')?></h2>
     <ul>
         <li><?php _e( 'If you enjoy the plugin, we would really appreciate if you could <a href="https://wordpress.org/support/plugin/veep/reviews/" target="_blank">drop us a review</a> or support us with <a href="https://www.paypal.me/veep" target="_blank">a donation</a>', $this->plugin_name ) ?></li>
         <li><?php _e( 'If you find a bug or have any suggestion, create a <a href="https://wordpress.org/support/plugin/veep" target="_blank">new topic in the plugin support</a>', $this->plugin_name ) ?></li>

@@ -102,10 +102,9 @@ Class Veepdotai_Admin_Site {
         $r = null;
         if (isset($post[$pn .'-' .$field])){
             $field_name = $pn .'-' . $field;
-            //$field_value = sanitize_text_field($post[$field_name]);
-            $field_value = str_replace('\\\'', '\'', sanitize_text_field($post[$field_name]));
+            $field_value = sanitize_textarea_field($post[$field_name]);
             error_log('field_name : ' . $field_name . ' = ' . $field_value);
-            $r = update_option($field_name, $field_value);
+            $r = update_option($field_name, wp_unslash( $field_value ));
         }
         return $r;
     }
@@ -126,7 +125,9 @@ Class Veepdotai_Admin_Site {
 
                 $this->update_option_if_set($post, $pn, 'ai-section' . $i . '-title');
                 $this->update_option_if_set($post, $pn, 'ai-section' . $i . '-text');
+//                $this->update_option_if_set($post, $pn, 'ai-section' . $i . '-transcription');
                 $this->update_option_if_set($post, $pn, 'ai-section' . $i . '-page');
+//                $this->update_option_if_set($post, $pn, 'ai-section' . $i . '-themes');
                 $this->update_option_if_set($post, $pn, 'ai-section' . $i . '-cta-text');
                 $this->update_option_if_set($post, $pn, 'ai-section' . $i . '-cta-href');
             }
@@ -382,8 +383,8 @@ Class Veepdotai_Admin_Site {
      */
     public function generate_all($post) {
         $page = $this->generate_images_from_prompts($post);
-        $page = $this->generate_pages_from_section_informations($post);
         $page = $this->generate_page_from_template($post);
+        $page = $this->generate_pages_from_section_informations($post);
         //$this->generate_articles_from_section_informations($post);
 
         //Veepdotai_Util::go_to_url($page);
@@ -486,6 +487,8 @@ Class Veepdotai_Admin_Site {
 
             //error_log('DOM: ' . $dom);
             $content = $dom->export();
+
+            // Replace * by <span>\1</span>
             $content = preg_replace(
                 '/(>[a-zA-Z\s]*)\*([a-zA-Z\s]*)\*/',
                 "\\1<span>\\2</span>", $content);

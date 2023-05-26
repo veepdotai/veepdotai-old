@@ -81,10 +81,13 @@ Class Veepdotai_Admin_Prompts {
             $field_value = '';
         } else {
             // if (isset($post[$pn .'-' .$field])){
-            $field_value = sanitize_text_field($post[$field_name]);
+            $field_value = sanitize_textarea_field( $post[$field_name] );
+            //$field_value = str_replace('\\\'', '\'', $field_value);
         }
         error_log('field_name : ' . $field_name . ' = ' . $field_value);
-        $r = update_option($field_name, $field_value);
+        //$r = update_option($field_name, addslashes( stripslashes($field_value) ));
+        $r = update_option($field_name, wp_unslash ($field_value) );
+
         return $r;
     }
 
@@ -222,7 +225,7 @@ Class Veepdotai_Admin_Prompts {
         . $content
         . "\n\n" . $prompt_post);
 
-        return $prompt;
+        return stripslashes( $prompt );
     }
 
     /**
@@ -357,8 +360,10 @@ Class Veepdotai_Admin_Prompts {
                 $this->update_option($prefix . 'title', $section->title);
                 $this->update_option($prefix . 'text', $section->text);
                 $this->update_option($prefix . 'page', $section->page);
+//                $this->update_option($prefix . 'transcript', $section->transcript);
                 //$r = $this->update_option($prefix . 'cta-href', $section->{"cta-href"});
                 $this->update_option($prefix . 'cta-text', $section->{"cta-text"});
+//                $this->update_option($prefix . 'themes', $section->{"themes"});
                 $this->update_option($prefix . 'img-prompt', $section->img);
 
                 //$img = $this->create_image_with_ai($open_ai, $date, $prompt, $i);

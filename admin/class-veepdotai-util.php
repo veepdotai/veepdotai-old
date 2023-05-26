@@ -58,6 +58,9 @@ class Veepdotai_Util {
         }
     }
 
+    /**
+     * Logs information without buffering so you can see process progression
+     */
     public static function log_direct( $o ){
         ob_end_flush();
         ob_start();
