@@ -183,9 +183,14 @@ Class Veepdotai_Admin_Site {
         }
     }
 
+    /**
+     * @TBD
+     */
     public function generate_articles_from_section_informations($post, $reset = false) {
         $this->save_configuration($post);
         $pn = $this->plugin_name;
+
+        // Not Implemented Yet
     }
 
     public function generate_pages_from_section_informations($post, $reset = false) {
@@ -204,7 +209,8 @@ Class Veepdotai_Admin_Site {
                     $section_field = "$pn-ai-section$i-text-interview";
                     Veepdotai_Util::log_direct("<h2>Processing section: " . $section_field . ".</h2>");
 
-                    $prompt_pre = "Ecris à partir du contenu suivant un article de blog de 20 lignes "
+                    // Should be stored into the prompts database so it may be translated.
+                    $prompt_pre = "Ecris à partir du contenu suivant un article de blog de 200 mots "
                                 . "avec un style journalistique et argumenté reprenant les idées principales du texte sans écrire ce que tu fais : ";
         
                     $content = get_option("$section_field");

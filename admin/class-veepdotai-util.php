@@ -40,9 +40,9 @@ class Veepdotai_Util {
 	 * Moves the user to the provided admin page for the Veepdotai plugin.
 	 */
 	public static function go_to_url($page, $move = true) {
-        if (! str_contains($page, 'https')) {
+        if (! str_contains($page, 'http')) {
             $admin_url = get_admin_url();
-            $prefix_menu = "/admin.php?page=veepdotai-veepdotai-menu-";
+            $prefix_menu = "admin.php?page=veepdotai-veepdotai-menu-";
             $page_url = $admin_url . $prefix_menu . $page;    
         } else {
             $page_url = $page;

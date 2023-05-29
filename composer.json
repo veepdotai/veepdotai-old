@@ -3,7 +3,8 @@
     "require": {
         "orhanerday/open-ai": "^3.4",
         "paquettg/php-html-parser": "^3.1",
-        "webeweb/pexels-library": "^3.2"
+        "webeweb/pexels-library": "^3.2",
+        "league/commonmark": "^2.4"
     },
     "autoload": {
         "psr-4": {

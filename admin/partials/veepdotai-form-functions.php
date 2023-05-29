@@ -12,7 +12,6 @@ function generate_button_escaped($pn, $button_id, $button_name) {
                     . esc_attr( $pn . '-' . $button_id )
                     . '" value="'
                     . esc_attr( $button_name )
-//                    . esc_attr( _e( $button_name, $pn ))
                     . '" />';
     
     return $input_button;
@@ -46,19 +45,19 @@ function display_escaped(bool $enable_voice, string $legend, string $field_name,
     $name = 'name="' . esc_attr( $field_name ) . '"';
     $class = 'class="' . esc_attr( $field_name ) . '"';
 
-    $events = $enable_voice ? 'onclick="start_listening(this)"' : "";
+    $events = $enable_voice ? 'onclick="start_listening(this)"' : "none";
                //                . 'onmouseleave="stop(this)"';
 
     $common_attrs_escaped = "$events $type $name $class";
     if ($_type == "textarea") {
-        $style = 'style="width: 100%; height: 100px;"';
+        $style = 'style="width: 100%; height: 101px;"';
         $field_element_escaped = "<textarea $style $common_attrs_escaped >"
                                     . esc_textarea( $value )
                                     . "</textarea>" ;
     } else {
         $style = 'style="width: 100%;"';
         $field_element_escaped = "<input $style $common_attrs_escaped value=\""
-                                    . esc_attr( $value )
+                                    . esc_attr_e( $value )
                                     . "\" />";
     }
     

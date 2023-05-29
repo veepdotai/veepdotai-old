@@ -61,7 +61,7 @@
 })( jQuery );
 
   function init_sections() {
-	if (jQuery('.veep_section')) {
+	if (jQuery('.veep_section').length > 0) {
 		toggle_display(jQuery('.veep_section')[0].id);
 	}
   }
@@ -170,6 +170,8 @@
     console.log('Focus');
  
     if ('speechSynthesis' in window) {
+        console.log('Speech Synthesis is Supported 😞'); 
+
         let voices = getVoices();
         let rate = 1, pitch = 1, volume = 1;
 		let talks = text.split(/\.|\?|\!|\.{3}/);
@@ -180,7 +182,7 @@
 			}
 		}
     } else {
-        console.log(' Speech Synthesis Not Supported 😞'); 
+        console.log('Speech Synthesis Not Supported 😞'); 
     }
   }
 
@@ -188,43 +190,45 @@
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 
-  var recognition = new webkitSpeechRecognition();
-  recognition.continuous = true;
-  recognition.interimResults = true;
+  var recognition = null;
   var target = null;
-  recognition.onstart = () => {
-	console.log("Speech recognition service has started.");
-  };
+  if (/interview/.test(window.location)) {	
+    recognition = new webkitSpeechRecognition();
+	recognition.continuous = true;
+	recognition.interimResults = true;
+	recognition.onstart = () => {
+		console.log("Speech recognition service has started.");
+	};
 
-  recognition.onend = () => {
-	console.log("Speech recognition service disconnected. Restarting.");
-	recognition.start();
-  };
+	recognition.onend = () => {
+		console.log("Speech recognition service disconnected. Restarting.");
+		recognition.start();
+	};
 
-  recognition.onresult = function(event) {
-	if (target != null) {
-		if (target.nodeName == 'INPUT') {
-			target.value = "";
-		} else {
-			target.innerHTML = "";
-		}
-		var msg = null;
-		for(var i=0; i < event.results.length; i++){
-		  console.log(i + "/" + event.results.length + ": " + event.results[i])
-			msg = event.results[i][0].transcript;
+	recognition.onresult = function(event) {
+		if (target != null) {
 			if (target.nodeName == 'INPUT') {
-				target.value += msg;
+				target.value = "";
 			} else {
-				target.innerHTML += msg;
+				target.innerHTML = "";
 			}
-		}	
+			var msg = null;
+			for(var i=0; i < event.results.length; i++){
+			console.log(i + "/" + event.results.length + ": " + event.results[i])
+				msg = event.results[i][0].transcript;
+				if (target.nodeName == 'INPUT') {
+					target.value += msg;
+				} else {
+					target.innerHTML += msg;
+				}
+			}	
+		}
 	}
-  }
 
-  recognition.onstart = function(event) {
-  }
+	recognition.start = function(event) {};
 
-  recognition.start();
+	recognition.start();
+  }
 
   function start_listening(output) {
 	  target = output;

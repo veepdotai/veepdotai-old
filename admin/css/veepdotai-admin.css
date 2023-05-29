@@ -15,14 +15,17 @@
     align-items: center
 }
 
+.veep_configuration,
 .veep_section {
     border: 1px solid grey;
+    border-radius: 5px;
     padding: 10px;
     margin: 10px;
 }
 
+.veep_configuration > label,
 .veep_section > label {
-    background: #dddddd;
+        background: #dddddd;
     color: black;
     padding : 5px;
 }
@@ -61,3 +64,8 @@
     content: ' | ';
 }
 */
+
+.veepdotai-main-admin-about ul {
+    list-style: disc;
+    padding-left: 15px;
+}

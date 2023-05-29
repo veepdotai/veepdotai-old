@@ -50,11 +50,11 @@ Class Veepdotai_Admin_Menu {
         }
 
         //generate the form
-        ob_start();
+        //ob_start();
         include( 'partials/main-admin-menu.php' );
-        $page_html = ob_get_contents();
-        ob_end_clean();
-        echo $page_html;
+        //$page_html = ob_get_contents();
+        //ob_end_clean();
+        //echo $page_html;
         
     }
 
@@ -86,9 +86,7 @@ Class Veepdotai_Admin_Menu {
             $this->var_error_log( $raw );
 
             /*
-                            $raw= <<<_EOF_
-                            {"id":"cmpl-6gAFowcFdl66wjyIDh9CQ6btVAvXB","object":"text_completion","created":1675507212,"model":"text-davinci-003","choices":[{"text":"\n\n1. Accueil \n2. Notre Histoire \n3. Services Funéraires \n4. Réception des Défunts \n5. Cérémonies \n6. Salons Funéraires \n7. Démarches administratives \n8. Contact","index":0,"logprobs":null,"finish_reason":"stop"}],"usage":{"prompt_tokens":152,"completion_tokens":68,"total_tokens":220}}
-                            _EOF_;
+                            $raw= '{"id":"cmpl-6gAFowcFdl66wjyIDh9CQ6btVAvXB","object":"text_completion","created":1675507212,"model":"text-davinci-003","choices":[{"text":"\n\n1. Accueil \n2. Notre Histoire \n3. Services Funéraires \n4. Réception des Défunts \n5. Cérémonies \n6. Salons Funéraires \n7. Démarches administratives \n8. Contact","index":0,"logprobs":null,"finish_reason":"stop"}],"usage":{"prompt_tokens":152,"completion_tokens":68,"total_tokens":220}}';
                             //$result = preg_replace('/\\n/', '\\\\\n', $raw);
             */
             $result = preg_replace('/\\\\n/', '##n', $raw);
