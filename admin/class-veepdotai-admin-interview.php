@@ -36,10 +36,12 @@ Class Veepdotai_Admin_Interview {
 		$this->version = $version;
 
         $post = $_POST;
-        $veep_post = array_intersect_key(
+/*        $veep_post = array_intersect_key(
                         $post,
                         array_flip(preg_grep('/^' . $this->plugin_name .'/', array_keys($post))));
         $this->post = $veep_post;
+*/
+        $this->post = $_POST;
     }
 
     public function manage_action() {
@@ -65,7 +67,14 @@ Class Veepdotai_Admin_Interview {
             } else {
                 Veepdotai_Util::go_to_url('site', true);
             }
-		}
+		} else if ( isset($vp[$pn . 'ai-record-audio_data']) ) {
+            print_r($_FILES);
+            //this will print out the received name, temp name, type, size, etc. 
+            $input = $_FILES['veepdotai-ai-record-audio_data']['tmp_name']; //get the temporary name that PHP gave to the uploaded file 
+            $output = $_FILES['veepdotai-ai-record-audio_data']['name'].".wav"; //letting the client control the filename is a rather bad idea 
+            //move the file from temp name to local folder using $output name 
+            move_uploaded_file($input, $output);
+        }
 
         //generate the form
         //ob_start();
