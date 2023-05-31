@@ -24,6 +24,17 @@ function generate_interview_form_section($enable_voice, $intent, $section_title,
     return $section;
 }
 
+function generate_interview_form_section2($enable_voice, $intent, $section_title, int $num_section, $context = '') {
+    $pn = 'veepdotai';
+    $section = '<div id="veep_id_' . $intent . '" class="veep_section">'
+                . '<label>' . $section_title . ' [' . $num_section . ']</label>'
+                . '<p id="context-' . $num_section . '" class="veep_context">' . $context . '</p>'
+                . display_escaped($enable_voice, "Contenu", $pn . "-ai-section" . $num_section . "-text-interview", "textarea", true)
+                . '</div>';
+                
+    return $section;
+}
+
 /**
  * $pn stands for plugin name
  */
