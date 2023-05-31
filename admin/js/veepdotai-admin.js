@@ -60,6 +60,9 @@
 
 })( jQuery );
 
+/**
+ * Init tabs to make form filling easier
+ */
   function init_sections() {
 	if (jQuery('.veep_section').length > 0) {
 		toggle_display(jQuery('.veep_section')[0].id);
@@ -92,6 +95,9 @@
 	}
   }
 
+  /**
+   * Prompts helper
+   */
   function fillWithSameValues(o) {
 	function getValueByClassName(className) {
 		return document.getElementsByClassName(className)[0].value;
@@ -120,6 +126,9 @@
 
   }
 
+  /**
+   * Voice synthesis 
+   */
   function getVoice(lang) {
     let voices = getVoices();
 	let voice = null;
@@ -190,6 +199,7 @@
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 
+  /*
   var recognition = null;
   var target = null;
   if (/interview/.test(window.location)) {	
@@ -240,3 +250,4 @@
 	recognition.stop();
   }
 
+*/
