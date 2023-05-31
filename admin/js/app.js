@@ -13,7 +13,6 @@ var recordButton = document.getElementById("recordButton");
 var stopButton = document.getElementById("stopButton");
 var pauseButton = document.getElementById("pauseButton");
 
-//add events to those 2 buttons
 recordButton.addEventListener("click", startRecording);
 stopButton.addEventListener("click", stopRecording);
 pauseButton.addEventListener("click", pauseRecording);
@@ -154,9 +153,10 @@ function createDownloadLink(blob) {
 		          console.log("Server returned: ",e.target.responseText);
 		      }
 		  };
-		  var fd=new FormData();
-		  fd.append("audio_data",blob, filename);
-		  xhr.open("POST","upload.php",true);
+		  var fd = new FormData();
+		  //fd.append("audio_data", blob, filename);
+		  fd.append("veepdotai-ai-record-audio_data", blob, filename);
+		  xhr.open("POST", "admin.php?page=veepdotai-veepdotai-menu-interview", true);
 		  xhr.send(fd);
 	})
 	li.appendChild(document.createTextNode (" "))//add a space in between
