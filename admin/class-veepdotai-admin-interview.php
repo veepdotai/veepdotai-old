@@ -5,6 +5,8 @@ require_once "class-veepdotai-util.php";
 use PHPHtmlParser\Dom;
 use PHPHtmlParser\Options;
 
+use Orhanerday\OpenAi\OpenAi;
+
 // The function that handles the AJAX request
 add_action( 'wp_ajax_upload', 'Veepdotai_Admin_Interview::upload_callback' );
 
@@ -39,15 +41,32 @@ Class Veepdotai_Admin_Interview {
         //move the file from temp name to local folder using $output name 
         move_uploaded_file($input, $output);
 
-        $duration = 240; // 240 seconds so the size should be < 25 Mo for middle rate
-        $cmd_split_wav = 'ffmpeg -i ' . $output
-                            .' -f segment -segment_time ' . $duration
-                            . ' -c copy ' . $output . '%02d.wav';
-        $results = [];
-        $result = exec('pwd', $results, $code);
-        print_r($results);
-        print_r($result);
-        print_r($code);
+        $size = intval($_FILES['veepdotai-ai-record-audio_data']['size']);
+        if ($size > 25000000) {
+            $duration = 240; // 240 seconds so the size should be < 25 Mo for middle rate
+            $cmd_split_wav = 'ffmpeg -i ' . $output
+                                .' -f segment -segment_time ' . $duration
+                                . ' -c copy ' . $output . '%2d.wav';
+            $results = [];
+            $result = exec('pwd', $results, $code);
+            print_r($results);
+            print_r($result);
+            print_r($code);
+        }
+        // Process the wav through the whisper API from ChatGPT
+        $open_ai_key = get_option(VEEPDOTAI_PLUGIN_NAME.'_ai_api_key');
+        $open_ai = new OpenAi($open_ai_key);
+
+        $c_file = curl_file_create($output);
+
+        $params = [
+            "model" => "whisper-1",
+            "file" => $c_file,
+        ];
+
+        $raw = $open_ai->transcribe($params);
+
+        echo $raw;
         die(); // this is required to return a proper result
     }
     
