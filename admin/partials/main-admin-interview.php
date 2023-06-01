@@ -2,6 +2,8 @@
     <h2><?php esc_html_e(get_admin_page_title() . ' / Interview')?></h2>
     <hr>
         <input type="button" value="Je suis prêt" onclick="start(document.getElementById('context').innerHTML)"/>
+        <form method="post" action="">
+
         <?php
             echo wp_kses_post( init_nonce() );
 
@@ -18,7 +20,7 @@
             echo wp_kses_post( generate_interview_form_section(true, 'faq', 'FAQ', 4) );
             echo wp_kses_post( generate_interview_contact_section(true, 'contact', 'Prise de contact', 5) );
         ?>
-    <form method="post" action="">
+
         <div class="veep_actions">
             <?php
                 echo generate_button_escaped($pn, 'ai-save', __('Save'));

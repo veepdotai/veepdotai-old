@@ -39,7 +39,8 @@ function disableButton(self, buttonName, disabled, label) {
 	}
 }
 
-function startRecording() {
+function startRecording(e) {
+	e.preventDefault();
 	console.log("recordButton clicked");
 
 	/*
@@ -116,7 +117,8 @@ function startRecording() {
 	});
 }
 
-function pauseRecording(){
+function pauseRecording(e){
+	e.preventDefault();
 	console.log("pauseButton clicked rec.recording=",rec.recording );
 	if (rec.recording){
 		//pause
@@ -132,7 +134,8 @@ function pauseRecording(){
 	}
 }
 
-function stopRecording() {
+function stopRecording(e) {
+	e.preventDefault();
 	console.log("stopButton clicked");
 
 	//disable the stop button, enable the record too allow for new recordings
@@ -202,7 +205,8 @@ function createDownloadLink(blob) {
 	var upload = document.createElement('a');
 	upload.href="#";
 	upload.innerHTML = "✅";
-	upload.addEventListener("click", function(event){
+	upload.addEventListener("click", function(e){
+		e.preventDefault();
 
 		var data = {
 			action: 'upload',
