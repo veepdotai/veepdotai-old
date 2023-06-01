@@ -5,6 +5,9 @@ require_once "class-veepdotai-util.php";
 use PHPHtmlParser\Dom;
 use PHPHtmlParser\Options;
 
+// The function that handles the AJAX request
+add_action( 'wp_ajax_upload', 'Veepdotai_Admin_Interview::upload_callback' );
+
 Class Veepdotai_Admin_Interview {
 	/**
 	 * The ID of this plugin.
@@ -24,6 +27,30 @@ Class Veepdotai_Admin_Interview {
 	 */
 	private $version;
 
+    public static function upload_callback() {
+        check_ajax_referer( 'my-special-string', 'security' );
+
+        //print_r($_FILES); //this will print out the received name, temp name, type, size, etc. 
+        $input = $_FILES['veepdotai-ai-record-audio_data']['tmp_name'];
+        $current_user = wp_get_current_user();
+        $output = VEEPDOTAI_PLUGIN_DIR . 'data/generated/'
+                    . $current_user->user_login
+                    . '-' . $_FILES['veepdotai-ai-record-audio_data']['name'].".wav";
+        //move the file from temp name to local folder using $output name 
+        move_uploaded_file($input, $output);
+
+        $duration = 240; // 240 seconds so the size should be < 25 Mo for middle rate
+        $cmd_split_wav = 'ffmpeg -i ' . $output
+                            .' -f segment -segment_time ' . $duration
+                            . ' -c copy ' . $output . '%02d.wav';
+        $results = [];
+        $result = exec('pwd', $results, $code);
+        print_r($results);
+        print_r($result);
+        print_r($code);
+        die(); // this is required to return a proper result
+    }
+    
 	/**
 	 * Initialize the class and set its properties.
 	 *
@@ -67,14 +94,7 @@ Class Veepdotai_Admin_Interview {
             } else {
                 Veepdotai_Util::go_to_url('site', true);
             }
-		} else if ( isset($vp[$pn . 'ai-record-audio_data']) ) {
-            print_r($_FILES);
-            //this will print out the received name, temp name, type, size, etc. 
-            $input = $_FILES['veepdotai-ai-record-audio_data']['tmp_name']; //get the temporary name that PHP gave to the uploaded file 
-            $output = $_FILES['veepdotai-ai-record-audio_data']['name'].".wav"; //letting the client control the filename is a rather bad idea 
-            //move the file from temp name to local folder using $output name 
-            move_uploaded_file($input, $output);
-        }
+		}
 
         //generate the form
         //ob_start();

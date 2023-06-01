@@ -61,21 +61,22 @@ function display_escaped(bool $enable_voice, string $legend, string $field_name,
                                     . "\" />";
     }
     
-    $section_escaped = '<fieldset>'
+    $section_input_escaped = '<fieldset>'
                 . '<legend>' . esc_html( $legend ) . '</legend>'
                 . '<label for="' . esc_attr( $field_name ) . '"></label>'
                 . $field_element_escaped
                 . '</fieldset>';
 
-    $section_escaped = '<div id="controls">'
+    $section_audio_escaped = '<div id="controls-' . esc_attr( $field_name ) . '">'
                         . '<button id="recordButton">Record</button>'
                         . '<button id="pauseButton" disabled>Pause</button>'
                         . '<button id="stopButton" disabled>Stop</button>'
-                        . '</div>'
-                        . '<p><strong>Recordings:</strong></p>'
-                        . '<ol id="recordingsList"></ol>';
+                      . '</div>'
+                      . '<div id="formats">Format: start recording to see sample rate</div>'
+                      . '<p><strong>Recordings:</strong></p>'
+                      . '<ol id="recordingsList"></ol>';            
 
-    return $section_escaped;
+    return $section_audio_escaped . $section_input_escaped;
 }
 
 function generate_context($context) {

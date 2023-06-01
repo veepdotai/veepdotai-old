@@ -59,7 +59,7 @@ function veepdotai_load_textdomain() {
  * Rename this for your plugin and update it as you release new versions.
  */
 define( 'VEEPDOTAI_VERSION', '1.0.0' );
-define( 'VEEPDOTAI_PLUGIN_DIR', __DIR__);
+define( 'VEEPDOTAI_PLUGIN_DIR', plugin_dir_path( __FILE__ ));
 
 /**
  * The code that runs during plugin activation.
