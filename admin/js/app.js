@@ -14,6 +14,33 @@ themes.forEach(element => {
 	addEventListeners(element);
 });
 
+/**
+ * Counter up timer
+ */
+var minutesLabel = document.getElementById("minutes");
+var secondsLabel = document.getElementById("seconds");
+var totalSeconds = 0;
+setInterval(setTime, 1000);
+pauseTimer = true;
+
+function setTime() {
+	if (! pauseTimer) {
+		++totalSeconds;
+		secondsLabel.innerHTML = pad(totalSeconds % 60);
+		minutesLabel.innerHTML = pad(parseInt(totalSeconds / 60));
+	}
+}
+
+function pad(val) {
+  var valString = val + "";
+  if (valString.length < 2) {
+    return "0" + valString;
+  } else {
+    return valString;
+  }
+}
+/* End counter up timer */
+
 function getElementById(buttonName, field) {
 	//return document.getElementById(buttonName + '-' + field);
 	return jQuery('#veep_id_' + field + ' #' + buttonName)[0];
@@ -40,6 +67,9 @@ function disableButton(self, buttonName, disabled, label) {
 }
 
 function startRecording(e) {
+	totalSeconds = 0;
+	pauseTimer = false;
+
 	e.preventDefault();
 	console.log("recordButton clicked");
 
@@ -119,6 +149,11 @@ function startRecording(e) {
 
 function pauseRecording(e){
 	e.preventDefault();
+	if (pauseTimer) {
+		pauseTimer = false;
+	} else {
+		pauseTimer = true;
+	}
 	console.log("pauseButton clicked rec.recording=",rec.recording );
 	if (rec.recording){
 		//pause
@@ -136,6 +171,8 @@ function pauseRecording(e){
 
 function stopRecording(e) {
 	e.preventDefault();
+	pauseTimer = true;
+
 	console.log("stopButton clicked");
 
 	//disable the stop button, enable the record too allow for new recordings

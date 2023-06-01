@@ -54,7 +54,7 @@ Class Veepdotai_Admin_Interview {
             print_r($code);
         }
         // Process the wav through the whisper API from ChatGPT
-        $open_ai_key = get_option(VEEPDOTAI_PLUGIN_NAME.'-openai-api-key');
+        $open_ai_key = get_option(VEEPDOTAI_PLUGIN_NAME . '-openai-api-key');
         $open_ai = new OpenAi($open_ai_key);
 
         $c_file = curl_file_create($output);
@@ -66,7 +66,9 @@ Class Veepdotai_Admin_Interview {
 
         $raw = $open_ai->transcribe($params);
 
-        echo $raw;
+        //print_r($raw);
+        //print_r(json_decode($raw));
+        echo json_decode($raw)->text;
         die(); // this is required to return a proper result
     }
     

@@ -20,6 +20,12 @@
             echo wp_kses_post( generate_interview_form_section(true, 'faq', 'FAQ', 4) );
             echo wp_kses_post( generate_interview_contact_section(true, 'contact', 'Prise de contact', 5) );
         ?>
+      
+        <div class="timer">
+            <p>
+                Durée du vocal : <label id="minutes">00</label>:<label id="seconds">00</label>
+            </p>
+        </div>
 
         <div class="veep_actions">
             <?php

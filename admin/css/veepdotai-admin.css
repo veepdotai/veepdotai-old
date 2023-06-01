@@ -94,3 +94,13 @@
 #stopButton {
     background-color: red;
 }
+
+.timer {
+    padding-left: 20px;
+    font-size: larger;
+}
+
+.timer label {
+    background: black;
+    color: white;
+}
