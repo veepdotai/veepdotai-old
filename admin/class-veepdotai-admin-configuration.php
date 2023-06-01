@@ -57,13 +57,13 @@ Class Veepdotai_Admin_Configuration {
 
     public function manage_action() {
 
-		include('partials/veepdotai-form-functions.php');
+		include('partials/veepdotai-form-configuration-functions.php');
 
         $self = $this;
         $pn = $this->plugin_name;
         $vp = $this->post;
 
-        if (isset($vp[$pn .'-ai-save-api-key'])) {
+        if (isset($vp[$pn .'-ai-save'])) {
             $self->save_configuration($vp);
         } else if (isset($vp[$pn .'-ai-next'])) {
 			Veepdotai_Util::go_to_url('interview');
@@ -86,8 +86,8 @@ Class Veepdotai_Admin_Configuration {
         $vp = $this->post;
 
         if($this->security_check($vp, $pn .'-main_admin_menu')) {
-            update_option($pn .'-ai-api_key', sanitize_text_field($vp[$pn.'-ai-api_key']));
-            update_option($pn .'-pexels-api_key', sanitize_text_field($vp[$pn.'-pexels-api_key']));
+            update_option($pn . '-openai-api-key', sanitize_text_field($vp[$pn.'-openai-api-key']));
+            update_option($pn . '-pexels-api-key', sanitize_text_field($vp[$pn.'-pexels-api-key']));
         }
 
     }

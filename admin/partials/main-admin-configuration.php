@@ -7,31 +7,12 @@
     </ul>
     <hr>
     <form method="post" action="">
-        <?php wp_nonce_field( $this->plugin_name . '-main_admin_configuration', $this->plugin_name . '-main_admin_configuration_nonce' ) ?>
+        <?php
+        
+        wp_nonce_field( $this->plugin_name . '-main_admin_configuration', $this->plugin_name . '-main_admin_configuration_nonce' );
 
-        <div class="veep_configuration">
-            <label><?php esc_html (_e('Open API key configuration', $this->plugin_name))?></label>
-            <p></p>
-            <fieldset>
-                <legend></legend>
-
-                <label for="<?php esc_attr_e( $this->plugin_name . '-ai-api_key') ?>">Open API key</label>
-                <input type="text" name="<?php esc_attr_e( $this->plugin_name . '-ai-api_key') ?>" value="<?php esc_attr( get_option($this->plugin_name . '-ai-api_key')) ?>" required/>
-                <p><?php _e( 'If you dont have one, <a href="https://platform.openai.com/account/api-keys" target="_blank">get an API Key</a>', $this->plugin_name ) ?></p>
-            </fieldset>
-        </div>
-
-        <div class="veep_configuration">
-            <label><?php esc_html (_e('Pexels API key configuration', $this->plugin_name))?></label>
-            <p></p>
-            <fieldset>
-                <legend></legend>
-
-                <label for="<?php esc_attr_e( $this->plugin_name . '-pexels-api_key') ?>">Pexel API Key</label>
-                <input type="text" name="<?php esc_attr_e( $this->plugin_name . '-pexels-api_key') ?>" value="<?php esc_attr( get_option($this->plugin_name . '-pexels-api_key')) ?>" required/>
-                <p><?php _e( 'If you dont have one, <a href="https://www.pexels.com/fr-fr/api/new/" target="_blank">get an API Key</a>', $this->plugin_name ) ?></p>
-            </fieldset>
-        </div>
+        echo ( generate_configuration_form_section(true, 'configuration', 'Configuration',1) );
+        ?>
 
         <div class="veep_actions">
             <?php

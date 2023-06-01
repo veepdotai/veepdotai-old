@@ -350,7 +350,7 @@ Class Veepdotai_Admin_Prompts {
             for ($i = 0; $i < 4; $i++) {
                 $prompt = $this->create_prompt($content_titles[$i], $i);
 
-                $open_ai_key = get_option($this->plugin_name.'_ai_api_key');
+                $open_ai_key = get_option($this->plugin_name.'-openai-api-key');
                 $open_ai = new OpenAi($open_ai_key);
  
                 $section = $this->create_text_with_ai($open_ai, $date, $prompt, $i);

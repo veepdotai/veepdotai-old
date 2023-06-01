@@ -218,7 +218,7 @@ Class Veepdotai_Admin_Site {
 
                     Veepdotai_Util::log_direct("<p class='prompt'>" . $prompt . ".</p>");
 
-                    $open_ai_key = get_option($this->plugin_name.'_ai_api_key');
+                    $open_ai_key = get_option($this->plugin_name.'-openai-api-key');
                     $open_ai = new OpenAi($open_ai_key);
 
                     $params = [
@@ -339,7 +339,7 @@ Class Veepdotai_Admin_Site {
     public function get_image_with_pexels($ts, $prompt, $i) {
         $pn = $this->plugin_name;
 
-        $pexels_key = get_option($pn . '_pexels_api_key');
+        $pexels_key = get_option($pn . '-pexels-api-key');
         $provider = new ApiProvider($pexels_key);
 
         // Create a Search photos request.
@@ -418,7 +418,7 @@ Class Veepdotai_Admin_Site {
                 // Open AI
                 // Results with AI image generation are disappointed
                 // $open_ai = new OpenAi($pexels_ai_key); 
-                // $pexels_key = get_option($this->plugin_name . '_pexels_api_key');
+                // $pexels_key = get_option($this->plugin_name . '-pexels-api-key');
                 //$image = $this->create_image_with_ai($open_ai, $date, $prompt, $i);
                 //$res = $this->update_option($prefix . 'img-href', $image->data[0]->url);
 

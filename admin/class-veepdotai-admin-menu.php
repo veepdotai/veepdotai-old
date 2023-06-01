@@ -64,7 +64,7 @@ Class Veepdotai_Admin_Menu {
             update_option($this->plugin_name.'_ai_context', sanitize_text_field($post[$this->plugin_name.'-ai-context']));
 
             //$open_ai_key = getenv('OPENAI_API_KEY');
-            $open_ai_key = get_option($this->plugin_name.'_ai_api_key');
+            $open_ai_key = get_option($this->plugin_name.'-openai-api-key');
             $open_ai = new OpenAi($open_ai_key);
 
             $prompt = get_option($this->plugin_name.'_ai_context');

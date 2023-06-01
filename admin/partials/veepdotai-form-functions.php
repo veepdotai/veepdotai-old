@@ -45,10 +45,7 @@ function display_escaped(bool $enable_voice, string $legend, string $field_name,
     $name = 'name="' . esc_attr( $field_name ) . '"';
     $class = 'class="' . esc_attr( $field_name ) . '"';
 
-    $events = $enable_voice ? 'onclick="start_listening(this)"' : "none";
-               //                . 'onmouseleave="stop(this)"';
-
-    $common_attrs_escaped = "$events $type $name $class";
+    $common_attrs_escaped = "$type $name $class";
     if ($_type == "textarea") {
         $style = 'style="width: 100%; height: 101px;"';
         $field_element_escaped = "<textarea $style $common_attrs_escaped >"
