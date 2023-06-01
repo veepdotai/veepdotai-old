@@ -88,20 +88,28 @@ class Veepdotai_Admin {
             $this->version,
             false
         );
-		wp_enqueue_script(
+        wp_enqueue_script(
             $this->plugin_name . '-voice-app',
             plugin_dir_url( __FILE__ ) . 'js/app.js',
-            array( 'jquery' ),
+            array('jquery'),
             $this->version,
             true
         );
-		wp_enqueue_script(
+        wp_localize_script(
+            $this->plugin_name . '-voice-app',
+            'MyAjax', array(
+                'ajaxurl' => admin_url( 'admin-ajax.php' ),
+                'security' => wp_create_nonce( 'my-special-string' )
+            )
+        );
+        wp_enqueue_script(
             $this->plugin_name . '-voice-recorder',
             plugin_dir_url( __FILE__ ) . 'js/recorder.js',
-            array( 'jquery' ),
+            array(),
             $this->version,
             true
         );
+
 	}
 
     /**

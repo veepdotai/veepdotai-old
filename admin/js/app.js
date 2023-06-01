@@ -9,13 +9,33 @@ var input; 							//MediaStreamAudioSourceNode we'll be recording
 var AudioContext = window.AudioContext || window.webkitAudioContext;
 var audioContext //audio context to help us record
 
-var recordButton = document.getElementById("recordButton");
-var stopButton = document.getElementById("stopButton");
-var pauseButton = document.getElementById("pauseButton");
+var themes = ['benefices', 'besoins', 'solutions', 'differenciation']
+themes.forEach(element => {
+	addEventListeners(element);
+});
 
-recordButton.addEventListener("click", startRecording);
-stopButton.addEventListener("click", stopRecording);
-pauseButton.addEventListener("click", pauseRecording);
+function getElementById(buttonName, field) {
+	//return document.getElementById(buttonName + '-' + field);
+	return jQuery('#veep_id_' + field + ' #' + buttonName)[0];
+}
+
+function addEventListeners(field) {
+	var recordButton = getElementById("recordButton", field);
+	var stopButton = getElementById("stopButton", field);
+	var pauseButton = getElementById("pauseButton", field);
+	
+	recordButton.addEventListener("click", startRecording);
+	stopButton.addEventListener("click", stopRecording);
+	pauseButton.addEventListener("click", pauseRecording);	
+}
+
+function disableButton(self, buttonName, disabled, label) {
+	var button = jQuery('#' + self.parentElement.id + ' #' + buttonName)[0];
+	button.disabled = disabled;
+	if (label) {
+		button.innerHTML = label;
+	}
+}
 
 function startRecording() {
 	console.log("recordButton clicked");
@@ -31,9 +51,19 @@ function startRecording() {
     	Disable the record button until we get a success or fail from getUserMedia() 
 	*/
 
-	recordButton.disabled = true;
-	stopButton.disabled = false;
-	pauseButton.disabled = false
+	//this.disabled = true;
+	/*jQuery('#' + this.parentElement.id + ' recordButton')[0].disabled = true;
+	jQuery('#' + this.parentElement.id + ' stopButton')[0].disabled = false;
+	jQuery('#' + this.parentElement.id + ' pauseButton')[0].disabled = false;
+	*/
+	//this.parentElement.getElementById('pauseButton').disabled = false;
+	disableButton(this, 'recordButton', true);
+	disableButton(this, 'stopButton', false);
+	disableButton(this, 'pauseButton', false);
+
+	//recordButton.disabled = true;
+	//stopButton.disabled = false;
+	//pauseButton.disabled = false
 
 	/*
     	We're using the standard promise based getUserMedia() 
@@ -73,9 +103,14 @@ function startRecording() {
 
 	}).catch(function(err) {
 	  	//enable the record button if getUserMedia() fails
+		disableButton(this, 'recordButton', false);
+		disableButton(this, 'stopButton', true);
+		disableButton(this, 'pauseButton', true);
+/*	  
     	recordButton.disabled = false;
     	stopButton.disabled = true;
     	pauseButton.disabled = true
+*/
 	});
 }
 
@@ -84,11 +119,13 @@ function pauseRecording(){
 	if (rec.recording){
 		//pause
 		rec.stop();
-		pauseButton.innerHTML="Resume";
+		disableButton(this, 'pauseButton', false, 'Resume')
+//		pauseButton.innerHTML="Resume";
 	}else{
 		//resume
 		rec.record()
-		pauseButton.innerHTML="Pause";
+		disableButton(this, 'pauseButton', false, 'Pause')
+//		pauseButton.innerHTML="Pause";
 
 	}
 }
@@ -97,12 +134,18 @@ function stopRecording() {
 	console.log("stopButton clicked");
 
 	//disable the stop button, enable the record too allow for new recordings
-	stopButton.disabled = true;
+
+	disableButton(this, 'stopButton', true);
+	disableButton(this, 'recordButton', false);
+	disableButton(this, 'pauseButton', true);
+
+/*	stopButton.disabled = true;
 	recordButton.disabled = false;
 	pauseButton.disabled = true;
-
+*/
 	//reset button just in case the recording is stopped while paused
-	pauseButton.innerHTML="Pause";
+	disableButton(this, 'pauseButton', true, 'Pause')
+//	pauseButton.innerHTML="Pause";
 	
 	//tell the recorder to stop the recording
 	rec.stop();
@@ -120,6 +163,7 @@ function createDownloadLink(blob) {
 	var au = document.createElement('audio');
 	var li = document.createElement('li');
 	var link = document.createElement('a');
+	var remove = document.createElement('a');
 
 	//name of .wav file to use during upload and download (without extendion)
 	var filename = new Date().toISOString();
@@ -130,38 +174,87 @@ function createDownloadLink(blob) {
 
 	//save to disk link
 	link.href = url;
-	link.download = filename+".wav"; //download forces the browser to donwload the file using the  filename
+	link.download = filename + ".wav"; //download forces the browser to donwload the file using the  filename
 	link.innerHTML = "Save to disk";
 
+	//save to disk link
+	remove.href = '';
+	remove.innerHTML = "❌";
+	remove.addEventListener("click", function(e) {
+		e.preventDefault();
+		this.parentElement.remove();
+	});
+
+	
 	//add the new audio element to li
 	li.appendChild(au);
 	
 	//add the filename to the li
-	li.appendChild(document.createTextNode(filename+".wav "))
+	li.appendChild(document.createTextNode(filename + ".wav "))
 
 	//add the save to disk link to li
-	li.appendChild(link);
+	//li.appendChild(link);
+	li.appendChild(remove);
 	
 	//upload link
 	var upload = document.createElement('a');
 	upload.href="#";
-	upload.innerHTML = "Upload";
+	upload.innerHTML = "✅";
 	upload.addEventListener("click", function(event){
-		  var xhr=new XMLHttpRequest();
-		  xhr.onload=function(e) {
-		      if(this.readyState === 4) {
-		          console.log("Server returned: ",e.target.responseText);
-		      }
-		  };
-		  var fd = new FormData();
-		  //fd.append("audio_data", blob, filename);
-		  fd.append("veepdotai-ai-record-audio_data", blob, filename);
-		  xhr.open("POST", "admin.php?page=veepdotai-veepdotai-menu-interview", true);
-		  xhr.send(fd);
+
+		var data = {
+			action: 'upload',
+			security : MyAjax.security,
+			whatever: 1234
+		};
+
+		var fd = new FormData();
+		fd.append('action', 'upload');
+		fd.append('security', MyAjax.security);
+		fd.append('whatever', 100);
+		fd.append('veepdotai-ai-record-audio_data', blob, filename);
+
+		self = this;
+		jQuery.ajax({
+			url: MyAjax.ajaxurl,
+			data: fd,
+			processData: false,
+			contentType: false,
+			type: 'POST',
+			success: function(data){
+				//alert('Got this from the server: ' + data);
+				id = self.parentElement.parentElement.parentElement.id;
+				textarea = jQuery('#' + id + ' textarea')[0];
+				textarea.disabled = false;
+				textarea.innerHTML = data;
+				textarea.disabled = true;
+			}	
+		});
+
+		/*
+		var xhr=new XMLHttpRequest();
+		xhr.onload=function(e) {
+		    if (this.readyState === 4) {
+		        console.log("Server returned: ",e.target.responseText);
+		    }
+		};
+		xhr.open("POST", MyAjax.ajaxurl, true);
+		xhr.send(fd);
+		*/
 	})
 	li.appendChild(document.createTextNode (" "))//add a space in between
 	li.appendChild(upload)//add the upload link to li
 
 	//add the li element to the ol
+	var recordingsList = null;
+	var found = false;
+	themes.forEach(element => {
+		var display = jQuery('#veep_id_' + element)[0].style.display;
+		if (! found && display == 'block') {
+			recordingsList = jQuery('#veep_id_' + element + ' #recordingsList')[0];
+			found = true;
+		}
+		
+	});
 	recordingsList.appendChild(li);
 }

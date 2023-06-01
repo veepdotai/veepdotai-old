@@ -86,33 +86,15 @@ Class Veepdotai_Admin_Menu {
             $this->var_error_log( $raw );
 
             /*
-                            $raw= '{"id":"cmpl-6gAFowcFdl66wjyIDh9CQ6btVAvXB","object":"text_completion","created":1675507212,"model":"text-davinci-003","choices":[{"text":"\n\n1. Accueil \n2. Notre Histoire \n3. Services Funéraires \n4. Réception des Défunts \n5. Cérémonies \n6. Salons Funéraires \n7. Démarches administratives \n8. Contact","index":0,"logprobs":null,"finish_reason":"stop"}],"usage":{"prompt_tokens":152,"completion_tokens":68,"total_tokens":220}}';
-                            //$result = preg_replace('/\\n/', '\\\\\n', $raw);
+                $raw= '{"id":"cmpl-6gAFowcFdl66wjyIDh9CQ6btVAvXB","object":"text_completion","created":1675507212,"model":"text-davinci-003","choices":[{"text":"\n\n1. Accueil \n2. Notre Histoire \n3. Services Funéraires \n4. Réception des Défunts \n5. Cérémonies \n6. Salons Funéraires \n7. Démarches administratives \n8. Contact","index":0,"logprobs":null,"finish_reason":"stop"}],"usage":{"prompt_tokens":152,"completion_tokens":68,"total_tokens":220}}';
+                //$result = preg_replace('/\\n/', '\\\\\n', $raw);
             */
             $result = preg_replace('/\\\\n/', '##n', $raw);
-            /*
-                $this->var_error_log( $result );
-                var_dump($result);
-                echo $result . "\n";
-            */
             $infos = json_decode($result);
-            /*
-                $this->var_error_log( $infos );
-                var_dump($infos);
-                echo "Erreur? " . json_last_error() ."\n\n";
-            */
             $text = $infos->choices[0]->text;
             $text = preg_replace('/^##n##n/', '', $text);
-            /*
-                echo "Text: " . $text . ".\n\n";
-                var_dump($text);
-                echo "OUTPUT ###";
-            */
             //$output = preg_replace('/\\\\n/', '&#13;', $text);
             $output = preg_replace('/##n/', '&#13;', $text);
-            /*
-                echo "$output";
-            */
 
 //				$result = $prompt . "\n\n"
 //							. "Raw:\n.\n" . $raw . "\n\n"
