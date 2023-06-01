@@ -86,8 +86,8 @@ Class Veepdotai_Admin_Configuration {
         $vp = $this->post;
 
         if($this->security_check($vp, $pn .'-main_admin_menu')) {
-            update_option($pn .'_ai_api_key', sanitize_text_field($vp[$pn.'-ai-api_key']));
-            update_option($pn .'_pexels_api_key', sanitize_text_field($vp[$pn.'-pexels-api_key']));
+            update_option($pn .'-ai-api_key', sanitize_text_field($vp[$pn.'-ai-api_key']));
+            update_option($pn .'-pexels-api_key', sanitize_text_field($vp[$pn.'-pexels-api_key']));
         }
 
     }

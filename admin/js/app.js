@@ -24,9 +24,11 @@ function addEventListeners(field) {
 	var stopButton = getElementById("stopButton", field);
 	var pauseButton = getElementById("pauseButton", field);
 	
-	recordButton.addEventListener("click", startRecording);
-	stopButton.addEventListener("click", stopRecording);
-	pauseButton.addEventListener("click", pauseRecording);	
+	if (recordButton && stopButton && pauseButton) {
+		recordButton.addEventListener("click", startRecording);
+		stopButton.addEventListener("click", stopRecording);
+		pauseButton.addEventListener("click", pauseRecording);	
+	}
 }
 
 function disableButton(self, buttonName, disabled, label) {

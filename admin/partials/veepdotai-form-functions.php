@@ -57,7 +57,7 @@ function display_escaped(bool $enable_voice, string $legend, string $field_name,
     } else {
         $style = 'style="width: 100%;"';
         $field_element_escaped = "<input $style $common_attrs_escaped value=\""
-                                    . esc_attr_e( $value )
+                                    . esc_attr( $value )
                                     . "\" />";
     }
     
@@ -67,16 +67,21 @@ function display_escaped(bool $enable_voice, string $legend, string $field_name,
                 . $field_element_escaped
                 . '</fieldset>';
 
-    $section_audio_escaped = '<div id="controls-' . esc_attr( $field_name ) . '">'
-                        . '<button id="recordButton">Record</button>'
-                        . '<button id="pauseButton" disabled>Pause</button>'
-                        . '<button id="stopButton" disabled>Stop</button>'
-                      . '</div>'
-                      . '<div id="formats">Format: start recording to see sample rate</div>'
-                      . '<p><strong>Recordings:</strong></p>'
-                      . '<ol id="recordingsList"></ol>';            
+    $result = $section_input_escaped;
+    if ($enable_voice) {
+        $section_audio_escaped = '<div id="controls-' . esc_attr( $field_name ) . '">'
+        . '<button id="recordButton">Record</button>'
+        . '<button id="pauseButton" disabled>Pause</button>'
+        . '<button id="stopButton" disabled>Stop</button>'
+      . '</div>'
+      . '<div id="formats">Format: start recording to see sample rate</div>'
+      . '<p><strong>Recordings:</strong></p>'
+      . '<ol id="recordingsList"></ol>';
 
-    return $section_audio_escaped . $section_input_escaped;
+      $result = $section_audio_escaped . $section_input_escaped;
+    }
+
+    return $result;
 }
 
 function generate_context($context) {

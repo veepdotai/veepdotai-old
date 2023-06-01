@@ -16,7 +16,7 @@
                 <legend></legend>
 
                 <label for="<?php esc_attr_e( $this->plugin_name . '-ai-api_key') ?>">Open API key</label>
-                <input type="text" name="<?php esc_attr_e( $this->plugin_name . '-ai-api_key') ?>" value="<?php esc_attr_e( get_option($this->plugin_name . '_ai_api_key')) ?>" required/>
+                <input type="text" name="<?php esc_attr_e( $this->plugin_name . '-ai-api_key') ?>" value="<?php esc_attr( get_option($this->plugin_name . '-ai-api_key')) ?>" required/>
                 <p><?php _e( 'If you dont have one, <a href="https://platform.openai.com/account/api-keys" target="_blank">get an API Key</a>', $this->plugin_name ) ?></p>
             </fieldset>
         </div>
@@ -28,7 +28,7 @@
                 <legend></legend>
 
                 <label for="<?php esc_attr_e( $this->plugin_name . '-pexels-api_key') ?>">Pexel API Key</label>
-                <input type="text" name="<?php esc_attr_e( $this->plugin_name . '-pexels-api_key') ?>" value="<?php esc_attr_e( get_option($this->plugin_name . '_pexels_api_key')) ?>" required/>
+                <input type="text" name="<?php esc_attr_e( $this->plugin_name . '-pexels-api_key') ?>" value="<?php esc_attr( get_option($this->plugin_name . '-pexels-api_key')) ?>" required/>
                 <p><?php _e( 'If you dont have one, <a href="https://www.pexels.com/fr-fr/api/new/" target="_blank">get an API Key</a>', $this->plugin_name ) ?></p>
             </fieldset>
         </div>
