@@ -17,6 +17,27 @@ function generate_button_escaped($pn, $button_id, $button_name) {
     return $input_button;
 }
 
+function generate_editorial_calendar_tabs_escaped() {
+    $questions = [
+        'vocal' => 'Vocal',
+        'article' => 'Article',
+        'post_li' => 'Post LinkedIn',
+        'post_fb' => 'Post Facebook',
+        'post_insta' => 'Post Instagram',
+    ];
+
+    $list_items = '';
+    foreach($questions as $key => $label) {
+        $list_items .= '<li'
+                        . ' id=' . esc_attr('veep_id_' . $key . '_menu')
+                        . ' onclick="toggle_display(\'' . esc_js('veep_id_' . $key ) . '\')">'
+                        . esc_html( $label )
+                        . '</li>';
+    }
+    // A more generic tabs should have been better...
+    return '<ul class="tabs_questions">' . $list_items . '</ul>';
+}
+
 function generate_tabs_escaped() {
     $questions = [
         'benefices' => 'Bénéfices',

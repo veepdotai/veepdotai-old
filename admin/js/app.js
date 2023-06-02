@@ -9,7 +9,11 @@ var input; 							//MediaStreamAudioSourceNode we'll be recording
 var AudioContext = window.AudioContext || window.webkitAudioContext;
 var audioContext //audio context to help us record
 
-var themes = ['benefices', 'besoins', 'solutions', 'differenciation']
+// I know, a better architecture should be welcome :-(
+var themes = [
+	'vocal', // Vocal page
+	'benefices', 'besoins', 'solutions', 'differenciation' // Interview page
+]
 themes.forEach(element => {
 	addEventListeners(element);
 });
@@ -41,6 +45,12 @@ function pad(val) {
 }
 /* End counter up timer */
 
+/**
+ * Attach events to buttons in a veep_id_* as id element.
+ * @param {*} buttonName 
+ * @param {*} field 
+ * @returns 
+ */
 function getElementById(buttonName, field) {
 	//return document.getElementById(buttonName + '-' + field);
 	return jQuery('#veep_id_' + field + ' #' + buttonName)[0];
@@ -292,10 +302,16 @@ function createDownloadLink(blob) {
 	var recordingsList = null;
 	var found = false;
 	themes.forEach(element => {
-		var display = jQuery('#veep_id_' + element)[0].style.display;
-		if (! found && display == 'block') {
-			recordingsList = jQuery('#veep_id_' + element + ' #recordingsList')[0];
-			found = true;
+		try {
+			var display = jQuery('#veep_id_' + element)[0].style.display;
+			if (! found && display == 'block') {
+				recordingsList = jQuery('#veep_id_' + element + ' #recordingsList')[0];
+				found = true;
+			}
+		} catch (e) {
+			// I know. A better architecture sould be welcome.
+			// These elements don't exist. Just ignore them.
+			// Interesting when in vocal or in entretien page.
 		}
 		
 	});

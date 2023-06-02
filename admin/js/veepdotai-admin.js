@@ -73,10 +73,13 @@
 	sections = jQuery('.veep_section');
 	if (sections) {
 		menus = jQuery('ul.tabs_questions li');
-		for (i = 0; i < sections.length; i++) {
-			sections[i].style.display = 'none';
-			if (i < menus.length) {
-				menus[i].classList.remove('displayed');
+		if (menus) {
+
+			for (i = 0; i < sections.length; i++) {
+				sections[i].style.display = 'none';
+				if (i < menus.length) {
+					menus[i].classList.remove('displayed');
+				}
 			}
 		}
 	}
@@ -85,13 +88,19 @@
   function toggle_display(eltName) {
 	hide_sections();
 
-	section = jQuery('#' + eltName)[0];
-	menu = jQuery('#' + eltName + '_menu')[0];
-	if (section.style.display == 'none') {
-		section.style = 'display: block';
-		menu.classList.add('displayed');
-	} else {
-		section.style = 'display: none';
+	try {
+		section = jQuery('#' + eltName)[0];
+		menu = jQuery('#' + eltName + '_menu')[0];
+		if (section.style.display == 'none') {
+			section.style = 'display: block';
+			menu.classList.add('displayed');
+		} else {
+			section.style = 'display: none';
+		}
+	} catch (e) {
+		// I know. A better architecture sould be welcome.
+		// These elements don't exist. Just ignore them.
+		// Interesting when in vocal or in entretien page.
 	}
   }
 

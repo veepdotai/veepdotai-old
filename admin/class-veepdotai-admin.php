@@ -12,6 +12,10 @@
 
 use Orhanerday\OpenAi\OpenAi;
 
+// The function that handles the AJAX request
+add_action( 'wp_ajax_upload', 'Veepdotai_Admin_Interview::upload_callback' );
+add_action( 'wp_ajax_generate_article', 'Veepdotai_Admin_Editorial_Calendar::generate_article_callback' );
+
 class Veepdotai_Admin {
 
 	/**
@@ -57,6 +61,7 @@ class Veepdotai_Admin {
 		require plugin_dir_path( __FILE__ ) . './class-veepdotai-admin-interview.php';
 		require plugin_dir_path( __FILE__ ) . './class-veepdotai-admin-prompts.php';
 		require plugin_dir_path( __FILE__ ) . './class-veepdotai-admin-site.php';
+		require plugin_dir_path( __FILE__ ) . './class-veepdotai-admin-editorial-calendar.php';
 		require plugin_dir_path( __FILE__ ) . './class-veepdotai-admin-about.php';
 	}
 
@@ -177,6 +182,15 @@ class Veepdotai_Admin {
         add_submenu_page(
             $this->plugin_name,
             __( 'Veepdotai', $this->plugin_name ),
+            __( 'Editorial Calendar', $this->plugin_name ),
+            'veepdotai_generate',
+            $this->plugin_name.'-veepdotai-menu-editorial-calendar',
+            array($this, 'main_admin_submenu_editorial_calendar_callback')
+        );
+
+        add_submenu_page(
+            $this->plugin_name,
+            __( 'Veepdotai', $this->plugin_name ),
             __( 'About', $this->plugin_name ),
             'veepdotai',
             $this->plugin_name.'-veepdotai-menu-about',
@@ -242,6 +256,15 @@ class Veepdotai_Admin {
      */
 	public function main_admin_submenu_site_callback() {
         (new Veepdotai_Admin_Site( $this->plugin_name, $this->version ))->manage_action();
+    }
+
+    /**
+     * Render the main admin site and save data to the db
+     *
+     * @since  1.0.0
+     */
+	public function main_admin_submenu_editorial_calendar_callback() {
+        (new Veepdotai_Admin_EditorialCalendar( $this->plugin_name, $this->version ))->manage_action();
     }
 
     /**

@@ -7,9 +7,6 @@ use PHPHtmlParser\Options;
 
 use Orhanerday\OpenAi\OpenAi;
 
-// The function that handles the AJAX request
-add_action( 'wp_ajax_upload', 'Veepdotai_Admin_Interview::upload_callback' );
-
 Class Veepdotai_Admin_Interview {
 	/**
 	 * The ID of this plugin.

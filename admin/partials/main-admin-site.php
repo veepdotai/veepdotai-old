@@ -26,7 +26,7 @@
                     echo generate_button_escaped($pn, 'ai-generate-pages', __( 'Generate pages' ));
                     echo generate_button_escaped($pn, 'ai-generate-articles', __( 'Generate articles' ));
                 }
-                echo generate_button_escaped($pn, 'ai-generate-all', __('Generate site' ));
+                echo generate_button_escaped($pn, 'ai-generate-all', __('Generate All' ));
             ?>
 
         </div>
