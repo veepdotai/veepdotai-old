@@ -4,11 +4,62 @@ require_once "class-veepdotai-util.php";
 
 use Psr\Log\LoggerInterface;
 
-Class Veepdotai_Admin_EditorialCalendar {
+use Orhanerday\OpenAi\OpenAi;
+
+add_action( 'wp_ajax_generate_article', 'Veepdotai_Admin_Editorial_Calendar::generate_article_callback' );
+
+Class Veepdotai_Admin_Editorial_Calendar {
 
     public static function generate_article_callback() {
         check_ajax_referer( 'my-special-string', 'security' );
-        echo "Article generated";
+
+        $prompt = <<<_EOF_
+Rédige à partir du texte suivant un post linkedin, avec des emojis et des retours à la ligne, au format json strict, comme un copywriter spécialisé dans le SEO, en mettant en gras les mots déjà présents dans le texte  :
+
+les bénéfices qu'on peut retirer du projet VIP sont les suivants premièrement on gagne énormément de temps puisque si vous êtes entrepreneur créateur d'entreprise que ce soit un restaurant ou une société de service l'objectif c'est d'y passer le moins de temps possible et en même temps cette présence sur Internet est absolument fondamentale puisque c'est grâce à elle que vous pourrez communiquer que vous pourrez avoir des leads alors il va venir avec moi et à partir de là l'idée ça va être de d'établir cette présence internet très rapidement pour autant il faut qu'elle soit riche et donc c'est pour ça que VIP grâce à la voix va vous permettre de construire votre bride de communication et ce brief de communication il va permettre derrière de créer un site web avec plusieurs pages une page d'accueil plus une dizaine de pages par exemple ainsi qu'un profil Linkedin qui sera constitué d'une audience qui ce qui s'enrichira automatiquement chaque semaine par exemple d'une cinquantaine de contacts automatiquement évidemment et les deux post-in qui seront également générés automatiquement à partir des pages Web qui sont elles-mêmes construites automatiquement pour votre site web donc l'idée c'est que vraiment avec la voix on puisse créer totalement une présence internet donc c'est un énorme gain de temps
+_EOF_;
+/*
+        $open_ai_key = get_option('veepdotai-openai-api-key');
+        $open_ai = new OpenAi($open_ai_key);
+
+        $params = [
+            'model' => 'text-davinci-003',
+            'prompt' => $prompt,
+            'temperature' => 0.7,
+            'max_tokens' => 2000,
+            'frequency_penalty' => 0,
+            'presence_penalty' => 0.6,
+        ];
+
+        //print_r("Params: ");
+        //print_r($params);
+        Veepdotai_Util::log_direct("<p class='params'>" . $params . ".</p>");
+
+        $raw = $open_ai->completion($params);
+        */
+        $raw = <<<_EOF_
+{
+    "post": {
+    "caption": "🚀 Entrepreneurs et créateurs d'entreprise, avez-vous entendu parler du projet VIP ? C'est une révolution pour gagner du temps et booster votre présence sur Internet ! 😱⏰ \n\nGrâce à ce projet, vous pouvez gagner énormément de temps en établissant une présence internet riche et dynamique, tout ça très rapidement. Comment est-ce possible? Par la puissance de votre voix ! 🎙️🔥 \n\nVotre voix permet de construire un brief de communication unique qui jette les bases d'un site web automatique avec plusieurs pages, y compris une page d'accueil et une dizaine d'autres. C'est comme avoir un super assistant virtuel qui construit votre site web pour vous. 🌐💪\n\nEt ce n'est pas tout! Le projet VIP enrichit également votre profil Linkedin automatiquement chaque semaine avec une cinquantaine de nouveaux contacts. 🎉 \n\nCerise sur le gâteau, vos pages Web génèrent automatiquement deux post-in. Votre présence en ligne se construit littéralement toute seule! 🧩 \n\nLe projet VIP est véritablement le partenaire de tous les entrepreneurs pressés qui veulent mettre en place une présence en ligne performante sans perdre de temps. 🏁 \n\n#ProjetVIP #Entrepreneur #SEO #Internet #Communication #LinkedIn",
+    "images": [
+    "(Generate an image of an entrepreneur using a voice-activated device)",
+    "(Generate an image of a website being automatically created)",
+    "(Generate an image of a LinkedIn profile with increasing number of contacts)",
+    "(Generate an image of automatic posting on LinkedIn)"
+    ],
+    "hashtags": ["ProjetVIP", "Entrepreneur", "SEO", "Internet", "Communication", "LinkedIn"]
+    }
+}
+_EOF_;
+        //print_r("Raw: ");
+        //print_r($raw);
+
+        //$r = json_decode($raw)->choices[0];
+        //$newcontent = $r->text;
+        //echo $newcontent;
+
+        //echo Veepdotai_Util::convert_to_valid_json($raw);
+        echo $raw;
         die();
     }
 

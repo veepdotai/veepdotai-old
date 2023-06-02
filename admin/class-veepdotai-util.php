@@ -12,6 +12,66 @@
 
 class Veepdotai_Util {
 
+    public static function convert_to_valid_json($text) {
+/*
+        $result = preg_replace('/\\\\n/', '##n', $text);
+        $infos = json_decode($result);
+        $text = $infos->choices[0]->text;
+        $text = preg_replace('/^##n##n/', '', $text);
+        $output = preg_replace('/##n/', '&#13;', $text);
+        return $output;
+*/
+        $string = preg_replace('/\\n/', '', $text);
+        $r = json_decode($string);
+
+        if ($r) {
+            $text = $r->choices[0]->text;
+            $string = preg_replace('/Résultat :/', '', $text);
+            $string = preg_replace('/Résumé :/', '', $text);
+            $string = preg_replace('/^[^{]*/', '', $text);
+            $results = json_decode($string);
+
+            if ($results) {
+                Veepdotai_Util::error_log("OK");
+                return $results;
+            } else {
+                Veepdotai_Util::error_log("Error2");
+                return Veepdotai_Util::get_last_error();
+            }
+        } else {
+            error_log("Error1");
+            return Veepdotai_Util::get_last_error();
+        }
+    }
+
+    public static function get_last_error() {
+        switch (json_last_error()) {
+            case JSON_ERROR_NONE:
+                $r = ' - No errors';
+            break;
+            case JSON_ERROR_DEPTH:
+                $r = ' - Maximum stack depth exceeded';
+            break;
+            case JSON_ERROR_STATE_MISMATCH:
+                $r = ' - Underflow or the modes mismatch';
+            break;
+            case JSON_ERROR_CTRL_CHAR:
+                $r = ' - Unexpected control character found';
+            break;
+            case JSON_ERROR_SYNTAX:
+                $r = ' - Syntax error, malformed JSON';
+            break;
+            case JSON_ERROR_UTF8:
+                $r = ' - Malformed UTF-8 characters, possibly incorrectly encoded';
+            break;
+            default:
+                $r = ' - Unknown error';
+            break;
+        }
+
+        return $r;
+    }
+
     /**
      * 
      */
@@ -73,6 +133,10 @@ class Veepdotai_Util {
 	public static function log( $object=null ){
         return Veepdotai_Util::var_error_log($object);
     }
+
+    public static function error_log( $object=null ){
+        return Veepdotai_Util::var_error_log($object);
+	}
 
     public static function var_error_log( $object=null ){
         ob_start();                    // start buffer capture

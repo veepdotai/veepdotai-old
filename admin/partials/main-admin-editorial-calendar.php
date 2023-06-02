@@ -26,7 +26,7 @@
             <?php
                 echo generate_button_escaped($pn, 'ai-save', __('Save'));
                 if (! in_array('veepdotai_role_user', wp_get_current_user()->roles)) {
-                    echo generate_button_escaped($pn, 'ai-generate-images', __( 'Generate images' ));
+                    echo generate_button_escaped($pn, 'ai-generate-images', __( 'Generate images'));
                     echo generate_button_escaped($pn, 'ai-generate-article', __( 'Generate article' ));
                     echo generate_button_escaped($pn, 'ai-generate-post-linkedin', __( 'Generate linkedin post' ));
                     echo generate_button_escaped($pn, 'ai-generate-post-facebook', __( 'Generate facebook post' ));
@@ -37,4 +37,9 @@
 
         </div>
     </form>
+    <script>
+        jQuery("input[name='veepdotai-ai-generate-article']")[0].addEventListener('click', function() {ajax_edcal_generate_article(event)});
+
+    </script>
+
 </div>

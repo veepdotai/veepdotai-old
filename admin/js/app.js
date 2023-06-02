@@ -19,33 +19,6 @@ themes.forEach(element => {
 });
 
 /**
- * Counter up timer
- */
-var minutesLabel = document.getElementById("minutes");
-var secondsLabel = document.getElementById("seconds");
-var totalSeconds = 0;
-setInterval(setTime, 1000);
-pauseTimer = true;
-
-function setTime() {
-	if (! pauseTimer) {
-		++totalSeconds;
-		secondsLabel.innerHTML = pad(totalSeconds % 60);
-		minutesLabel.innerHTML = pad(parseInt(totalSeconds / 60));
-	}
-}
-
-function pad(val) {
-  var valString = val + "";
-  if (valString.length < 2) {
-    return "0" + valString;
-  } else {
-    return valString;
-  }
-}
-/* End counter up timer */
-
-/**
  * Attach events to buttons in a veep_id_* as id element.
  * @param {*} buttonName 
  * @param {*} field 
@@ -249,52 +222,8 @@ function createDownloadLink(blob) {
 	li.appendChild(remove);
 	
 	//upload link
-	var upload = document.createElement('a');
-	upload.href="#";
-	upload.innerHTML = "✅";
-	upload.addEventListener("click", function(e){
-		e.preventDefault();
+	var upload = ajax_upload(blob, filename);
 
-		var data = {
-			action: 'upload',
-			security : MyAjax.security,
-			whatever: 1234
-		};
-
-		var fd = new FormData();
-		fd.append('action', 'upload');
-		fd.append('security', MyAjax.security);
-		fd.append('whatever', 100);
-		fd.append('veepdotai-ai-record-audio_data', blob, filename);
-
-		self = this;
-		jQuery.ajax({
-			url: MyAjax.ajaxurl,
-			data: fd,
-			processData: false,
-			contentType: false,
-			type: 'POST',
-			success: function(data){
-				//alert('Got this from the server: ' + data);
-				id = self.parentElement.parentElement.parentElement.id;
-				textarea = jQuery('#' + id + ' textarea')[0];
-				textarea.disabled = false;
-				textarea.innerHTML = data;
-				textarea.disabled = true;
-			}	
-		});
-
-		/*
-		var xhr=new XMLHttpRequest();
-		xhr.onload=function(e) {
-		    if (this.readyState === 4) {
-		        console.log("Server returned: ",e.target.responseText);
-		    }
-		};
-		xhr.open("POST", MyAjax.ajaxurl, true);
-		xhr.send(fd);
-		*/
-	})
 	li.appendChild(document.createTextNode (" "))//add a space in between
 	li.appendChild(upload)//add the upload link to li
 

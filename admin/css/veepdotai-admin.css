@@ -23,6 +23,10 @@
     margin: 10px;
 }
 
+#veep_id_configuration {
+    width: 200px;
+}
+
 .veep_configuration > label,
 .veep_section > label {
         background: #dddddd;

@@ -12,10 +12,6 @@
 
 use Orhanerday\OpenAi\OpenAi;
 
-// The function that handles the AJAX request
-add_action( 'wp_ajax_upload', 'Veepdotai_Admin_Interview::upload_callback' );
-add_action( 'wp_ajax_generate_article', 'Veepdotai_Admin_Editorial_Calendar::generate_article_callback' );
-
 class Veepdotai_Admin {
 
 	/**
@@ -94,14 +90,21 @@ class Veepdotai_Admin {
             false
         );
         wp_enqueue_script(
-            $this->plugin_name . '-voice-app',
+            $this->plugin_name . '-ajax',
             plugin_dir_url( __FILE__ ) . 'js/app.js',
             array('jquery'),
             $this->version,
             true
         );
+        wp_enqueue_script(
+            $this->plugin_name . '-ajax2',
+            plugin_dir_url( __FILE__ ) . 'js/ajax_callbacks.js',
+            array(),
+            $this->version,
+            true
+        );
         wp_localize_script(
-            $this->plugin_name . '-voice-app',
+            $this->plugin_name . '-ajax',
             'MyAjax', array(
                 'ajaxurl' => admin_url( 'admin-ajax.php' ),
                 'security' => wp_create_nonce( 'my-special-string' )
@@ -110,6 +113,14 @@ class Veepdotai_Admin {
         wp_enqueue_script(
             $this->plugin_name . '-voice-recorder',
             plugin_dir_url( __FILE__ ) . 'js/recorder.js',
+            array(),
+            $this->version,
+            true
+        );
+
+        wp_enqueue_script(
+            $this->plugin_name . '-counter',
+            plugin_dir_url( __FILE__ ) . 'js/counter.js',
             array(),
             $this->version,
             true
@@ -264,7 +275,7 @@ class Veepdotai_Admin {
      * @since  1.0.0
      */
 	public function main_admin_submenu_editorial_calendar_callback() {
-        (new Veepdotai_Admin_EditorialCalendar( $this->plugin_name, $this->version ))->manage_action();
+        (new Veepdotai_Admin_Editorial_Calendar( $this->plugin_name, $this->version ))->manage_action();
     }
 
     /**
