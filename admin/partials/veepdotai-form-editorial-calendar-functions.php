@@ -6,6 +6,7 @@ include('veepdotai-form-functions.php');
  * Generate a list with all the dates to generate a post for.
  */
 function generate_editorial_calendar_selector() {
+    $csv = Veepdotai_Util::get_option('ai-section-edstrat0-strategy');
     $list =  '<div>'
                 . '<select>'
                     . '<option name="20250602">2025 - Juin - 02 : Pourquoi un calendrier éditorial ?</option>'

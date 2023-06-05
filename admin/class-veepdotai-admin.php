@@ -58,6 +58,7 @@ class Veepdotai_Admin {
 		require plugin_dir_path( __FILE__ ) . './class-veepdotai-admin-prompts.php';
 		require plugin_dir_path( __FILE__ ) . './class-veepdotai-admin-site.php';
 		require plugin_dir_path( __FILE__ ) . './class-veepdotai-admin-editorial-calendar.php';
+		require plugin_dir_path( __FILE__ ) . './class-veepdotai-admin-editorial-strategy.php';
 		require plugin_dir_path( __FILE__ ) . './class-veepdotai-admin-about.php';
 	}
 
@@ -193,6 +194,15 @@ class Veepdotai_Admin {
         add_submenu_page(
             $this->plugin_name,
             __( 'Veepdotai', $this->plugin_name ),
+            __( 'Editorial Strategy', $this->plugin_name ),
+            'veepdotai_generate',
+            $this->plugin_name.'-veepdotai-menu-editorial-strategy',
+            array($this, 'main_admin_submenu_editorial_strategy_callback')
+        );
+
+        add_submenu_page(
+            $this->plugin_name,
+            __( 'Veepdotai', $this->plugin_name ),
             __( 'Editorial Calendar', $this->plugin_name ),
             'veepdotai_generate',
             $this->plugin_name.'-veepdotai-menu-editorial-calendar',
@@ -276,6 +286,15 @@ class Veepdotai_Admin {
      */
 	public function main_admin_submenu_editorial_calendar_callback() {
         (new Veepdotai_Admin_Editorial_Calendar( $this->plugin_name, $this->version ))->manage_action();
+    }
+
+    /**
+     * Render the main admin site and save data to the db
+     *
+     * @since  1.0.0
+     */
+	public function main_admin_submenu_editorial_strategy_callback() {
+        (new Veepdotai_Admin_Editorial_Strategy( $this->plugin_name, $this->version ))->manage_action();
     }
 
     /**

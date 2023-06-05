@@ -101,3 +101,38 @@ function ajax_edcal_generate_article(e) {
         }	
     })
 }
+
+function ajax_edstrat_generate_editorial_strategy(e) {
+    e.preventDefault();
+
+    var fd = new FormData();
+    fd.append('action', 'generate_editorial_strategy');
+    fd.append('security', MyAjax.security);
+    fd.append('content_id', document.getElementById('veepdotai-content-id').value);
+
+    function setValue(selector, value, widgetType = 'text') {
+        try {
+            if ("textarea" === widgetType) {
+                jQuery(selector)[0].innerHTML = value;
+            } else {
+                jQuery(selector)[0].value = value;
+            }
+        } catch (e) {
+
+        }
+    }
+
+    self = this;
+    jQuery.ajax({
+        url: MyAjax.ajaxurl,
+        data: fd,
+        processData: false,
+        contentType: false,
+        type: 'POST',
+        success: function(data) {
+            response = get_json(data);
+            post = response.choices[0].text;
+            setValue(".veepdotai-ai-section-edstrat0-strategy", post, "textarea");
+        }	
+    })
+}

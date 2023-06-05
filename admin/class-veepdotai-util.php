@@ -14,6 +14,11 @@ use Orhanerday\OpenAi\OpenAi;
 
 class Veepdotai_Util {
 
+    public static function get_option($param) {
+        $pn = VEEPDOTAI_PLUGIN_NAME;
+        return get_option($pn . '-' . $param);
+    }
+
     public static function get_content_from_ai($_params) {
         if (is_string($_params)) {
             $params = [
@@ -28,7 +33,7 @@ class Veepdotai_Util {
             $params = $_params;
         }
 
-        $open_ai_key = get_option('veepdotai-openai-api-key');
+        $open_ai_key = Veepdotai_Util::get_option('openai-api-key');
         $open_ai = new OpenAi($open_ai_key);
 
         //Veepdotai_Util::log_direct("<p class='params'>" . $params . ".</p>");

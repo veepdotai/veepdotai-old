@@ -60,20 +60,23 @@
 			// We are not on the interview page
 		}
 
-		var $loading = $('#loadingDiv').hide();
-		$(document)
+		init_loading_page();
+		init_sections();
+
+	});
+
+})( jQuery );
+
+function init_loading_page() {
+	var $loading = jQuery('#loadingDiv').hide();
+	jQuery(document)
 		.ajaxStart(function () {
 			$loading.show();
 		})
 		.ajaxStop(function () {
 			$loading.hide();
 		});
-		
-		init_sections();
-
-	});
-
-})( jQuery );
+}
 
 /**
  * Init tabs to make form filling easier
