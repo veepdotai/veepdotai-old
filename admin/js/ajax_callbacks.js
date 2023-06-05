@@ -23,9 +23,8 @@ function ajax_upload(blob, filename) {
                 //alert('Got this from the server: ' + data);
                 id = self.parentElement.parentElement.parentElement.id;
                 textarea = jQuery('#' + id + ' textarea')[0];
-                textarea.disabled = false;
                 textarea.innerHTML = data;
-                textarea.disabled = true;
+                textarea.setAttribute('readonly', 'readonly');
             }	
         })
 
@@ -45,12 +44,43 @@ function ajax_upload(blob, filename) {
     return upload;
 }
 
+/**
+ * Fix json by removing prohibited chars then returns valid json
+ * @param { text } data 
+ * @returns json object
+ */
+function get_json(data) {
+    result = data
+            .replace(/{(\s|\n)*/g, "{")
+            .replace(/(\s|\n)*}/g, "}")
+            .replace(/\[(\s|\n)*/g, "[")
+            .replace(/(\s|\n)]/g, "]")
+            .replace(/(\s|\n)*],(\s|\n)*/g, "],")
+            .replace(/\",\n\s*\"/g, "\",\"")
+            .replace(/\n/g, "\\n");
+
+    return JSON.parse(data);
+}
+
 function ajax_edcal_generate_article(e) {
     e.preventDefault();
 
     var fd = new FormData();
     fd.append('action', 'generate_article');
     fd.append('security', MyAjax.security);
+    fd.append('content_id', document.getElementById('veepdotai-content-id').value);
+
+    function setValue(selector, value, widgetType = 'text') {
+        try {
+            if ("textarea" === widgetType) {
+                jQuery(selector)[0].innerHTML = value;
+            } else {
+                jQuery(selector)[0].value = value;
+            }
+        } catch (e) {
+
+        }
+    }
 
     self = this;
     jQuery.ajax({
@@ -59,9 +89,15 @@ function ajax_edcal_generate_article(e) {
         processData: false,
         contentType: false,
         type: 'POST',
-        success: function(data){
-            jQuery("textarea[name='veepdotai-ai-section-edcal11-content']")[0].innerHTML = data;
-            alert('Got this from the server: ' + data);
+        success: function(data) {
+            response = get_json(data);
+            post = response.choices[0].text;
+            setValue(".veepdotai-ai-section-edcal1-title", post.title);
+            setValue(".veepdotai-ai-section-edcal1-description", post.description, "textarea");
+            setValue(".veepdotai-ai-section-edcal1-content", post.content, "textarea");
+            setValue(".veepdotai-ai-section-edcal1-themes", post.themes);
+            setValue(".veepdotai-ai-section-edcal1-hashtags", post.hashtags);
+            setValue(".veepdotai-ai-section-edcal1-keywords", post.keywords);
         }	
     })
 }

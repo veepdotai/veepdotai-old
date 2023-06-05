@@ -25,7 +25,7 @@ function generate_editorial_calendar_vocal_form_section($enable_voice, $intent, 
     $section = '<div id="veep_id_' . $intent . '" class="veep_section">'
                 . '<label>' . $section_title . ' [' . $num_section . ']</label>'
                 . '<p id="context-' . $num_section . '" class="veep_context">' . $context . '</p>'
-                . display_escaped($enable_voice, "Retranscription", $name_escaped . $num_section . "-transcription", "textarea", true)
+                . display_escaped($enable_voice, "Retranscription", $name_escaped . "-transcription", "textarea", true)
                 . '</div>';
     return $section;
 }
@@ -37,11 +37,12 @@ function generate_editorial_calendar_form_section_escaped($enable_voice, $intent
     $section = '<div id="veep_id_' . $intent . '" class="veep_section">'
                 . '<label>' . $section_title . ' [' . $num_section . ']</label>'
                 . '<p id="context-' . $num_section . '" class="veep_context">' . $context . '</p>'
-                . display_escaped($enable_voice, "Titre", $name_escaped . $num_section . "-title", "text", true)
-                . display_escaped($enable_voice, "Description", $name_escaped . $num_section . "-description", "textarea", true)
-                . display_escaped($enable_voice, "Contenu", $name_escaped . $num_section . "-content", "textarea", true)
-                . display_escaped($enable_voice, "Hashtags", $name_escaped . $num_section . "-hashtags", "text", true)
-                . display_escaped($enable_voice, "Mots-lés", $name_escaped . $num_section . "-keywords", "text", true)
+                . display_escaped($enable_voice, "Titre", $name_escaped . "-title", "text", true)
+                . display_escaped($enable_voice, "Description", $name_escaped . "-description", "textarea", true)
+                . display_escaped($enable_voice, "Contenu", $name_escaped . "-content", "textarea", true)
+                . display_escaped($enable_voice, "Hashtags", $name_escaped . "-hashtags", "text", true)
+                . display_escaped($enable_voice, "Thèmes", $name_escaped . "-themes", "text", true)
+                . display_escaped($enable_voice, "Mots-clés", $name_escaped . "-keywords", "text", true)
                 . '</div>';
     return $section;
 }

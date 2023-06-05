@@ -10,9 +10,73 @@
  * @author     Jean-Christophe Kermagoret <jc@kermagoret.net>
  */
 
+use Orhanerday\OpenAi\OpenAi;
+
 class Veepdotai_Util {
 
-    public static function convert_to_valid_json($text) {
+    public static function get_content_from_ai($_params) {
+        if (is_string($_params)) {
+            $params = [
+                'model' => 'text-davinci-003',
+                'prompt' => $_params,
+                'temperature' => 0.7,
+                'max_tokens' => 2000,
+                'frequency_penalty' => 0,
+                'presence_penalty' => 0.6,
+            ];    
+        } else {
+            $params = $_params;
+        }
+
+        $open_ai_key = get_option('veepdotai-openai-api-key');
+        $open_ai = new OpenAi($open_ai_key);
+
+        //Veepdotai_Util::log_direct("<p class='params'>" . $params . ".</p>");
+
+        $raw = $open_ai->completion($params);
+
+        return $raw;
+    }
+
+    public static function get_data($filename) {
+
+        $pn = VEEPDOTAI_PLUGIN_NAME;
+        $date = date("Ymd-His");
+        $year = date("Y");
+        $month = date("m");
+        $day = date("d");
+        $user_login = wp_get_current_user()->user_login;
+        $directory = WP_PLUGIN_DIR . "/$pn/data/users/$user_login/$year/$month/$day";
+
+        $data = file_get_contents($directory . "/" . $filename);
+        return $data;
+    }
+
+    /**
+     * The content is stored based on user login
+     */
+    public static function store_data($content, $filename) {
+
+        $pn = VEEPDOTAI_PLUGIN_NAME;
+        $date = date("Ymd-His");
+        $year = date("Y");
+        $month = date("m");
+        $day = date("d");
+        $user_login = wp_get_current_user()->user_login;
+        // It would be better to store data according to user/yyyy/mm/dd
+        $directory = WP_PLUGIN_DIR . "/$pn/data/users/$user_login/$year/$month/$day";
+
+        // Creates the provided directory
+        mkdir($directory, 0777, true);
+
+        $abs_filename = $directory . "/" . $date . "-" . $filename;
+
+        $r = file_put_contents($abs_filename, $content);
+
+        return $r;
+    }
+
+     public static function convert_to_valid_json($text) {
 /*
         $result = preg_replace('/\\\\n/', '##n', $text);
         $infos = json_decode($result);
@@ -21,14 +85,16 @@ class Veepdotai_Util {
         $output = preg_replace('/##n/', '&#13;', $text);
         return $output;
 */
-        $string = preg_replace('/\\n/', '', $text);
-        $r = json_decode($string);
+        // Decodes the data provided by GPT. It respects JSON format
+        // but the data corresponding to the key text maybe not.
+        $r = json_decode($text);
 
         if ($r) {
             $text = $r->choices[0]->text;
             $string = preg_replace('/Résultat :/', '', $text);
             $string = preg_replace('/Résumé :/', '', $text);
             $string = preg_replace('/^[^{]*/', '', $text);
+
             $results = json_decode($string);
 
             if ($results) {
@@ -39,9 +105,36 @@ class Veepdotai_Util {
                 return Veepdotai_Util::get_last_error();
             }
         } else {
-            error_log("Error1");
+            error_log("Error 1: format error.");
             return Veepdotai_Util::get_last_error();
         }
+    }
+
+    /**
+     * Fix json by removing \n and \s in json source, i. e. beetween data,
+     * but double \n in json data
+     */
+    public static function fix_json($text) {
+        // \n breaks json decoding so we must get rid of these
+        // We just convert them in \\n.
+
+        $string = preg_replace('/^(\s|\n)*{/', "{", $text);
+        $string = preg_replace('/{(\s|\n)*/', "{", $string);
+        $string = preg_replace('/(\s|\n)*}/', "}", $string);
+        $string = preg_replace('/\[(\s|\n)*/', "[", $string);
+        $string = preg_replace('/(\s|\n)]/', "]", $string);
+        $string = preg_replace('/(\s|\n)*],(\s|\n)*/', "],", $string);
+        $string = preg_replace('/\",\n\s*\"/', "\",\"", $string);
+        $string = preg_replace('/\n/', "\\n", $string);
+
+        $string = preg_replace('/\\r/', "", $string);
+        $string = preg_replace('/\\n/', "#_#_#n", $string);
+        $string = preg_replace('/\n/', "", $string);
+        $string = preg_replace('/#_#_#n/', "\\\\n", $string);
+
+        Veepdotai_Util::log('In fix_json: ' . $string);
+
+        return $string;
     }
 
     public static function get_last_error() {
