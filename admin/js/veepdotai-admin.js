@@ -54,7 +54,21 @@
 			});			
 		}
 
-		jQuery("")
+		try {
+			jQuery("#veep_id_vocal textarea")[0].setAttribute('readonly', 'readonly');
+		} catch (e) {
+			// We are not on the interview page
+		}
+
+		var $loading = $('#loadingDiv').hide();
+		$(document)
+		.ajaxStart(function () {
+			$loading.show();
+		})
+		.ajaxStop(function () {
+			$loading.hide();
+		});
+		
 		init_sections();
 
 	});

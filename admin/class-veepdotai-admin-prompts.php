@@ -2,8 +2,6 @@
 
 require_once "class-veepdotai-util.php";
 
-use Orhanerday\OpenAi\OpenAi;
-
 Class Veepdotai_Admin_Prompts {
 	/**
 	 * The ID of this plugin.
@@ -177,8 +175,7 @@ Class Veepdotai_Admin_Prompts {
         // Gets an already computed data, for example: 20230509-135300
         $ts = get_option($pn . '_ai_site_ts');
         if ($ts) {
-            $raw = file_get_contents(WP_PLUGIN_DIR
-                    . "/$pn/data/$ts-$pn-ai-section$i-result.txt");
+            $raw = Veepdotai_Util::get_data("$ts-$pn-ai-section$i-result.txt");
         } else {
             $raw = "";
         }
@@ -189,21 +186,17 @@ Class Veepdotai_Admin_Prompts {
      * Stores computed data to check errors or enables users
      * to replay a previous prompt or reuse previous results
      */
-    public function store_data($date, $i, $params, $raw, $r) {
+    public function store_data($date, $i, $prompt, $raw, $r) {
 
         $pn = $this->plugin_name;
 
-        // It would be better to store data according to user/yyyy/mm/dd
-        $filename = WP_PLUGIN_DIR . "/$pn/data/$date-$pn-ai-section$i";
+        $filename = "$date-$pn-ai-section$i";
 
-        $filename_prompt = $filename . "-prompt.txt";
-        $filename_result = $filename . "-result_raw.txt";
-        $filename_json = $filename . "-result_json.txt";
-        file_put_contents($filename_prompt, $params["prompt"]);
-        file_put_contents($filename_result, $raw);
-        file_put_contents($filename_json, json_encode($r));  
+        $r1 = Veepdotai_Util::store_data($prompt, $filename . "-prompt.txt");
+        $r2 = Veepdotai_Util::store_data($raw, $filename . "-result_raw.txt");
+        $r3 = Veepdotai_Util::store_data(json_encode($r), $filename . "-result_json.txt");
 
-        return $r;
+        return $r1 && $r2 && $r3;
     }
 
     /**
@@ -236,25 +229,16 @@ Class Veepdotai_Admin_Prompts {
     /**
      * 
      */
-    public function create_text_with_ai($open_ai, $ts, $prompt, $i) {
+    public function create_text_with_ai($ts, $prompt, $i) {
         $pn = $this->plugin_name;
 
         $raw = $this->get_data($i);
         $r;
         //error_log($this->plugin_name . '_ai_site_ts' . ': ' . $ts . '.');
         if (! $raw) {
-            $params = [
-                'model' => 'text-davinci-003',
-                'prompt' => $prompt,
-                'temperature' => 0.7,
-                'max_tokens' => 2000,
-                'frequency_penalty' => 0,
-                'presence_penalty' => 0.6,
-            ];
-
-            $raw = $open_ai->completion($params);
+            $raw = Veepdotai_Util::get_content_from_ai($prompt);
             $r = Veepdotai_Util::convert_to_valid_json($raw);
-            $this->store_data($ts, $i, $params, $raw, $r);
+            $this->store_data($ts, $i, $prompt, $raw, $r);
         } else {
             $r = Veepdotai_Util::convert_to_valid_json($raw);
             // $params = []; // should contain prompt
@@ -289,11 +273,8 @@ Class Veepdotai_Admin_Prompts {
             $date = date("Ymd-His");
             for ($i = 0; $i < 4; $i++) {
                 $prompt = $this->create_prompt($content_titles[$i], $i);
-
-                $open_ai_key = get_option($this->plugin_name.'-openai-api-key');
-                $open_ai = new OpenAi($open_ai_key);
  
-                $section = $this->create_text_with_ai($open_ai, $date, $prompt, $i);
+                $section = $this->create_text_with_ai($date, $prompt, $i);
                 
                 $prefix = $pn . '-ai-section' . $i . '-';
 

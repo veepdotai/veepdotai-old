@@ -446,6 +446,7 @@ Class Veepdotai_Admin_Site {
         if ($this->security_check($post, $pn .'-main_admin_site')) {
             $id = $post[$pn.'-lp-templates'];
             
+            // Gets content from template choosen in the UI
             $initial_content = get_post($id)->post_content;
             //$initial_content2 = file_get_contents(plugin_dir_path(__FILE__) . '../data/template.html');
 

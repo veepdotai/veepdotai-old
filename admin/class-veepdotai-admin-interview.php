@@ -66,8 +66,6 @@ Class Veepdotai_Admin_Interview {
 
         $raw = $open_ai->transcribe($params);
 
-        //print_r($raw);
-        //print_r(json_decode($raw));
         echo json_decode($raw)->text;
         die(); // this is required to return a proper result
     }
