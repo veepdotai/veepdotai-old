@@ -74,6 +74,10 @@
     padding-left: 15px;
 }
 
+.editorial-calendar-question select {
+    max-width: fit-content;
+}
+
 .veep_section audio {
     border-radius: 5px;
     vertical-align: middle;

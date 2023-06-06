@@ -5,11 +5,21 @@ include('veepdotai-form-functions.php');
 /**
  * Generate a list with all the dates to generate a post for.
  */
-function generate_editorial_calendar_selector() {
-    $csv = Veepdotai_Util::get_option('ai-section-edstrat0-strategy');
-    $list =  '<div>'
+function generate_editorial_calendar_selector($class_css) {
+    $user_login = wp_get_current_user()->user_login;
+    $csv_content = Veepdotai_Util::get_option('ai-section-edstrat0-strategy');
+    $lines = str_getcsv($csv_content, "\n");
+    $options = "";
+    $date = date_create(); // today
+    for ($i = 1; $i < count($lines); $i++) {
+        $options .= '<option name="' . $user_login . '-' . date_format($date, 'Ymd') . '-' . md5($lines[$i]) . '">'
+                        . date_format($date, 'd/m/Y') . ' - ' . $lines[$i]
+                        . '</option>';
+        $date = date_add($date, new DateInterval('P1D'));
+    }
+    $list =  '<div class="' . $class_css . '">'
                 . '<select>'
-                    . '<option name="20250602">2025 - Juin - 02 : Pourquoi un calendrier éditorial ?</option>'
+                . $options
                 . '</select>'
             . '</div>';
 

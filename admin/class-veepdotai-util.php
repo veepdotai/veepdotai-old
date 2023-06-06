@@ -16,7 +16,9 @@ class Veepdotai_Util {
 
     public static function get_option($param) {
         $pn = VEEPDOTAI_PLUGIN_NAME;
-        return get_option($pn . '-' . $param);
+        $param_name = $pn . '-' . $param;
+        Veepdotai_Util::log("Getting option: " . $param_name);
+        return get_option($param_name);
     }
 
     public static function get_content_from_ai($_params) {
@@ -43,17 +45,39 @@ class Veepdotai_Util {
         return $raw;
     }
 
-    public static function get_data($filename) {
+    public static function get_storage_filename($suffix) {
+        $date = date_create();
+        return Veepdotai_Util::get_storage_directory($date)
+                . '/' . date_format($date, 'Y-m-d\TH:m:s') . '-' . $suffix;
+    }
 
+    public static function get_storage_directory($_date = null) {
         $pn = VEEPDOTAI_PLUGIN_NAME;
-        $date = date("Ymd-His");
-        $year = date("Y");
-        $month = date("m");
-        $day = date("d");
+
+        if ($_date) {
+            $date = $_date;
+        } else {
+            $date = date_create();
+        }
+
+        $year = date_format($date, 'Y');
+        $month = date_format($date, 'm');
+        $day = date_format($date, 'd');
         $user_login = wp_get_current_user()->user_login;
         $directory = WP_PLUGIN_DIR . "/$pn/data/users/$user_login/$year/$month/$day";
 
-        $data = file_get_contents($directory . "/" . $filename);
+        return $directory;
+    }
+
+    public static function get_data($filename) {
+
+        $date_extracted = preg_match("/(\d{4}-\d{2}-\d{2T\d{2}:\d{2}:\d{2})/", $filename);
+        if (! $date_extracted) {
+            $data = file_get_contents(Veepdotai_Util::get_storage_directory() . "/" . $filename);
+        } else {
+            $date = date_create($date_extracted[1]);
+            $data = file_get_contents(Veepdotai_Util::get_storage_directory($date) . "/" . $filename);
+        }
         return $data;
     }
 
@@ -61,20 +85,12 @@ class Veepdotai_Util {
      * The content is stored based on user login
      */
     public static function store_data($content, $filename) {
-
-        $pn = VEEPDOTAI_PLUGIN_NAME;
-        $date = date("Ymd-His");
-        $year = date("Y");
-        $month = date("m");
-        $day = date("d");
-        $user_login = wp_get_current_user()->user_login;
-        // It would be better to store data according to user/yyyy/mm/dd
-        $directory = WP_PLUGIN_DIR . "/$pn/data/users/$user_login/$year/$month/$day";
-
         // Creates the provided directory
+        $date = date_create();
+        $directory = Veepdotai_Util::get_storage_directory($date);
         mkdir($directory, 0777, true);
 
-        $abs_filename = $directory . "/" . $date . "-" . $filename;
+        $abs_filename = $directory . "/" . date_format($date, 'Y-m-d\TH:m:s') . "-" . $filename;
 
         $r = file_put_contents($abs_filename, $content);
 

@@ -15,7 +15,7 @@ Class Veepdotai_Admin_Editorial_Strategy {
         $prompt = <<<_EOF_
 A partir de l'entretien ci-dessus, composé des parties Bénéfices, Besoins, Produits/Services et Différenciation, agis en spécialiste de la communication et propose une stratégie éditoriale au format csv composée d'une liste de 10 questions sans faire d'introduction ni de conclusion à ta réponse. La ligne d'en-tête de l'export csv sera la suivante :
 * thème : le thème principal correspondant parmi bénéfices, besoins, produits/services ou différenciation
-* question : la question, dans le style plus direct possible
+* question : la question, dans le style le plus direct possible
 * destinataire : le type de personne susceptible de répondre parmi directeur général ou responsable commercial ou responsable marketing ou responsable technique
 * type : le type de la question parmi TOFU, MOFU ou BOFU
 * format : le type de format de publication le plus pertinent parmi article de blog, post instagram, post facebook ou post linkedin

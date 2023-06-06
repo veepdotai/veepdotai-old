@@ -190,7 +190,7 @@ function createDownloadLink(blob) {
 	var link = document.createElement('a');
 	var remove = document.createElement('a');
 
-	//name of .wav file to use during upload and download (without extendion)
+	//name of .wav file to use during upload and download (without extension)
 	var filename = new Date().toISOString();
 
 	//add controls to the <audio> element
@@ -222,7 +222,7 @@ function createDownloadLink(blob) {
 	li.appendChild(remove);
 	
 	//upload link
-	var upload = ajax_upload(blob, filename);
+	var upload = ajax_transcribe(blob, filename);
 
 	li.appendChild(document.createTextNode (" "))//add a space in between
 	li.appendChild(upload)//add the upload link to li

@@ -27,6 +27,14 @@
             </p>
         </div>
 
+        <div class="veep-content-id" style="visibility: hidden;">
+            <?php
+                if (in_array('veepdotai_role_admin', wp_get_current_user()->roles)) {
+                    echo('<p><input id="veepdotai-content-id" type="text" placeholder="Type your content id" value=""/></p>');
+                }
+            ?>
+        </div>
+
         <div class="veep_actions">
             <?php
                 echo generate_button_escaped($pn, 'ai-save', __('Save'));

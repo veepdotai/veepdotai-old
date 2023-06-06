@@ -8,11 +8,12 @@
         <?php
             echo wp_kses_post( init_nonce() );
 
-            echo generate_editorial_calendar_selector(get_pages());
+            echo generate_editorial_calendar_selector('editorial-calendar-question');
 
             echo generate_editorial_calendar_tabs_escaped(get_pages());
 
             echo wp_kses_post( generate_editorial_calendar_vocal_form_section(true, 'vocal', 'Post vocal', 0) );
+            echo ( generate_editorial_calendar_form_section_escaped(false, 'question', 'Question', 5) );
             echo ( generate_editorial_calendar_form_section_escaped(false, 'article', 'Article', 1) );
             echo ( generate_editorial_calendar_form_section_escaped(false, 'post_li', 'Post LinkedIn', 2) );
             echo ( generate_editorial_calendar_form_section_escaped(false, 'post_fb', 'Post Facebook', 3) );
@@ -36,8 +37,10 @@
             <?php
                 echo generate_button_escaped($pn, 'ai-save', __('Save'));
                 if (! in_array('veepdotai_role_user', wp_get_current_user()->roles)) {
+                    echo generate_button_escaped($pn, 'ai-transcribe', __( 'Retranscrire le vocal'));
                     echo generate_button_escaped($pn, 'ai-generate-images', __( 'Generate images'));
                     echo generate_button_escaped($pn, 'ai-generate-article', __( 'Generate article' ));
+                    echo generate_button_escaped($pn, 'ai-publish-article', __( 'Publish article' ));
                     echo generate_button_escaped($pn, 'ai-generate-post-linkedin', __( 'Generate linkedin post' ));
                     echo generate_button_escaped($pn, 'ai-generate-post-facebook', __( 'Generate facebook post' ));
                     echo generate_button_escaped($pn, 'ai-generate-post-instagram', __( 'Generate instagram post' ));
@@ -48,7 +51,9 @@
         </div>
     </form>
     <script>
+        jQuery("input[name='veepdotai-ai-transcribe']")[0].addEventListener('click', function() {ajax_edcal_transcribe(event)});
         jQuery("input[name='veepdotai-ai-generate-article']")[0].addEventListener('click', function() {ajax_edcal_generate_article(event)});
+        jQuery("input[name='veepdotai-ai-publish-article']")[0].addEventListener('click', function() {ajax_edcal_publish_article(event)});
 
     </script>
 

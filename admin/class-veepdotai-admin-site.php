@@ -70,7 +70,7 @@ Class Veepdotai_Admin_Site {
         } elseif (isset($vp[$pn .'-ai-generate-images'])) {
             $page_url = $self->generate_images_from_prompts($vp);
 
-            Veepdotai_Util::go_to_url( $page_url );
+            Veepdotai_Util::go_to_url('site', true);
         } elseif (isset($vp[$pn .'-ai-generate-pages'])) {
             $page_url = $self->generate_pages_from_section_informations($vp);
 
@@ -186,9 +186,98 @@ Class Veepdotai_Admin_Site {
     /**
      * @TBD
      */
-    public function generate_articles_from_section_informations($post, $reset = false) {
+    public function generate_articles_from_vocals($post, $reset = false) {
         $this->save_configuration($post);
         $pn = $this->plugin_name;
+
+        // Is page already computed?
+        $newcontent = Veepdotai_Util::get_option($pn ."-ai-section$i-page");
+        if ($newcontent == "" || $reset) {
+            $section_field = "$pn-ai-section$i-text-interview";
+            Veepdotai_Util::log_direct("<h2>Processing section: " . $section_field . ".</h2>");
+
+            // Should be stored into the prompts database so it may be translated.
+            $prompt_pre = "Ecris à partir du contenu suivant un article de blog de 200 mots "
+                        . "avec un style journalistique et argumenté reprenant les idées principales du texte sans écrire ce que tu fais : ";
+
+            $content = get_option("$section_field");
+            $prompt = $prompt_pre . $content;
+
+            Veepdotai_Util::log_direct("<p class='prompt'>" . $prompt . ".</p>");
+
+            $open_ai_key = get_option($this->plugin_name.'-openai-api-key');
+            $open_ai = new OpenAi($open_ai_key);
+
+            $params = [
+                'model' => 'text-davinci-003',
+                'prompt' => $prompt,
+                'temperature' => 0.7,
+                'max_tokens' => 2000,
+                'frequency_penalty' => 0,
+                'presence_penalty' => 0.6,
+            ];
+
+            print_r("Params: ");
+            print_r($params);
+            Veepdotai_Util::log_direct("<p class='params'>" . $params . ".</p>");
+
+            $raw = $open_ai->completion($params);
+            print_r("Raw: ");
+            print_r($raw);
+            $r = json_decode($raw)->choices[0];
+            $newcontent = $r->text;
+
+            // Stores content in the corresponding option
+            update_option($pn ."-ai-section$i-page", $newcontent);
+        }
+
+        // Compute post_name for future reference by welcome|landing page
+        $cta_text = get_option($pn ."-ai-section$i-cta-text");
+        $post_name = Veepdotai_Util::replace_special_chars($cta_text);
+        $post_name = strtr($post_name, ["'" => "_", " " => "_"]);
+        $post_name = strtolower($post_name);
+
+        $template = $post[$pn .'-lp-templates'];
+        error_log("post name for $i: " . $post_name);
+
+        Veepdotai_Util::log_direct("<p class='post_name'>Post_name for this generation: " . $post_name . ".</p>");
+        Veepdotai_Util::log_direct("<p class='template'>Template for this generation: " . $template . ".</p>");
+
+        $image_href = get_option($pn ."-ai-section$i-img-href");
+        $image_alt = get_option($pn ."-ai-section$i-img-prompt");
+
+        $tpl_group_pre = '<!-- wp:group {"className":"veep_page","layout":{"type":"constrained"}} -->'
+                            . '<div class="wp-block-group veep_page">';
+        $tpl_group_post = '</div>'
+                            .'<!-- /wp:group -->';
+
+        $tpl_image = '<!-- wp:image {"align":"center","style":{"border":{"radius":"5px","width":"10px"}},"className":"size-full has-custom-border is-style-rounded","dynamicAttributes":{"toolsetDSVersion":"230000"}} -->'
+                        . '<figure class="wp-block-image aligncenter has-custom-border size-full is-style-rounded">'
+                        . '<img src="' . $image_href . '" alt="' . $image_alt . '" style="border-width:10px;border-radius:5px"/>'
+                        . '</figure>'
+                        . '<!-- /wp:image -->';
+
+        $tpl_para = '<!-- wp:paragraph {"className":"veep_generated_text","dynamicAttributes":{"toolsetDSVersion":"230000"}} -->'
+                    . '<p class="veep_text_generated">' . $newcontent . '</p>'
+                    . '<!-- /wp:paragraph -->';
+
+        $content = $tpl_group_pre . $tpl_image . $tpl_para . $tpl_group_post;
+
+        //error_log('DOM: ' . $dom);
+        $new_page = array(
+            'post_title' => get_option($pn ."-ai-section$i-cta-text"), // Needs wp_strip_all_tags ?
+            'post_content' => $content,
+            'post_status' => 'publish',
+            'post_type' => 'page',  // post
+            'post_name' => $post_name,
+            'page_template' => $template
+        );
+
+        $page_id = wp_insert_post($new_page);
+        $r = wp_set_post_categories($page_id, array(31));
+        //error_log("Post $page_id has been assigned the 31 category" . $r);
+
+        $page_url = get_permalink($page_id);
 
         // Not Implemented Yet
     }

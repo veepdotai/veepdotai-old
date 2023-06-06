@@ -8,7 +8,7 @@ use PHPHtmlParser\Options;
 use Orhanerday\OpenAi\OpenAi;
 
 // The function that handles the AJAX request
-add_action( 'wp_ajax_upload', 'Veepdotai_Admin_Interview::upload_callback' );
+add_action( 'wp_ajax_transcribe', 'Veepdotai_Admin_Interview::transcribe_callback' );
 
 Class Veepdotai_Admin_Interview {
 	/**
@@ -29,19 +29,39 @@ Class Veepdotai_Admin_Interview {
 	 */
 	private $version;
 
-    public static function upload_callback() {
+    public static function transcribe_callback() {
+        Veepdotai_Util::Log('Entering transcribe_callback');
         check_ajax_referer( 'my-special-string', 'security' );
 
         //print_r($_FILES); //this will print out the received name, temp name, type, size, etc. 
-        $input = $_FILES['veepdotai-ai-record-audio_data']['tmp_name'];
-        $current_user = wp_get_current_user();
-        $output = VEEPDOTAI_PLUGIN_DIR . 'data/generated/'
-                    . $current_user->user_login
-                    . '-' . $_FILES['veepdotai-ai-record-audio_data']['name'].".wav";
-        //move the file from temp name to local folder using $output name 
-        move_uploaded_file($input, $output);
+        //$input = $_FILES['veepdotai-ai-record-audio_data']['tmp_name'];
 
-        $size = intval($_FILES['veepdotai-ai-record-audio_data']['size']);
+        $file = $_FILES['veepdotai-ai-record-audio_data'];
+        if ($file) {
+            $input = $file['tmp_name'];
+            Veepdotai_Util::Log('File from the request: input [tmp_name]: ' . $input);
+            $filename = $file['name'];
+            Veepdotai_Util::Log('File from the request: filename [name]: ' . $filename);
+    
+            $current_user = wp_get_current_user();
+            $output = Veepdotai_Util::get_storage_filename('interview.wav');
+            Veepdotai_Util::Log('File from the request is going to be moved to: ' . $output);
+
+    //        $output = Veepdotai_Util::get_storage_directory()
+    //                    . '/' . $filename . '.wav';
+    //                    . '-' . $_FILES['veepdotai-ai-record-audio_data']['name'].".wav";
+            //move the file from temp name to local folder using $output name 
+            move_uploaded_file($input, $output);
+            $size = intval($file['size']);
+            Veepdotai_Util::Log('File size from the request: size [size]: ' . $size);
+        } else {
+            $output = Veepdotai_Util::get_storage_directory()
+                        . '/' . $_POST['veepdotai-content-id'];
+
+            Veepdotai_Util::Log('Getting file from the repository: ' . $output);
+            $size = 0;
+        }
+
         if ($size > 25000000) {
             $duration = 240; // 240 seconds so the size should be < 25 Mo for middle rate
             $cmd_split_wav = 'ffmpeg -i ' . $output
@@ -54,7 +74,7 @@ Class Veepdotai_Admin_Interview {
             print_r($code);
         }
         // Process the wav through the whisper API from ChatGPT
-        $open_ai_key = get_option(VEEPDOTAI_PLUGIN_NAME . '-openai-api-key');
+        $open_ai_key = Veepdotai_Util::get_option('openai-api-key');
         $open_ai = new OpenAi($open_ai_key);
 
         $c_file = curl_file_create($output);
@@ -65,6 +85,7 @@ Class Veepdotai_Admin_Interview {
         ];
 
         $raw = $open_ai->transcribe($params);
+        Veepdotai_Util::store_data($raw, 'question-transcription.json');
 
         echo json_decode($raw)->text;
         die(); // this is required to return a proper result

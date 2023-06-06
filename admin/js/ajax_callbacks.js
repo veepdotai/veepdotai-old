@@ -1,4 +1,4 @@
-function ajax_upload(blob, filename) {
+function ajax_transcribe(blob, filename) {
     var upload = document.createElement('a');
 
     upload.href="#";
@@ -7,10 +7,13 @@ function ajax_upload(blob, filename) {
         e.preventDefault();
 
         var fd = new FormData();
-        fd.append('action', 'upload');
+        fd.append('action', 'transcribe');
         fd.append('security', MyAjax.security);
-        fd.append('whatever', 100);
-        fd.append('veepdotai-ai-record-audio_data', blob, filename);
+
+        content_id = jQuery('#veepdotai-content-id')[0].value;
+        if (! content_id) {
+            fd.append('veepdotai-ai-record-audio_data', blob, filename);
+        }
 
         self = this;
         jQuery.ajax({
@@ -20,7 +23,7 @@ function ajax_upload(blob, filename) {
             contentType: false,
             type: 'POST',
             success: function(data){
-                //alert('Got this from the server: ' + data);
+                console.log(new Date() + ": returns from the server");
                 id = self.parentElement.parentElement.parentElement.id;
                 textarea = jQuery('#' + id + ' textarea')[0];
                 textarea.innerHTML = data;
@@ -62,6 +65,29 @@ function get_json(data) {
     return JSON.parse(data);
 }
 
+function ajax_edcal_publish_article(e) {
+    e.preventDefault();
+
+    var fd = new FormData();
+    fd.append('action', 'publish_article');
+    fd.append('security', MyAjax.security);
+
+    self = this;
+    jQuery.ajax({
+        url: MyAjax.ajaxurl,
+        data: fd,
+        processData: false,
+        contentType: false,
+        type: 'POST',
+        success: function(data) {
+            console.log(new Date() + ": edcal_generate_article returns from the server");
+            response = data;
+            window.location = data;
+        }	
+    })
+
+}
+
 function ajax_edcal_generate_article(e) {
     e.preventDefault();
 
@@ -90,8 +116,9 @@ function ajax_edcal_generate_article(e) {
         contentType: false,
         type: 'POST',
         success: function(data) {
-            response = get_json(data);
-            post = response.choices[0].text;
+            console.log(new Date() + ": edcal_generate_article returns from the server");
+            response = JSON.parse(data);
+            post = data.choices[0].text;
             setValue(".veepdotai-ai-section-edcal1-title", post.title);
             setValue(".veepdotai-ai-section-edcal1-description", post.description, "textarea");
             setValue(".veepdotai-ai-section-edcal1-content", post.content, "textarea");
@@ -130,7 +157,8 @@ function ajax_edstrat_generate_editorial_strategy(e) {
         contentType: false,
         type: 'POST',
         success: function(data) {
-            response = get_json(data);
+            //response = get_json(data);
+            response = JSON.parse(data);
             post = response.choices[0].text;
             setValue(".veepdotai-ai-section-edstrat0-strategy", post, "textarea");
         }	

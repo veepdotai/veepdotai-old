@@ -5,15 +5,57 @@ require_once "class-veepdotai-util.php";
 use Psr\Log\LoggerInterface;
 
 add_action( 'wp_ajax_generate_article', 'Veepdotai_Admin_Editorial_Calendar::generate_article_callback' );
+add_action( 'wp_ajax_publish_article', 'Veepdotai_Admin_Editorial_Calendar::publish_article_callback' );
 
 Class Veepdotai_Admin_Editorial_Calendar {
+
+    public static function publish_article_callback() {
+        Veepdotai_Util::log("Publishing article callback");
+        check_ajax_referer( 'my-special-string', 'security' );
+
+        $title = Veepdotai_Util::get_option("ai-section-edcal1-title");
+        $description = Veepdotai_Util::get_option("ai-section-edcal1-description");
+        $content = Veepdotai_Util::get_option("ai-section-edcal1-content");
+        $hashtags = Veepdotai_Util::get_option("ai-section-edcal1-hashtags");
+        $themes = Veepdotai_Util::get_option("ai-section-edcal1-themes");
+        $keywords = Veepdotai_Util::get_option("ai-section-edcal1-keywords");
+
+        $post_name = Veepdotai_Util::replace_special_chars($title);
+        $post_name = strtr($post_title, ["'" => "_", " " => "_"]);
+        $post_name = strtolower($post_name);
+
+        $new_page = array(
+            'post_title' => $title, // Needs wp_strip_all_tags ?
+            'post_content' => $content,
+            'post_status' => 'publish',
+            'post_type' => 'post',
+            'post_name' => $post_name,
+            'meta_input' => [
+                'veepdotai_meta_tag_title' => $title,
+                'veepdotai_meta_tag_description' => $description,
+                'veepdotai_meta_tag_main_query' => 'main query',
+                'veepdotai_meta_tag_keywords' => $hashtags
+                                                    . ',' . $keywords
+                                                    . ',' . $themes
+            ]
+//            'page_template' => $template
+        );
+
+        $page_id = wp_insert_post($new_page);
+        $r = wp_set_post_categories($page_id, array(31));
+        //error_log("Post $page_id has been assigned the 31 category" . $r);
+
+        $page_url = get_permalink($page_id);
+
+        echo $page_url;
+    }
 
     public static function generate_article_callback() {
         Veepdotai_Util::log("Generating article callback");
         check_ajax_referer( 'my-special-string', 'security' );
 
         $prompt = <<<_EOF_
-Rédige comme un copywriter spécialisé dans le SEO un article de blog en français, à partir du texte à analyser ci-dessous, en mettant en gras les mots déjà présents dans le texte en respectant le format json strict suivant:
+La réponse doit être formatée en json strict en respectant la structure suivante, sans ajouter d'éléments en dehors de cette structure :
 {
     "title": mets le titre ici,
     "description": mets la description SEO ici,
@@ -24,9 +66,7 @@ Rédige comme un copywriter spécialisé dans le SEO un article de blog en fran�
     "image": mets ici un prompt permettant de générer une image pour cet article
 }
 
-Le texte à analyser est le suivant :
-
-les bénéfices qu'on peut retirer du projet VIP sont les suivants premièrement on gagne énormément de temps puisque si vous êtes entrepreneur créateur d'entreprise que ce soit un restaurant ou une société de service l'objectif c'est d'y passer le moins de temps possible et en même temps cette présence sur Internet est absolument fondamentale puisque c'est grâce à elle que vous pourrez communiquer que vous pourrez avoir des leads alors il va venir avec moi et à partir de là l'idée ça va être de d'établir cette présence internet très rapidement pour autant il faut qu'elle soit riche et donc c'est pour ça que VIP grâce à la voix va vous permettre de construire votre bride de communication et ce brief de communication il va permettre derrière de créer un site web avec plusieurs pages une page d'accueil plus une dizaine de pages par exemple ainsi qu'un profil Linkedin qui sera constitué d'une audience qui ce qui s'enrichira automatiquement chaque semaine par exemple d'une cinquantaine de contacts automatiquement évidemment et les deux post-in qui seront également générés automatiquement à partir des pages Web qui sont elles-mêmes construites automatiquement pour votre site web donc l'idée c'est que vraiment avec la voix on puisse créer totalement une présence internet donc c'est un énorme gain de temps
+Rédige comme un copywriter spécialisé dans le SEO un article de blog de 40 lignes en français, à partir du texte à analyser ci-dessous, en mettant en gras les mots déjà présents dans ce texte
 
 _EOF_;
 
@@ -34,10 +74,11 @@ _EOF_;
         $content_id = $_POST['content_id'];
         Veepdotai_Util::log('content_id: ' . $content_id);        
         if (! $content_id) {
-            Veepdotai_Util::log('Getting content from AI: ' . $content_id);
+            $prompt .= '\n\n' . Veepdotai_Util::get_option("ai-section-edcal0-transcription");
+            Veepdotai_Util::log('Getting content from AI');
+            Veepdotai_Util::store_data($prompt, "edcal-article-prompt.txt");
 
             $raw = Veepdotai_Util::get_content_from_ai($prompt);
-            Veepdotai_Util::store_data($prompt, "edcal-article-prompt.txt");
             Veepdotai_Util::store_data($raw, "edcal-article-raw.json");
         } else {
             Veepdotai_Util::log('Getting content already stored: ' . $content_id);
