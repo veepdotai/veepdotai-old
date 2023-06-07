@@ -8,7 +8,41 @@
  }
 
  header, footer {
-    display: none;
+    /* display: none; */
+ }
+
+ footer {
+   background-color: black;
+   color: white;
+ }
+
+ footer a {
+   color: white;
+ }
+
+ footer img {
+   scale: 75%;
+ }
+
+body.single-post main {
+   min-width: 480px;
+   max-width: 768px;
+   margin-left: auto;
+   margin-right: auto;
+ }
+
+ main figure img {
+   height: 300px;
+   object-fit: cover;
+ }
+
+ main figure span {
+   display: none;
+ }
+
+ footer h3 {
+   padding: 10px;
+   font-size: x-large;
  }
 
 .veep_section:first-child {
