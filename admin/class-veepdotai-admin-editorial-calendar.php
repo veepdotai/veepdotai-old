@@ -21,7 +21,7 @@ Class Veepdotai_Admin_Editorial_Calendar {
         $keywords = Veepdotai_Util::get_option("ai-section-edcal1-keywords");
 
         $post_name = Veepdotai_Util::replace_special_chars($title);
-        $post_name = strtr($post_title, ["'" => "_", " " => "_"]);
+        $post_name = strtr($title, ["'" => "_", " " => "_"]);
         $post_name = strtolower($post_name);
 
         $new_page = array(
@@ -74,11 +74,16 @@ _EOF_;
         $content_id = $_POST['content_id'];
         Veepdotai_Util::log('content_id: ' . $content_id);        
         if (! $content_id) {
-            $prompt .= '\n\n' . Veepdotai_Util::get_option("ai-section-edcal0-transcription");
-            Veepdotai_Util::log('Getting content from AI');
+            $prompt = $prompt
+                        . "\n\n" . Veepdotai_Util::get_option("ai-section-edcal0-transcription");
+
+            Veepdotai_Util::log('Storing prompt.');
             Veepdotai_Util::store_data($prompt, "edcal-article-prompt.txt");
 
+            Veepdotai_Util::log('Getting content from AI');
             $raw = Veepdotai_Util::get_content_from_ai($prompt);
+
+            Veepdotai_Util::log('Storing json');
             Veepdotai_Util::store_data($raw, "edcal-article-raw.json");
         } else {
             Veepdotai_Util::log('Getting content already stored: ' . $content_id);

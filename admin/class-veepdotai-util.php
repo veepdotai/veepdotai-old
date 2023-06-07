@@ -144,6 +144,7 @@ class Veepdotai_Util {
         $string = preg_replace('/(\s|\n)*}/', "}", $string);
         $string = preg_replace('/\[(\s|\n)*/', "[", $string);
         $string = preg_replace('/(\s|\n)]/', "]", $string);
+        $string = preg_replace('/\":(\s|\n)*\"]/', "\":\"", $string);
         $string = preg_replace('/(\s|\n)*],(\s|\n)*/', "],", $string);
         $string = preg_replace('/\",\n\s*\"/', "\",\"", $string);
         $string = preg_replace('/\n/', "\\n", $string);

@@ -118,7 +118,7 @@ function ajax_edcal_generate_article(e) {
         success: function(data) {
             console.log(new Date() + ": edcal_generate_article returns from the server");
             response = JSON.parse(data);
-            post = data.choices[0].text;
+            post = response.choices[0].text;
             setValue(".veepdotai-ai-section-edcal1-title", post.title);
             setValue(".veepdotai-ai-section-edcal1-description", post.description, "textarea");
             setValue(".veepdotai-ai-section-edcal1-content", post.content, "textarea");
