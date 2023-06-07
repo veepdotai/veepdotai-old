@@ -15,10 +15,15 @@ Class Veepdotai_Admin_Editorial_Calendar {
 
         $title = Veepdotai_Util::get_option("ai-section-edcal1-title");
         $description = Veepdotai_Util::get_option("ai-section-edcal1-description");
-        $content = Veepdotai_Util::get_option("ai-section-edcal1-content");
+        $markdown_content = Veepdotai_Util::get_option("ai-section-edcal1-content");
+        $content_escaped = Veepdotai_Util::generate_html_from_markdown($markdown_content);
         $hashtags = Veepdotai_Util::get_option("ai-section-edcal1-hashtags");
         $themes = Veepdotai_Util::get_option("ai-section-edcal1-themes");
         $keywords = Veepdotai_Util::get_option("ai-section-edcal1-keywords");
+
+        $audio_path = Veepdotai_Util::get_option("ai-vocal-path");
+        Veepdotai_Util::log("Veepdotai-ai-vocal-path: " . $audio_path);
+        $audio = Veepdotai_Util::generate_audio(site_url() . '/wp-content/plugins/veepdotai/' . $audio_path);
 
         $post_name = Veepdotai_Util::replace_special_chars($title);
         $post_name = strtr($title, ["'" => "_", " " => "_"]);
@@ -26,7 +31,10 @@ Class Veepdotai_Admin_Editorial_Calendar {
 
         $new_page = array(
             'post_title' => $title, // Needs wp_strip_all_tags ?
-            'post_content' => $content,
+            'post_content' => $audio .
+                                '<div>'
+                                . $content_escaped
+                                . '</div>',
             'post_status' => 'publish',
             'post_type' => 'post',
             'post_name' => $post_name,

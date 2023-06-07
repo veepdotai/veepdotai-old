@@ -10,6 +10,10 @@ function ajax_transcribe(blob, filename) {
         fd.append('action', 'transcribe');
         fd.append('security', MyAjax.security);
 
+        // This information is required to indicate where does the audio come from
+        id = this.parentElement.parentElement.parentElement.id;
+        fd.append('audio', id);
+
         content_id = jQuery('#veepdotai-content-id')[0].value;
         if (! content_id) {
             fd.append('veepdotai-ai-record-audio_data', blob, filename);

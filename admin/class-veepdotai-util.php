@@ -10,9 +10,47 @@
  * @author     Jean-Christophe Kermagoret <jc@kermagoret.net>
  */
 
+use League\CommonMark\GithubFlavoredMarkdownConverter;
 use Orhanerday\OpenAi\OpenAi;
 
 class Veepdotai_Util {
+
+    public static function generate_audio($url) {
+        $url_escaped = $url;
+        Veepdotai_Util::log("Generates an audio component for $url_escaped");
+
+        $audio = '<!-- wp:audio -->'
+                    . '<figure class="wp-block-audio">'
+                        . '<audio controls src="' . $url_escaped .'"></audio>'
+                    . '</figure>'
+                . '<!-- /wp:audio -->';
+
+        return $audio;
+    }
+
+    public static function generate_paragraph($text, $css_class_name = "") {
+        $para_escaped = esc_html($text);
+        Veepdotai_Util::log("Generates an audio component for $para_escaped");
+        $css_class_name_escaped = esc_attr($css_class_name);
+
+        $paragraph = '<!-- wp:paragraph {"className":"' . $css_class_name_escaped . '","dynamicAttributes":{"toolsetDSVersion":"230000"}} -->'
+                    . '<p class="' . $css_class_name_escaped . '">' . $para_escaped . '</p>'
+                    . '<!-- /wp:paragraph -->';
+
+        return $paragraph;
+    }
+
+    public static function generate_html_from_markdown($markdown) {
+        $output = (new GithubFlavoredMarkdownConverter())->convert($markdown);
+        return $output;
+    }
+
+    public static function set_option($param, $value) {
+        $pn = VEEPDOTAI_PLUGIN_NAME;
+        $param_name = $pn . '-' . $param;
+        Veepdotai_Util::log("Setting option: " . $param_name . " = " . $value);
+        return update_option($param_name, $value);
+    }
 
     public static function get_option($param) {
         $pn = VEEPDOTAI_PLUGIN_NAME;

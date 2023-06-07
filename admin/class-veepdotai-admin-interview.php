@@ -42,7 +42,7 @@ Class Veepdotai_Admin_Interview {
             Veepdotai_Util::Log('File from the request: input [tmp_name]: ' . $input);
             $filename = $file['name'];
             Veepdotai_Util::Log('File from the request: filename [name]: ' . $filename);
-    
+
             $current_user = wp_get_current_user();
             $output = Veepdotai_Util::get_storage_filename('interview.wav');
             Veepdotai_Util::Log('File from the request is going to be moved to: ' . $output);
@@ -52,6 +52,14 @@ Class Veepdotai_Admin_Interview {
     //                    . '-' . $_FILES['veepdotai-ai-record-audio_data']['name'].".wav";
             //move the file from temp name to local folder using $output name 
             move_uploaded_file($input, $output);
+            $audio = $_POST['audio'];
+            // We are on the vocal section
+            if ('veep_id_vocal' === $audio) {
+                $path = preg_replace("#.*/wp-content\/plugins/veepdotai/(.*)#", "$1", $output);
+                Veepdotai_Util::log('Storing path to retrieve it later: ' . $path);
+                Veepdotai_Util::set_option('ai-vocal-path', $path);                
+            }
+
             $size = intval($file['size']);
             Veepdotai_Util::Log('File size from the request: size [size]: ' . $size);
         } else {
