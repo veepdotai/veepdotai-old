@@ -56,7 +56,7 @@ define( 'VEEPDOTAI_SEO_VERSION', '1.0.0' );
  */
 
 function veepdotai_meta_tags_meta_boxes() {
-    add_meta_box('veepdotai_meta_tags_meta_boxes', 'Référencement naturel', 'veepdotai_meta_tags_meta_boxes_callback', ['post', 'page']);
+    add_meta_box('veepdotai_meta_tags_meta_boxes', 'Référencement naturel', 'veepdotai_meta_tags_meta_boxes_callback', ['post', 'page'], 'side');
 }
 add_action('add_meta_boxes', 'veepdotai_meta_tags_meta_boxes');
 
@@ -66,25 +66,27 @@ function veepdotai_meta_tags_meta_boxes_callback($post) {
     $veepdotai_meta_tag_main_query = get_post_meta($post->ID, 'veepdotai_meta_tag_main_query', true);
     $veepdotai_meta_tag_keywords = get_post_meta($post->ID, 'veepdotai_meta_tag_keywords', true);
     ?>
-        <table class="form-table">
-            <tbody>
-                <tr>
-                    <th><label for="veepdotai-meta-tag-title">Balise "title"</label></th>
-                    <td><input id="veepdotai-meta-tag-title" class="regular-text" type="text" name="veepdotai_meta_tag_title" placeholder="Entrez votre balise title" value="<?php esc_attr( $veepdotai_meta_tag_title ); ?>"/></td>
-                </tr>
-                <tr>
-                    <th><label for="veepdotai-meta-tag-description">Balise "description"</label></th>
-                    <td><textarea id="veepdotai-meta-tag-description" class="large-text" rows="6" type="text" name="veepdotai_meta_tag_description" placeholder="Entrez votre balise description"><?php esc_attr( $veepdotai_meta_tag_description ); ?></textarea></td>
-                </tr>
-                <tr>
-                    <th><label for="veepdotai-meta-tag-description">Balise "main_query"</label></th>
-                    <td><input id="veepdotai-meta-tag-description" class="large-text" rows="6" type="text" name="veepdotai_meta_tag_description" placeholder="Entrez la requête principale de cette page"><?php esc_attr( $veepdotai_meta_tag_main_query ); ?></input></td>
-                </tr>
-                <tr>
-                    <th><label for="veepdotai-meta-tag-description">Balise "keywords"</label></th>
-                    <td><textarea id="veepdotai-meta-tag-keywords" class="large-text" rows="6" type="text" name="veepdotai_meta_tag_description" placeholder="Entrez les mots-clés de cette page"><?php esc_attr( $veepdotai_meta_tag_keywords ); ?></textarea></td>
-                </tr>
-        </table>
+
+<fieldset>
+    <label for="veepdotai-meta-tag-title">Balise "title"</label></th>
+    <input id="veepdotai-meta-tag-title" class="regular-text" type="text" name="veepdotai_meta_tag_title" placeholder="Entrez votre balise title" value="<?php esc_attr( $veepdotai_meta_tag_title ); ?>"/>
+</fieldset>
+
+<fieldset>
+    <label for="veepdotai-meta-tag-description">Balise "description"</label>
+    <textarea id="veepdotai-meta-tag-description" class="large-text" rows="6" type="text" name="veepdotai_meta_tag_description" placeholder="Entrez votre balise description"><?php esc_attr( $veepdotai_meta_tag_description ); ?></textarea>
+</fieldset>
+
+<fieldset>
+    <label for="veepdotai-meta-tag-description">Balise "main_query"</label></th>
+    <input id="veepdotai-meta-tag-description" class="large-text" rows="6" type="text" name="veepdotai_meta_tag_description" placeholder="Entrez la requête principale de cette page"><?php esc_attr( $veepdotai_meta_tag_main_query ); ?></input>
+</fieldset>
+
+<fieldset>
+    <label for="veepdotai-meta-tag-description">Balise "keywords"</label>
+    <textarea id="veepdotai-meta-tag-keywords" class="large-text" rows="6" type="text" name="veepdotai_meta_tag_description" placeholder="Entrez les mots-clés de cette page"><?php esc_attr( $veepdotai_meta_tag_keywords ); ?></textarea>
+</fieldset>
+
     <?php
 }
 
