@@ -99,6 +99,7 @@ require plugin_dir_path( __FILE__ ) . 'includes/class-veepdotai.php';
  */
 require plugin_dir_path( __FILE__ ) . 'plugins/veepdotai-seo.php';
 require plugin_dir_path( __FILE__ ) . 'plugins/veepdotai-saas.php';
+require plugin_dir_path( __FILE__ ) . 'plugins/www-post-thumb.php';
 
 /**
  * Begins execution of the plugin.
