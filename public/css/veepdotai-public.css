@@ -31,13 +31,28 @@ body.single-post main {
    margin-right: auto;
  }
 
- main figure img {
-   height: 300px;
+ body.page main {
+   margin-top: 0px ! important;
+ }
+
+ main figure span img {
+   height: 300px ! important;
    object-fit: cover;
  }
 
- main figure span {
+ main figure span.wp-block-post-featured-image__overlay {
    display: none;
+ }
+
+ .wp-block-latest-posts__featured-image img {
+   border-radius: 5px;
+   width: 100%;
+   height: 220px;
+   object-fit: cover;
+ }
+
+ .wp-block-latest-posts__featured-image a {
+      width: 100%;
  }
 
  footer h3 {

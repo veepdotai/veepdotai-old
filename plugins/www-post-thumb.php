@@ -40,12 +40,10 @@ function veepdotai_featured_image_meta_boxes() {
   add_meta_box('veepdotai_featured_image_meta_boxes', 'Featured image', 'GM\WWWPostThumbnail\field', ['post', 'page'], 'side');
 }
 add_action('add_meta_boxes', 'GM\WWWPostThumbnail\veepdotai_featured_image_meta_boxes');
-
 add_filter( 'admin_post_thumbnail_html', 'GM\WWWPostThumbnail\field' );
-
 add_action( 'save_post', 'GM\WWWPostThumbnail\save', 10, 2 );
-
 add_filter( 'post_thumbnail_html', 'GM\WWWPostThumbnail\markup', 10, PHP_INT_MAX );
+add_filter( 'has_post_thumbnail', 'GM\WWWPostThumbnail\has_post_thumbnail', 10, PHP_INT_MAX );
 
 function is_image( $url ) {
   $ext = array( 'jpeg', 'jpg', 'gif', 'png' );
@@ -104,9 +102,14 @@ function save( $pid, $post ) {
 
 function markup( $html, $post_id ) {
   $url =  get_post_meta( $post_id, '_thumbnail_ext_url', TRUE );
-  if ( empty( $url ) || ! is_image( $url ) ) {
+/*  if ( empty( $url ) || ! is_image( $url ) ) {
     return $html;
   }
+  */
+  if (empty( $url )) {
+    $url = "https://images.pexels.com/photos/3861969/pexels-photo-3861969.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2";
+  }
+
   $alt = get_post_field( 'post_title', $post_id ) . ' ' .  __( 'thumbnail', 'www-post-thumb' );
   $attr = array( 'alt' => $alt );
   $attr = apply_filters( 'wp_get_attachment_image_attributes', $attr, NULL );
@@ -118,3 +121,28 @@ function markup( $html, $post_id ) {
   $html .= ' />';
   return $html;
 }
+
+function has_post_thumbnail( $html, $post_id ) {
+  return true;
+  /*
+  $url =  get_post_meta( $post_id, '_thumbnail_ext_url', TRUE );
+  if ( empty( $url ) || ! is_image( $url ) ) {
+    return false;
+  } else {
+    return true;
+  }
+  */
+}
+/*
+add_filter('post_thumbnail_html', function( $html, $post_id, $post_thumbnail_id, $size, $attr ) {
+    ob_start();
+    ?>
+    <span class="featured-image">
+        <a href="<?=get_the_permalink($post_id)?>">
+            <?=$html?>
+        </a>
+    </span>
+    <?php
+    return ob_get_clean();
+}, 10, 5);
+*/
