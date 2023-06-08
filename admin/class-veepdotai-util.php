@@ -177,14 +177,14 @@ class Veepdotai_Util {
         // \n breaks json decoding so we must get rid of these
         // We just convert them in \\n.
 
-        $string = preg_replace('/^(\s|\n)*{/', "{", $text);
-        $string = preg_replace('/{(\s|\n)*/', "{", $string);
-        $string = preg_replace('/(\s|\n)*}/', "}", $string);
-        $string = preg_replace('/\[(\s|\n)*/', "[", $string);
-        $string = preg_replace('/(\s|\n)]/', "]", $string);
-        $string = preg_replace('/\":(\s|\n)*\"]/', "\":\"", $string);
-        $string = preg_replace('/(\s|\n)*],(\s|\n)*/', "],", $string);
-        $string = preg_replace('/\",\n\s*\"/', "\",\"", $string);
+        $string = preg_replace('/^(\s|\n|\r|\t)*{/', "{", $text);
+        $string = preg_replace('/{(\s|\n|\r|\t)*/', "{", $string);
+        $string = preg_replace('/(\s|\n|\r|\t)*}/', "}", $string);
+        $string = preg_replace('/\[(\s|\n|\r|\t)*/', "[", $string);
+        $string = preg_replace('/(\s|\n|\r|\t)]/', "]", $string);
+        $string = preg_replace('/\":(\s|\n|\r|\t)*\"]/', "\":\"", $string);
+        $string = preg_replace('/(\s|\n|\r|\t)*],(\s|\n|\r|\t)*/', "],", $string);
+        $string = preg_replace('/\",(\s|\n|\r|\t)*\"/', "\",\"", $string);
         $string = preg_replace('/\n/', "\\n", $string);
 
         $string = preg_replace('/\\r/', "", $string);
