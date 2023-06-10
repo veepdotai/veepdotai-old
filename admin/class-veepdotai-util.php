@@ -130,7 +130,7 @@ class Veepdotai_Util {
         $directory = Veepdotai_Util::get_storage_directory($date);
         mkdir($directory, 0777, true);
 
-        $abs_filename = $directory . "/" . date_format($date, 'Y-m-d\TH:m:s') . "-" . $filename;
+        $abs_filename = $directory . "/" . date_format($date, 'Y-m-d\TH:i:s') . "-" . $filename;
 
         $r = file_put_contents($abs_filename, $content);
 
