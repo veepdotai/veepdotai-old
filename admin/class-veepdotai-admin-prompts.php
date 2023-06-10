@@ -55,10 +55,10 @@ Class Veepdotai_Admin_Prompts {
             if ($page_url) {
                 Veepdotai_Util::go_to_url($page_url);
             }
-		} elseif (isset($vp[$pn .'-ai-transform'])) {
-            $page_url = $self->improve($vp);
         } elseif (isset($vp[$pn .'-ai-next'])) {
-			Veepdotai_Util::go_to_url('site');
+            $self->save_configuration($vp);
+
+            Veepdotai_Util::go_to_url('site');
 		}
 
         //generate the form
@@ -72,7 +72,7 @@ Class Veepdotai_Admin_Prompts {
     /**
      * 
      */
-    public function update_option_if_set($post, $pn, $field, $fieldValue = true) {
+    public static function update_option_if_set($post, $pn, $field, $fieldValue = true) {
         $r = null;
         $field_name = $pn .'-' . $field;
         if (! $fieldValue) {
@@ -93,44 +93,36 @@ Class Veepdotai_Admin_Prompts {
      * 
      */
     public function reset_configuration($post) {
-        $pn = $this->plugin_name;
+        $pn = VEEPDOTAI_PLUGIN_NAME;
+
         for ($i = 0; $i < 6; $i++) {
-            $this->update_option_if_set($post, $pn, 'ai-section' . $i . '-img', '');
-            $this->update_option_if_set($post, $pn, 'ai-section' . $i . '-title', '');
-            $this->update_option_if_set($post, $pn, 'ai-section' . $i . '-text', '');
-            $this->update_option_if_set($post, $pn, 'ai-section' . $i . '-page', '');
-            $this->update_option_if_set($post, $pn, 'ai-section' . $i . '-cta-text', '');
-            $this->update_option_if_set($post, $pn, 'ai-section' . $i . '-cta-href', '');
+            Veepdotai_Admin_Prompts::update_option_if_set($post, $pn, 'ai-section' . $i . '-img', '');
+            Veepdotai_Admin_Prompts::update_option_if_set($post, $pn, 'ai-section' . $i . '-title', '');
+            Veepdotai_Admin_Prompts::update_option_if_set($post, $pn, 'ai-section' . $i . '-text', '');
+            Veepdotai_Admin_Prompts::update_option_if_set($post, $pn, 'ai-section' . $i . '-page', '');
+            Veepdotai_Admin_Prompts::update_option_if_set($post, $pn, 'ai-section' . $i . '-cta-text', '');
+            Veepdotai_Admin_Prompts::update_option_if_set($post, $pn, 'ai-section' . $i . '-cta-href', '');
         }
-}
+    }
 
     public function save_configuration($post) {
-        $pn = $this->plugin_name;
+        $pn = VEEPDOTAI_PLUGIN_NAME;
 
         if($this->security_check($post, $pn .'-main_admin_site')) {
             for ($i = 0; $i < 6; $i++) {
-                $this->update_option_if_set($post, $pn, 'ai-section' . $i . '-text-prompt-pre');
-                $this->update_option_if_set($post, $pn, 'ai-section' . $i . '-text-prompt-post');
+                Veepdotai_Admin_Prompts::update_option_if_set($post, $pn, 'ai-section' . $i . '-text-prompt-pre');
+                Veepdotai_Admin_Prompts::update_option_if_set($post, $pn, 'ai-section' . $i . '-text-prompt-post');
             }
 
             //$this->update_option_if_set($post, $pn, 'ai_site_ts');
             $key = $pn . "_ai_site_ts";
             update_option($key, sanitize_text_field($post[$key]));
-
-/*
-            $selected_lp_template = isset($post[$pn .'-lp-templates'])
-                                        ? $post[$pn .'-lp-templates']
-                                        : get_option($pn .'-lp-templates');
-            $selected_generation = isset($post[$pn .'-generation'])
-                                        ? $post[$pn .'-generation']
-                                        : get_option($pn .'-generation');
-*/
         }
 
         return true;
     }
 
-    public function update_option($field_name, $field_value) {
+    public static function update_option($field_name, $field_value) {
         error_log("Field name: $field_name / Field value: $field_value");
         // Call the corresponding WP function
         $existing_value = get_option($field_name);
@@ -138,14 +130,15 @@ Class Veepdotai_Admin_Prompts {
             error_log("Replacing existing value for this field: $existing_value...");
         }
         update_option($field_name, ""); // resetting data so we know there is a problem
-        update_option($field_name, $field_value);
+        update_option($field_name, sanitize_textarea_field($field_value));
     }
 
     /**
      * 
      */
-    public function create_prompt($content_title, $i) {
-        $pn = $this->plugin_name;
+    public static function create_prompt($content_title, $i) {
+        $pn = VEEPDOTAI_PLUGIN_NAME;
+
         // We don't concat content anymore because the prompt becomes too big
         //$content .= "\nSection " . $content_titles[$i] . "\n\n";
         $content = "\nSection " . $content_title . "\n\n";
@@ -159,18 +152,27 @@ Class Veepdotai_Admin_Prompts {
         $prompt_pre = get_option($prefix . 'pre');
         $prompt_post = get_option($prefix . 'post');
 
-        $prompt = Veepdotai_Util::replace_special_chars($prompt_pre . "\n\n"
-        . $content
-        . "\n\n" . $prompt_post);
+/*        $prompt = Veepdotai_Util::replace_special_chars($prompt_pre)
+                    . "\n\n"
+                    . Veepdotai_Util::replace_special_chars($content)
+                    . "\n\n"
+                    . Veepdotai_Util::replace_special_chars($prompt_post);
+*/
+        $prompt = $prompt_pre
+                    . "\n\n"
+                    . $content
+                    . "\n\n"
+                    . $prompt_post;
 
-        return stripslashes( $prompt );
+        return $prompt;
+        //return stripslashes( $prompt );
     }
 
     /**
      * 
      */
-    public function get_data($i) {
-        $pn = $this->plugin_name;
+    public static function get_data($i) {
+        $pn = VEEPDOTAI_PLUGIN_NAME;
 
         // Gets an already computed data, for example: 20230509-135300
         $ts = get_option($pn . '_ai_site_ts');
@@ -186,9 +188,8 @@ Class Veepdotai_Admin_Prompts {
      * Stores computed data to check errors or enables users
      * to replay a previous prompt or reuse previous results
      */
-    public function store_data($date, $i, $prompt, $raw, $r) {
-
-        $pn = $this->plugin_name;
+    public static function store_data($date, $i, $prompt, $raw, $r) {
+        $pn = VEEPDOTAI_PLUGIN_NAME;
 
         $filename = "$date-$pn-ai-section$i";
 
@@ -202,43 +203,16 @@ Class Veepdotai_Admin_Prompts {
     /**
      * 
      */
-    public function fix_results($r) {
-        // $section is a global var
-        if (property_exists($r, 'section')) {
-            $section = $r->section;
-            if (is_string($section)) {
-                $section = $r;
-            } elseif (is_null($section)) {
-                $section = $r->sections[0];
-            } elseif (is_array($section)) {
-                $section = $r->section[0];
-            } else {
-                error_log("The format of the r->section is not known.");
-            }    
-        } elseif (property_exists($r, 'sections')) {
-            if (is_array($r->sections)) {
-                $section = $r->sections[0];
-            } else {
-                error_log("The format of the r->sections is not known.");
-            }
-        }
+    public static function create_text_with_ai($ts, $prompt, $i) {
+        $pn = VEEPDOTAI_PLUGIN_NAME;
 
-        return $section;
-    }
-
-    /**
-     * 
-     */
-    public function create_text_with_ai($ts, $prompt, $i) {
-        $pn = $this->plugin_name;
-
-        $raw = $this->get_data($i);
+        $raw = Veepdotai_Admin_Prompts::get_data($i);
         $r;
         //error_log($this->plugin_name . '_ai_site_ts' . ': ' . $ts . '.');
         if (! $raw) {
             $raw = Veepdotai_Util::get_content_from_ai($prompt);
             $r = Veepdotai_Util::convert_to_valid_json($raw);
-            $this->store_data($ts, $i, $prompt, $raw, $r);
+            Veepdotai_Admin_Prompts::store_data($ts, $i, $prompt, $raw, $r);
         } else {
             $r = Veepdotai_Util::convert_to_valid_json($raw);
             // $params = []; // should contain prompt
@@ -247,52 +221,8 @@ Class Veepdotai_Admin_Prompts {
 
         error_log($raw);
 
-        $section = $this->fix_results($r);
+        $section = Veepdotai_Util::fix_results($r);
         return $section;
-    }
-
-    /**
-     * Improve provided content with AI (openai in our case)
-     * 
-     * @TODO Storage needs to be reworked completely with a db!!!
-     */
-    public function improve($post) {
-        $this->save_configuration($post);
-        $pn = $this->plugin_name;
-
-        $results = [];
-        if($this->security_check($post, $pn .'-main_admin_site')) {
-
-            $content_titles = ["Bénéfices", "Besoins", "Solutions", "Avantages concurrentiels"];
-
-            // Process each prompt through the content of the corresponding field
-            // input through voice during the interview ?
-            // Or concat everything before providing the content to AI ?
-            // Last method will be cheaper and more efficient
-
-            $date = date("Ymd-His");
-            for ($i = 0; $i < 4; $i++) {
-                $prompt = $this->create_prompt($content_titles[$i], $i);
- 
-                $section = $this->create_text_with_ai($date, $prompt, $i);
-                
-                $prefix = $pn . '-ai-section' . $i . '-';
-
-                $this->update_option($prefix . 'title', $section->title);
-                $this->update_option($prefix . 'text', $section->text);
-                $this->update_option($prefix . 'page', $section->page);
-//                $this->update_option($prefix . 'transcript', $section->transcript);
-                //$r = $this->update_option($prefix . 'cta-href', $section->{"cta-href"});
-                $this->update_option($prefix . 'cta-text', $section->{"cta-text"});
-//                $this->update_option($prefix . 'themes', $section->{"themes"});
-                $this->update_option($prefix . 'img-prompt', $section->img);
-
-                //$img = $this->create_image_with_ai($open_ai, $date, $prompt, $i);
-
-                //$results[] = $r;
-            }
-        }
-        return $results;
     }
 
     /**

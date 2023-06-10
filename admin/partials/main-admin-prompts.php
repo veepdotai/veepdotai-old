@@ -20,7 +20,6 @@
             <?php
                 echo generate_button_escaped($pn, 'ai-save', __('Save'));
                 echo generate_button_escaped($pn, 'ai-next', __('Next'));
-                echo generate_button_escaped($pn, 'ai-transform', __('Transform original text'));
             ?>
 
             <input class="veepdotai_ai_site_ts" name="veepdotai_ai_site_ts" />

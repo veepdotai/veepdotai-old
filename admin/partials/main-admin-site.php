@@ -21,10 +21,10 @@
             <?php
                 echo generate_button_escaped($pn, 'ai-save', __('Save'));
                 if (! in_array('veepdotai_role_user', wp_get_current_user()->roles)) {
+                    echo generate_button_escaped($pn, 'ai-transform', __('Transform original text'));
                     echo generate_button_escaped($pn, 'ai-generate-images', __( 'Generate images' ));
                     echo generate_button_escaped($pn, 'ai-generate-site', __( 'Generate site' ));
                     echo generate_button_escaped($pn, 'ai-generate-pages', __( 'Generate pages' ));
-                    echo generate_button_escaped($pn, 'ai-generate-articles', __( 'Generate articles' ));
                 }
                 echo generate_button_escaped($pn, 'ai-generate-all', __('Generate All' ));
             ?>

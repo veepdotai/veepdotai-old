@@ -63,6 +63,8 @@ Class Veepdotai_Admin_Site {
         if (isset($vp[$pn .'-ai-save'])) {
             //$this.save_configuration($post);
             $self->save_configuration($vp);
+		} elseif (isset($vp[$pn .'-ai-transform'])) {
+            $page_url = $self->improve($vp);
 		} elseif (isset($vp[$pn .'-ai-generate-site'])) {
             $page_url = $self->generate_page_from_template($vp);
 
@@ -73,10 +75,6 @@ Class Veepdotai_Admin_Site {
             Veepdotai_Util::go_to_url('site', true);
         } elseif (isset($vp[$pn .'-ai-generate-pages'])) {
             $page_url = $self->generate_pages_from_section_informations($vp);
-
-            Veepdotai_Util::go_to_url( $page_url );
-        } elseif (isset($vp[$pn .'-ai-generate-articles'])) {
-            $page_url = $self->generate_articles_from_section_informations($vp);
 
             Veepdotai_Util::go_to_url( $page_url );
         } elseif (isset($vp[$pn .'-ai-generate-all'])) {
@@ -93,6 +91,53 @@ Class Veepdotai_Admin_Site {
         //$page_html = ob_get_contents();
         //ob_end_clean();
         //echo $page_html;
+    }
+
+        /**
+     * Improve provided content with AI (openai in our case)
+     * 
+     * @TODO Storage needs to be reworked completely with a db!!!
+     */
+    public function improve($post) {
+        $pn = VEEPDOTAI_PLUGIN_NAME;
+
+        //$this->save_configuration($post);
+
+        $results = [];
+        if($this->security_check($post, $pn .'-main_admin_site')) {
+
+            $content_titles = ["Bénéfices", "Besoins", "Solutions", "Avantages concurrentiels"];
+
+            // Process each prompt through the content of the corresponding field
+            // input through voice during the interview ?
+            // Or concat everything before providing the content to AI ?
+            // Last method will be cheaper and more efficient
+
+            $date = date("Ymd-His");
+            for ($i = 0; $i < 4; $i++) {
+                $prompt = Veepdotai_Admin_Prompts::create_prompt($content_titles[$i], $i);
+ 
+                $section = Veepdotai_Admin_Prompts::create_text_with_ai($date, $prompt, $i);
+                
+                $prefix = $pn . '-ai-section' . $i . '-';
+
+                Veepdotai_Admin_Prompts::update_option($prefix . 'title', $section->title);
+                Veepdotai_Admin_Prompts::update_option($prefix . 'text', $section->text);
+
+                $section_md = str_replace('#_#_#n', '\n', $section->page);
+                Veepdotai_Admin_Prompts::update_option($prefix . 'page', $section_md);
+//                $this->update_option($prefix . 'transcript', $section->transcript);
+                //$r = $this->update_option($prefix . 'cta-href', $section->{"cta-href"});
+                Veepdotai_Admin_Prompts::update_option($prefix . 'cta-text', $section->{"cta-text"});
+//                $this->update_option($prefix . 'themes', $section->{"themes"});
+                Veepdotai_Admin_Prompts::update_option($prefix . 'img-prompt', $section->img);
+
+                //$img = $this->create_image_with_ai($open_ai, $date, $prompt, $i);
+
+                //$results[] = $r;
+            }
+        }
+        return $results;
     }
 
     /**
@@ -359,9 +404,12 @@ Class Veepdotai_Admin_Site {
                                 . '</figure>'
                                 . '<!-- /wp:image -->';
 
+/*
                 $tpl_para = '<!-- wp:paragraph {"className":"veep_generated_text","dynamicAttributes":{"toolsetDSVersion":"230000"}} -->'
                             . '<p class="veep_text_generated">' . $newcontent . '</p>'
                             . '<!-- /wp:paragraph -->';
+*/
+                $tpl_para = Veepdotai_Util::generate_html_from_markdown($newcontent);
 
                 $content = $tpl_group_pre . $tpl_image . $tpl_para . $tpl_group_post;
 
@@ -477,19 +525,27 @@ Class Veepdotai_Admin_Site {
      * 
      */
     public function generate_all($post) {
-        $page = $this->generate_images_from_prompts($post);
-        $page = $this->generate_page_from_template($post);
-        $page = $this->generate_pages_from_section_informations($post);
-        //$this->generate_articles_from_section_informations($post);
+        //echo "<p>Extracting data from the interview thanks to AI.</p>";
+        $page = $this->improve($post);
+        sleep(2);
 
-        //Veepdotai_Util::go_to_url($page);
+        //echo "<p>Getting images extracted data.</p>";
+        $page = $this->generate_images_from_prompts($post);
+
+        //echo "<p>Generating home page from the extracted data.</p>";
+        $page_home = $this->generate_page_from_template($post);
+
+        //echo "<p>Generating pages, related to the home page, from the extracted data.</p>";
+        $page = $this->generate_pages_from_section_informations($post);
+
+        Veepdotai_Util::go_to_url($page_home);
     }
 
     /**
      * 
      */
     public function generate_images_from_prompts($post) {
-        $this->save_configuration($post);
+        //$this->save_configuration($post);
         $pn = $this->plugin_name;
         
         if ($this->security_check($post, $pn .'-main_admin_site')) {

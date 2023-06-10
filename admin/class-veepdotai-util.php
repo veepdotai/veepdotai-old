@@ -12,6 +12,7 @@
 
 use League\CommonMark\GithubFlavoredMarkdownConverter;
 use Orhanerday\OpenAi\OpenAi;
+use \Delight\Str\Str;
 
 class Veepdotai_Util {
 
@@ -63,6 +64,7 @@ class Veepdotai_Util {
         if (is_string($_params)) {
             $params = [
                 'model' => 'text-davinci-003',
+//                'model' => 'gpt-4',
                 'prompt' => $_params,
                 'temperature' => 0.7,
                 'max_tokens' => 2000,
@@ -170,21 +172,55 @@ class Veepdotai_Util {
     }
 
     /**
+     * 
+     */
+    public static function fix_results($r) {
+        $section = null;
+        if (property_exists($r, 'section')) {
+            Veepdotai_Util::log("A section property exists.");
+            $section = $r->section;
+            if (is_string($section)) {
+                Veepdotai_Util::log('Section is string : $section = $r.');
+                $section = $r;
+            } elseif (is_null($section)) {
+                Veepdotai_Util::log('Section is null : $section = $r->sections[0].');
+                $section = $r->sections[0];
+            } elseif (is_array($section)) {
+                Veepdotai_Util::log('Section is an array : $section = $r->section[0].');
+                $section = $r->section[0];
+            } else {
+                error_log("The format of the r->section is not known.");
+            }    
+        } elseif (property_exists($r, 'sections')) {
+            if (is_array($r->sections)) {
+                $section = $r->sections[0];
+            } else {
+                error_log("The format of the r->sections is not known.");
+            }
+        } else {
+            $section = $r;
+        }
+        
+        return $section;
+    }
+
+    /**
      * Fix json by removing \n and \s in json source, i. e. beetween data,
      * but double \n in json data
      */
-    public static function fix_json($text) {
+    public static function fix_json2($text) {
         // \n breaks json decoding so we must get rid of these
         // We just convert them in \\n.
 
-        $string = preg_replace('/^(\s|\n|\r|\t)*{/', "{", $text);
-        $string = preg_replace('/{(\s|\n|\r|\t)*/', "{", $string);
-        $string = preg_replace('/(\s|\n|\r|\t)*}/', "}", $string);
-        $string = preg_replace('/\[(\s|\n|\r|\t)*/', "[", $string);
-        $string = preg_replace('/(\s|\n|\r|\t)]/', "]", $string);
-        $string = preg_replace('/\":(\s|\n|\r|\t)*\"]/', "\":\"", $string);
-        $string = preg_replace('/(\s|\n|\r|\t)*],(\s|\n|\r|\t)*/', "],", $string);
-        $string = preg_replace('/\",(\s|\n|\r|\t)*\"/', "\",\"", $string);
+        $blank_chars = '\s|\n|\r|\t';
+        $string = preg_replace('/^(' . $blank_chars . ')*{/', "{", $text);
+        $string = preg_replace('/{(' . $blank_chars . ')*/', "{", $string);
+        $string = preg_replace('/(' . $blank_chars . ')*}/', "}", $string);
+        $string = preg_replace('/\[(' . $blank_chars . ')*/', "[", $string);
+        $string = preg_replace('/(' . $blank_chars . ')]/', "]", $string);
+        $string = preg_replace('/\":(' . $blank_chars . ')*\"]/', "\":\"", $string);
+        $string = preg_replace('/(' . $blank_chars . ')*],(' . $blank_chars . ')*/', "],", $string);
+        $string = preg_replace('/\",(' . $blank_chars . ')*\"/', "\",\"", $string);
         $string = preg_replace('/\n/', "\\n", $string);
 
         $string = preg_replace('/\\r/', "", $string);
@@ -192,7 +228,75 @@ class Veepdotai_Util {
         $string = preg_replace('/\n/', "", $string);
         $string = preg_replace('/#_#_#n/', "\\\\n", $string);
 
-        Veepdotai_Util::log('In fix_json: ' . $string);
+        //Veepdotai_Util::log('In fix_json: ' . $string);
+        return $string;
+
+    }
+
+    public static function fix_json3($text) {
+
+        $blank_chars = '\s|\n|\r|\t';
+
+        $string = preg_replace('/^(' . $blank_chars . ')*{/', "{", $text);
+        $string = preg_replace('/{(' . $blank_chars . ')*/', "{", $string);
+        $string = preg_replace('/(' . $blank_chars . ')*}/', "}", $string);
+        $string = preg_replace('/\[(' . $blank_chars . ')*/', "[", $string);
+        $string = preg_replace('/(' . $blank_chars . ')]/', "]", $string);
+        $string = preg_replace('/\":(' . $blank_chars . ')*\"]/', "\":\"", $string);
+        $string = preg_replace('/(' . $blank_chars . ')*],(' . $blank_chars . ')*/', "],", $string);
+        $string = preg_replace('/\",(' . $blank_chars . ')*\"/', "\",\"", $string);
+        $string = preg_replace('/[^,]\n/', "\\n", $string);
+
+        $string = preg_replace('/\",\n\"/', "\",\"", $string);
+        
+                //$string = preg_replace('/\n/', "\\n", $string);
+        $string = preg_replace('/\\r/', "", $string);
+        $string = preg_replace('/[^,]\\\\n/', "#_#_#n", $string);
+        $string = preg_replace('/\n/', "", $string);
+        $string = preg_replace('/#_#_#n/', "\\\\n", $string);
+        $string = preg_replace('/\n/', "", $string);
+        $string = preg_replace('/\\"/', 'aa', $string);
+            
+        return $string;
+    }
+
+    public static function fix_json($raw) {
+
+        $text = (new \Delight\Str\Str($raw))->normalizeLineEndings("EOL");
+
+        $string = preg_replace('/(' . $blank_chars . ')*{(' . $blank_chars . ')*/', "{", $text);
+
+        //$string = preg_replace('/\"(' . $blank_chars . ')*{/', "\"{", $raw);
+        //$string = preg_replace('/\[(' . $blank_chars . ')*/', "[", $string);
+
+        // Delete the 2 following lines?
+        //$string = preg_replace('/(' . $blank_chars . ')]/', "]", $string);
+        //$string = preg_replace('/\":(' . $blank_chars . ')*\"]/', "\":\"]", $string);
+        //$string = preg_replace('/\":(' . $blank_chars . ')*\"/', "\":\"", $string);
+        //$string = preg_replace('/(' . $blank_chars . ')*],(' . $blank_chars . ')*/', "],", $string);
+        //$string = preg_replace('/\",(' . $blank_chars . ')*\"/', "\",\"", $string);
+        //$string = preg_replace('/\",(' . $blank_chars . ')"/', "\",\"", $string);
+
+        // 1234,EOL  "
+        //$string = preg_replace('/,(' . $blank_chars . ')*\"/', ',"', $string);
+        $string = preg_replace('/,EOL(\s|\t)*\"/', ',"', $string);
+
+        // ",EOL"
+        //$string = preg_replace('/\\",EOL\\"/', '\",\"', $string);
+        $string = preg_replace('/,EOL/', ',', $string);
+
+        // :EOL"
+        //$string = preg_replace('/:EOL\"/', ':"', $string);
+        $string = preg_replace('/:EOL/', ':', $string);
+
+        // "EOL    }EOL  ],"
+        $string = preg_replace('/"(' . $blank_chars . ')*}(' . $blank_chars . ')*],"/', '"}],"', $string);
+
+        // EOL  }EOL}
+        //$string = preg_replace('/(' . $blank_chars . ')*}(' . $blank_chars . ')*}/', '}}', $string);
+        $string = preg_replace('/(' . $blank_chars . ')*}/', '}', $string);
+
+        $string = str_replace('\n', "EOL", $string);
 
         return $string;
     }

@@ -100,9 +100,6 @@ ensure that the project can continue to grow and improve.
 
 **Orhan Erday** / Creator.
 
-# Documentation
-Please visit https://orhanerday.gitbook.io/openai-php-api-1/
-
 # Endpoint Support
 
 - Chat

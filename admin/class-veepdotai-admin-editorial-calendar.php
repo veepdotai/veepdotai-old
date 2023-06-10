@@ -158,10 +158,6 @@ _EOF_;
             Veepdotai_Util::log("Editorial Calendar: Saving form data");
             //$this.save_configuration($post);
             $self->save_configuration($vp);
-        } elseif (isset($vp[$pn .'-ai-generate-articles'])) {
-            $page_url = $self->generate_articles_from_section_informations($vp);
-
-            Veepdotai_Util::go_to_url( $page_url );
         } elseif (isset($vp[$pn .'-ai-generate-all'])) {
             $page_url = $self->generate_all($vp);
         }
