@@ -103,7 +103,7 @@ function ajax_edcal_generate_article(e) {
     function setValue(selector, value, widgetType = 'text') {
         try {
             if ("textarea" === widgetType) {
-                jQuery(selector)[0].innerHTML = value;
+                jQuery(selector)[0].innerHTML = value.replace(/EOL/g,'\n');
             } else {
                 jQuery(selector)[0].value = value;
             }

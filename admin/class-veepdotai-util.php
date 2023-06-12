@@ -261,42 +261,41 @@ class Veepdotai_Util {
     }
 
     public static function fix_json($raw) {
-
+        $i = 1;
         $text = (new \Delight\Str\Str($raw))->normalizeLineEndings("EOL");
 
+        $blank_chars = '\s|EOL|\t';
         $string = preg_replace('/(' . $blank_chars . ')*{(' . $blank_chars . ')*/', "{", $text);
-
-        //$string = preg_replace('/\"(' . $blank_chars . ')*{/', "\"{", $raw);
-        //$string = preg_replace('/\[(' . $blank_chars . ')*/', "[", $string);
-
-        // Delete the 2 following lines?
-        //$string = preg_replace('/(' . $blank_chars . ')]/', "]", $string);
-        //$string = preg_replace('/\":(' . $blank_chars . ')*\"]/', "\":\"]", $string);
-        //$string = preg_replace('/\":(' . $blank_chars . ')*\"/', "\":\"", $string);
-        //$string = preg_replace('/(' . $blank_chars . ')*],(' . $blank_chars . ')*/', "],", $string);
-        //$string = preg_replace('/\",(' . $blank_chars . ')*\"/', "\",\"", $string);
-        //$string = preg_replace('/\",(' . $blank_chars . ')"/', "\",\"", $string);
+        Veepdotai_Util::log("$i. ############\n" . $string);
+        $i++;
 
         // 1234,EOL  "
         //$string = preg_replace('/,(' . $blank_chars . ')*\"/', ',"', $string);
         $string = preg_replace('/,EOL(\s|\t)*\"/', ',"', $string);
+        Veepdotai_Util::log("$i. ############\n" . $string);
+        $i++;
 
         // ",EOL"
         //$string = preg_replace('/\\",EOL\\"/', '\",\"', $string);
         $string = preg_replace('/,EOL/', ',', $string);
+        Veepdotai_Util::log("$i. ############\n" . $string);
+        $i++;
 
         // :EOL"
         //$string = preg_replace('/:EOL\"/', ':"', $string);
         $string = preg_replace('/:EOL/', ':', $string);
+        Veepdotai_Util::log("$i. ############\n" . $string);
+        $i++;
 
         // "EOL    }EOL  ],"
         $string = preg_replace('/"(' . $blank_chars . ')*}(' . $blank_chars . ')*],"/', '"}],"', $string);
+        Veepdotai_Util::log("$i. ############\n" . $string);
+        $i++;
 
         // EOL  }EOL}
         //$string = preg_replace('/(' . $blank_chars . ')*}(' . $blank_chars . ')*}/', '}}', $string);
         $string = preg_replace('/(' . $blank_chars . ')*}/', '}', $string);
-
-        $string = str_replace('\n', "EOL", $string);
+        Veepdotai_Util::log("$i. ############\n" . $string);
 
         return $string;
     }

@@ -94,19 +94,31 @@ _EOF_;
             Veepdotai_Util::log('Storing json');
             Veepdotai_Util::store_data($raw, "edcal-article-raw.json");
         } else {
-            Veepdotai_Util::log('Getting content already stored: ' . $content_id);
+            Veepdotai_Util::log('Getting content already stored: ' . $content_id);  
             $raw = Veepdotai_Util::get_data($content_id);
             Veepdotai_Util::log('raw: ' . $raw);
         }
 
-        //$ai_response = json_decode(Veepdotai_Util::fix_json($raw));
+        //Veepdotai_Util::log("Fixing json then decoding it.");
+        //$json_string = Veepdotai_Util::fix_json($raw);
+        //Veepdotai_Util::log("json->string: " . $json_string);
+        //$ai_response = json_decode($json_string);
         $ai_response = json_decode($raw);
-        Veepdotai_Util::log('text: ' . $ai_response->choices[0]->text);
+        //$ai_response = json_decode($raw);
         $text = $ai_response->choices[0]->text;
+        Veepdotai_Util::log('text: ' . $text);
+
         $text_fixed = Veepdotai_Util::fix_json($text);
-        $ai_response->choices[0]->text = json_decode($text_fixed);
-        Veepdotai_Util::log('After fix_json' . json_encode($ai_response));
-        echo json_encode($ai_response);
+        Veepdotai_Util::log("text_fixed: json->string: " . $text_fixed);
+
+        $text_json = json_decode($text_fixed);
+        Veepdotai_Util::log("text_fixed: content: " . $text_json->content);
+        Veepdotai_Util::log('Last json decoding error: ' . Veepdotai_Util::get_last_error());
+
+        $ai_response->choices[0]->text = $text_json;
+        $ai_response_text = json_encode($ai_response);
+        Veepdotai_Util::log('After fix_json' . $ai_response_text);
+        echo $ai_response_text;
         die();
     }
 
