@@ -46,6 +46,24 @@ class Veepdotai_Util {
         return $output;
     }
 
+    /**
+     * Extracted data are saved into the options table before being returned to the user.
+     */
+    public static function article_generation_save_extracted_data($i, $data) {
+        //for($i = 1; $i < 4; $i++) {
+            Veepdotai_Util::set_option('ai-section-edcal' . $i . '-title', $data->title);
+            Veepdotai_Util::set_option('ai-section-edcal' . $i . '-description', $data->description);
+            Veepdotai_Util::set_option('ai-section-edcal' . $i . '-content', $data->content);
+            //Veepdotai_Util::set_option('ai-section-edcal' . $i . '-linkedin', $data->linkedin);
+            Veepdotai_Util::set_option('ai-section-edcal' . $i . '-themes', $data->themes);
+            Veepdotai_Util::set_option('ai-section-edcal' . $i . '-hashtags', $data->hashtags);
+            Veepdotai_Util::set_option('ai-section-edcal' . $i . '-keywords', $data->keywords);
+            Veepdotai_Util::set_option('ai-section-edcal' . $i . '-image', $data->image);
+        //}
+
+        return $data;
+    }
+
     public static function set_option($param, $value) {
         $pn = VEEPDOTAI_PLUGIN_NAME;
         $param_name = $pn . '-' . $param;

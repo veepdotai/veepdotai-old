@@ -123,6 +123,8 @@ _EOF_;
         Veepdotai_Util::log('Last json decoding error: ' . Veepdotai_Util::get_last_error());
 
         $ai_response->choices[0]->text = $text_json;
+        // 1 : Post tab
+        Veepdotai_Util::save_extracted_data_from_article_generation(1, $text_json);
         $ai_response_text = json_encode($ai_response);
         Veepdotai_Util::log('After fix_json' . $ai_response_text);
         echo $ai_response_text;
