@@ -64,10 +64,10 @@ Class Veepdotai_Admin_Menu {
             update_option($this->plugin_name.'_ai_context', sanitize_text_field($post[$this->plugin_name.'-ai-context']));
 
             //$open_ai_key = getenv('OPENAI_API_KEY');
-            $open_ai_key = get_option($this->plugin_name.'-openai-api-key');
+            $open_ai_key = Veepdotai_Util::get_option('openai-api-key');
             $open_ai = new OpenAi($open_ai_key);
 
-            $prompt = get_option($this->plugin_name.'_ai_context');
+            $prompt = Veepdotai_Util::get_option('-ai-context');
             $promptWithCommand = $prompt . " Rédige un menu de navigation pour un site web sur ces sujets au format YAML, avec un hero title, une tagline et les principales sections à mettre sur la page d'accueil.";
             //$prompt = $prompt . " Propose-moi un menu de navigation pour le site web des pompes funèbres duriez.";
             //$prompt = $prompt . " Propose-moi un menu de navigation pour un site web en remplaçant les '\n' par '&#13;'.";

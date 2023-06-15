@@ -125,7 +125,8 @@ Class Veepdotai_Admin_Prompts {
     public static function update_option($field_name, $field_value) {
         error_log("Field name: $field_name / Field value: $field_value");
         // Call the corresponding WP function
-        $existing_value = get_option($field_name);
+        // The case where the field starts with VEEPDOTAI_PLUGIN_NAME- is managed by the get_option method
+        $existing_value = Veepdotai_Util::get_option($field_name);
         if ($existing_value) {
             error_log("Replacing existing value for this field: $existing_value...");
         }
@@ -142,9 +143,9 @@ Class Veepdotai_Admin_Prompts {
         // We don't concat content anymore because the prompt becomes too big
         //$content .= "\nSection " . $content_titles[$i] . "\n\n";
         $content = "\nSection " . $content_title . "\n\n";
-        $key = $pn . '-ai-section' . $i . '-text-interview';
-        error_log("Key: " . $key . ".");
-        $content .= get_option($key);
+        $key = 'ai-section' . $i . '-text-interview';
+        error_log("Key: $pn-$key.");
+        $content .= Veepdotai_Util::get_option($key);
         $content .= "\n";
 
         $prefix_variable = 'ai-section' . $i . '-text-prompt-';

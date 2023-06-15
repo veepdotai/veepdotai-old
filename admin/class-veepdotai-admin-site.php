@@ -377,7 +377,7 @@ Class Veepdotai_Admin_Site {
                 }
 
                 // Compute post_name for future reference by welcome|landing page
-                $cta_text = get_option($pn ."-ai-section$i-cta-text");
+                $cta_text = Veepdotai_Util::get_option("ai-section$i-cta-text");
                 $post_name = Veepdotai_Util::replace_special_chars($cta_text);
                 $post_name = strtr($post_name, ["'" => "_", " " => "_"]);
                 $post_name = strtolower($post_name);
@@ -388,8 +388,8 @@ Class Veepdotai_Admin_Site {
                 Veepdotai_Util::log_direct("<p class='post_name'>Post_name for this generation: " . $post_name . ".</p>");
                 Veepdotai_Util::log_direct("<p class='template'>Template for this generation: " . $template . ".</p>");
 
-                $image_href = get_option($pn ."-ai-section$i-img-href");
-                $image_alt = get_option($pn ."-ai-section$i-img-prompt");
+                $image_href = Veepdotai_Util::get_option("ai-section$i-img-href");
+                $image_alt = Veepdotai_Util::get_option("ai-section$i-img-prompt");
 
                 $tpl_group_pre = '<!-- wp:group {"className":"veep_page","layout":{"type":"constrained"}} -->'
                                     . '<div class="wp-block-group veep_page">';
@@ -413,7 +413,7 @@ Class Veepdotai_Admin_Site {
 
                 //error_log('DOM: ' . $dom);
                 $new_page = array(
-                    'post_title' => get_option($pn ."-ai-section$i-cta-text"), // Needs wp_strip_all_tags ?
+                    'post_title' => Veepdotai_Util::get_option("ai-section$i-cta-text"), // Needs wp_strip_all_tags ?
                     'post_content' => $content,
                     'post_status' => 'publish',
                     'post_type' => 'page',  // post
@@ -439,7 +439,7 @@ Class Veepdotai_Admin_Site {
         $pn = $this->plugin_name;
 
         // Gets an already computed data, for example: 20230509-135300
-        $ts = get_option($pn . '_ai_site_ts');
+        $ts = Veepdotai_Util::get_option('-ai-site-ts');
         if ($ts) {
             $raw = file_get_contents(WP_PLUGIN_DIR
                     . "/$pn/data/$ts-$pn-ai-section$i-result.txt");
@@ -474,7 +474,7 @@ Class Veepdotai_Admin_Site {
     public function get_image_with_pexels($ts, $prompt, $i) {
         $pn = $this->plugin_name;
 
-        $pexels_key = get_option($pn . '-pexels-api-key');
+        $pexels_key = Veepdotai_Util::get_option('pexels-api-key');
         $provider = new ApiProvider($pexels_key);
 
         // Create a Search photos request.
@@ -556,18 +556,18 @@ Class Veepdotai_Admin_Site {
 
             $date = date("Ymd-His");
             for ($i = 0; $i < 4; $i++) {
-                $prefix = $pn . '-ai-section' . $i . '-';
+                $prefix = 'ai-section' . $i . '-';
 
                 // Open AI
                 // Results with AI image generation are disappointed
                 // $open_ai = new OpenAi($pexels_ai_key); 
-                // $pexels_key = get_option($this->plugin_name . '-pexels-api-key');
+                // $pexels_key = Veepdotai_Util::get_option('pexels-api-key');
                 //$image = $this->create_image_with_ai($open_ai, $date, $prompt, $i);
                 //$res = $this->update_option($prefix . 'img-href', $image->data[0]->url);
 
                 // Pexels
                 // Images are better. A search is done with the provided information.
-                $prompt = get_option($prefix . 'img-prompt');
+                $prompt = Veepdotai_Util::get_option($prefix . 'img-prompt');
 //                $prompt = "nature";
                 $image = $this->get_image_with_pexels($date, $prompt, $i);
                 error_log("Image URL: " . $image->getSrc()->getLarge() . ".");
@@ -604,11 +604,11 @@ Class Veepdotai_Admin_Site {
 
             $sections = $dom->find('.veep_section');
             for ($i = 0; $i < count($sections); $i++) {
-                $veep_title = get_option("$pn-ai-section$i-title");
-                $veep_text = get_option("$pn-ai-section$i-text");
-                $veep_img = get_option("$pn-ai-section$i-img-href");
-                $veep_cta_href = get_option("$pn-ai-section$i-cta-href");
-                $veep_cta_text = get_option("$pn-ai-section$i-cta-text");
+                $veep_title = Veepdotai_Util::get_option("ai-section$i-title");
+                $veep_text = Veepdotai_Util::get_option("ai-section$i-text");
+                $veep_img = Veepdotai_Util::get_option("ai-section$i-img-href");
+                $veep_cta_href = Veepdotai_Util::get_option("ai-section$i-cta-href");
+                $veep_cta_text = Veepdotai_Util::get_option("ai-section$i-cta-text");
 
                 if ($veep_cta_href == "") {
                     // Compute post_name for future reference by welcome|landing page
@@ -646,7 +646,7 @@ Class Veepdotai_Admin_Site {
             error_log($content);
 
             $new_page = array(
-                'post_title' => get_option($pn .'-ai-section0-title'),
+                'post_title' => Veepdotai_Util::get_option('ai-section0-title'),
                 'post_content' => $content,
                 'post_status' => 'publish',
                 'post_type' => 'page',

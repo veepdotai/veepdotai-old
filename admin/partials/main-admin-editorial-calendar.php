@@ -51,7 +51,7 @@
         </div>
     </form>
     <script>
-        jQuery("input[name='veepdotai-ai-transcribe']")[0].addEventListener('click', function() {ajax_edcal_transcribe(event)});
+        //jQuery("input[name='veepdotai-ai-transcribe']")[0].addEventListener('click', function() {ajax_edcal_transcribe(event)});
         jQuery("input[name='veepdotai-ai-generate-article']")[0].addEventListener('click', function() {ajax_edcal_generate_article(event)});
         jQuery("input[name='veepdotai-ai-publish-article']")[0].addEventListener('click', function() {ajax_edcal_publish_article(event)});
 

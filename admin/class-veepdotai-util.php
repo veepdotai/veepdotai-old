@@ -73,7 +73,15 @@ class Veepdotai_Util {
 
     public static function get_option($param) {
         $pn = VEEPDOTAI_PLUGIN_NAME;
-        $param_name = $pn . '-' . $param;
+
+        if (preg_match("/^" . $pn . "/", $param)) {
+            // The param starts with the $pn, so we don't add it
+            $param_name = $param;
+        } else {
+            // We add it
+            $param_name = $pn . '-' . $param;
+        }
+
         Veepdotai_Util::log("Getting option: " . $param_name);
         return get_option($param_name);
     }
