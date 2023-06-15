@@ -69,6 +69,12 @@
 }
 */
 
+#veep_id_post_li_menu,
+#veep_id_post_fb_menu,
+#veep_id_post_insta_menu {
+    display: none;
+}
+
 .veepdotai-main-admin-about ul {
     list-style: disc;
     padding-left: 15px;
