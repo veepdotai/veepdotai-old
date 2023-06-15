@@ -177,8 +177,8 @@ Class Veepdotai_Admin_Interview {
             for ($i = 0; $i < 6; $i++) {
                 $this->update_option_if_set($post, $pn, 'ai-section' . $i . '-text-interview');
             }
-            $selected_lp_template = isset($post[$pn .'-lp-templates']) ? $post[$pn .'-lp-templates'] : get_option($pn .'-lp-templates');
-            $selected_generation = isset($post[$pn .'-generation']) ? $post[$pn .'-generation'] : get_option($pn .'-generation');
+            $selected_lp_template = isset($post[$pn .'-lp-templates']) ? $post[$pn .'-lp-templates'] : Veepdotai_Util::get_option('lp-templates');
+            $selected_generation = isset($post[$pn .'-generation']) ? $post[$pn .'-generation'] : Veepdotai_Util::get_option('generation');
         }
 
         return;

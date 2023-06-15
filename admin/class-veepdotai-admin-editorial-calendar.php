@@ -236,7 +236,7 @@ _EOF_;
     public function get_image($ts, $prompt, $i) {
         $pn = $this->plugin_name;
 
-        $pexels_key = get_option($pn . '-pexels-api-key');
+        $pexels_key = Veepdotai_Util::get_option('pexels-api-key');
         $provider = new ApiProvider($pexels_key);
 
         // Create a Search photos request.

@@ -147,17 +147,11 @@ Class Veepdotai_Admin_Prompts {
         $content .= get_option($key);
         $content .= "\n";
 
-        $prefix = $pn . '-ai-section' . $i . '-text-prompt-';
+        $prefix_variable = 'ai-section' . $i . '-text-prompt-';
 
-        $prompt_pre = get_option($prefix . 'pre');
-        $prompt_post = get_option($prefix . 'post');
+        $prompt_pre = Veepdotai_Util::get_option($prefix_variable . 'pre');
+        $prompt_post = Veepdotai_Util::get_option($prefix_variable . 'post');
 
-/*        $prompt = Veepdotai_Util::replace_special_chars($prompt_pre)
-                    . "\n\n"
-                    . Veepdotai_Util::replace_special_chars($content)
-                    . "\n\n"
-                    . Veepdotai_Util::replace_special_chars($prompt_post);
-*/
         $prompt = $prompt_pre
                     . "\n\n"
                     . $content
@@ -175,7 +169,7 @@ Class Veepdotai_Admin_Prompts {
         $pn = VEEPDOTAI_PLUGIN_NAME;
 
         // Gets an already computed data, for example: 20230509-135300
-        $ts = get_option($pn . '_ai_site_ts');
+        $ts = Veepdotai_Util::get_option('ai-site-ts');
         if ($ts) {
             $raw = Veepdotai_Util::get_data("$ts-$pn-ai-section$i-result.txt");
         } else {

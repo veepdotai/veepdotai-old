@@ -176,10 +176,8 @@ Class Veepdotai_Admin_Site {
                 $this->update_option_if_set($post, $pn, 'ai-section' . $i . '-cta-text');
                 $this->update_option_if_set($post, $pn, 'ai-section' . $i . '-cta-href');
             }
-            $selected_lp_template = isset($post[$pn .'-lp-templates']) ? $post[$pn .'-lp-templates'] : get_option($pn .'-lp-templates');
-            $selected_generation = isset($post[$pn .'-generation']) ? $post[$pn .'-generation'] : get_option($pn .'-generation');
-            //$selected_wp_template = isset($post[$pn .'-wp-templates']) ? $post[$pn .'-wp-templates'] : get_option($pn .'-wp-templates');
-            //include_once(plugin_dir_path(__FILE__) . 'partials/veepdotai-shortcode.php');
+            $selected_lp_template = isset($post[$pn .'-lp-templates']) ? $post[$pn .'-lp-templates'] : Veepdotai_Util::get_option('lp-templates');
+            $selected_generation = isset($post[$pn .'-generation']) ? $post[$pn .'-generation'] : Veepdotai_Util::get_option('generation');
         }
 
         return;
@@ -238,19 +236,19 @@ Class Veepdotai_Admin_Site {
         // Is page already computed?
         $newcontent = Veepdotai_Util::get_option($pn ."-ai-section$i-page");
         if ($newcontent == "" || $reset) {
-            $section_field = "$pn-ai-section$i-text-interview";
-            Veepdotai_Util::log_direct("<h2>Processing section: " . $section_field . ".</h2>");
+            $section_field = "ai-section$i-text-interview";
+            Veepdotai_Util::log_direct("<h2>Processing section: $pn-$section_field.</h2>");
 
             // Should be stored into the prompts database so it may be translated.
             $prompt_pre = "Ecris à partir du contenu suivant un article de blog de 200 mots "
                         . "avec un style journalistique et argumenté reprenant les idées principales du texte sans écrire ce que tu fais : ";
 
-            $content = get_option("$section_field");
+            $content = Veepdotai_Util::get_option($section_field);
             $prompt = $prompt_pre . $content;
 
             Veepdotai_Util::log_direct("<p class='prompt'>" . $prompt . ".</p>");
 
-            $open_ai_key = get_option($this->plugin_name.'-openai-api-key');
+            $open_ai_key = Veepdotai_Util::get_option('openai-api-key');
             $open_ai = new OpenAi($open_ai_key);
 
             $params = [
@@ -277,7 +275,7 @@ Class Veepdotai_Admin_Site {
         }
 
         // Compute post_name for future reference by welcome|landing page
-        $cta_text = get_option($pn ."-ai-section$i-cta-text");
+        $cta_text = Veepdotai_Util::get_option("ai-section$i-cta-text");
         $post_name = Veepdotai_Util::replace_special_chars($cta_text);
         $post_name = strtr($post_name, ["'" => "_", " " => "_"]);
         $post_name = strtolower($post_name);
@@ -288,8 +286,8 @@ Class Veepdotai_Admin_Site {
         Veepdotai_Util::log_direct("<p class='post_name'>Post_name for this generation: " . $post_name . ".</p>");
         Veepdotai_Util::log_direct("<p class='template'>Template for this generation: " . $template . ".</p>");
 
-        $image_href = get_option($pn ."-ai-section$i-img-href");
-        $image_alt = get_option($pn ."-ai-section$i-img-prompt");
+        $image_href = Veepdotai_Util::get_option("ai-section$i-img-href");
+        $image_alt = Veepdotai_Util::get_option("ai-section$i-img-prompt");
 
         $tpl_group_pre = '<!-- wp:group {"className":"veep_page","layout":{"type":"constrained"}} -->'
                             . '<div class="wp-block-group veep_page">';
@@ -310,7 +308,7 @@ Class Veepdotai_Admin_Site {
 
         //error_log('DOM: ' . $dom);
         $new_page = array(
-            'post_title' => get_option($pn ."-ai-section$i-cta-text"), // Needs wp_strip_all_tags ?
+            'post_title' => Veepdotai_Util::get_option("ai-section$i-cta-text"), // Needs wp_strip_all_tags ?
             'post_content' => $content,
             'post_status' => 'publish',
             'post_type' => 'page',  // post
@@ -338,21 +336,21 @@ Class Veepdotai_Admin_Site {
             $date = date("Ymd-His");
             for ($i = 0; $i < 4; $i++) {
                 // Is page already computed?
-                $newcontent = get_option($pn ."-ai-section$i-page");
+                $newcontent = Veepdotai_Util::get_option("ai-section$i-page");
                 if ($newcontent == "" || $reset) {
-                    $section_field = "$pn-ai-section$i-text-interview";
-                    Veepdotai_Util::log_direct("<h2>Processing section: " . $section_field . ".</h2>");
+                    $section_field = "ai-section$i-text-interview";
+                    Veepdotai_Util::log_direct("<h2>Processing section: $pn-$section_field.</h2>");
 
                     // Should be stored into the prompts database so it may be translated.
                     $prompt_pre = "Ecris à partir du contenu suivant un article de blog de 200 mots "
                                 . "avec un style journalistique et argumenté reprenant les idées principales du texte sans écrire ce que tu fais : ";
         
-                    $content = get_option("$section_field");
+                    $content = Veepdotai_Util::get_option($section_field);
                     $prompt = $prompt_pre . $content;
 
                     Veepdotai_Util::log_direct("<p class='prompt'>" . $prompt . ".</p>");
 
-                    $open_ai_key = get_option($this->plugin_name.'-openai-api-key');
+                    $open_ai_key = Veepdotai_Util::get_option('openai-api-key');
                     $open_ai = new OpenAi($open_ai_key);
 
                     $params = [

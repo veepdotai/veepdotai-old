@@ -30,13 +30,13 @@ _EOF_;
         if (! $content_id) {
             $prompt = "L'entretien est le suivant:"
                         . "\n\nQuels sont les bénéfices pour les utilisateurs ?\n\n"
-                            . get_option(VEEPDOTAI_PLUGIN_NAME . "-ai-section0-text-interview")
+                            . Veepdotai_Util::get_option("ai-section0-text-interview")
                         . "\n\nQuels sont les besoins des utilisateurs ?\n\n"
-                            . get_option(VEEPDOTAI_PLUGIN_NAME . "-ai-section1-text-interview")
+                            . Veepdotai_Util::get_option("ai-section1-text-interview")
                         . "\n\nQuels sont les produits et services de la société ?\n\n"
-                            . get_option(VEEPDOTAI_PLUGIN_NAME . "-ai-section2-text-interview")
+                            . Veepdotai_Util::get_option("ai-section2-text-interview")
                         . "\n\nQuels sont les éléments de différenciation de la société ?\n\n"
-                            . get_option(VEEPDOTAI_PLUGIN_NAME . "-ai-section3-text-interview")
+                            . Veepdotai_Util::get_option("ai-section3-text-interview")
                         . "\n\n" . $prompt;
             Veepdotai_Util::store_data($prompt, "edstrat-prompt.txt");
 
