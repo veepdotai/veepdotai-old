@@ -123,9 +123,11 @@ function ajax_edcal_generate_article(e) {
             console.log(new Date() + ": edcal_generate_article returns from the server");
             response = JSON.parse(data);
             post = response.choices[0].text;
+            linkedin = post.linkedin ? post.linkedin.replace(/<img[^\>]*alt="(.*?)"[^\>]*>/g,"$1") : "";
             setValue(".veepdotai-ai-section-edcal1-title", post.title);
             setValue(".veepdotai-ai-section-edcal1-description", post.description, "textarea");
             setValue(".veepdotai-ai-section-edcal1-content", post.content, "textarea");
+            setValue(".veepdotai-ai-section-edcal1-linkedin", linkedin, "textarea");
             setValue(".veepdotai-ai-section-edcal1-themes", post.themes);
             setValue(".veepdotai-ai-section-edcal1-hashtags", post.hashtags);
             setValue(".veepdotai-ai-section-edcal1-keywords", post.keywords);

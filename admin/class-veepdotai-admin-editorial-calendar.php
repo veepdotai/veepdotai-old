@@ -124,7 +124,7 @@ _EOF_;
 
         $ai_response->choices[0]->text = $text_json;
         // 1 : Post tab
-        Veepdotai_Util::save_extracted_data_from_article_generation(1, $text_json);
+        Veepdotai_Util::article_generation_save_extracted_data(1, $text_json);
         $ai_response_text = json_encode($ai_response);
         Veepdotai_Util::log('After fix_json' . $ai_response_text);
         echo $ai_response_text;
@@ -223,6 +223,7 @@ _EOF_;
                 $this->update_option_if_set($post, $pn, 'ai-section-edcal' . $i . '-title');
                 $this->update_option_if_set($post, $pn, 'ai-section-edcal' . $i . '-description');
                 $this->update_option_if_set($post, $pn, 'ai-section-edcal' . $i . '-content');
+                $this->update_option_if_set($post, $pn, 'ai-section-edcal' . $i . '-linkedin');
                 $this->update_option_if_set($post, $pn, 'ai-section-edcal' . $i . '-themes');
                 $this->update_option_if_set($post, $pn, 'ai-section-edcal' . $i . '-hashtags');
                 $this->update_option_if_set($post, $pn, 'ai-section-edcal' . $i . '-keywords');

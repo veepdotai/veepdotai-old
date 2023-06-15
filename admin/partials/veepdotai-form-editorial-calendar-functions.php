@@ -51,6 +51,7 @@ function generate_editorial_calendar_form_section_escaped($enable_voice, $intent
                 . display_escaped($enable_voice, "Titre", $name_escaped . "-title", "text", true)
                 . display_escaped($enable_voice, "Description", $name_escaped . "-description", "textarea", true)
                 . display_escaped($enable_voice, "Contenu", $name_escaped . "-content", "textarea", true)
+                . display_escaped($enable_voice, "Linkedin", $name_escaped . "-linkedin", "textarea", true)
                 . display_escaped($enable_voice, "Hashtags", $name_escaped . "-hashtags", "text", true)
                 . display_escaped($enable_voice, "Thèmes", $name_escaped . "-themes", "text", true)
                 . display_escaped($enable_voice, "Mots-clés", $name_escaped . "-keywords", "text", true)
