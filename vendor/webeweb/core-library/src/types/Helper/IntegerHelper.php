@@ -25,9 +25,9 @@ class IntegerHelper {
      * Factorial.
      *
      * @param int|null $n The number.
-     * @return int|null Returns the factorial.
+     * @return float|null Returns the factorial.
      */
-    public static function factorial(?int $n): ?int {
+    public static function factorial(?int $n): ?float {
 
         if (null === $n || $n < 0) {
             return null;
@@ -86,6 +86,23 @@ class IntegerHelper {
         }
 
         return intval($value);
+    }
+
+    /**
+     * Summation.
+     *
+     * @param int|null $n The number.
+     * @return float|null Returns the summation.
+     */
+    public static function summation(?int $n): ?float {
+
+        if (null === $n) {
+            return null;
+        }
+
+        $q = $n * ($n + 1);
+
+        return $q / 2;
     }
 
     /**

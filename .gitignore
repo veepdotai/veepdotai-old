@@ -1,2 +1,6 @@
 data/generated
+data/users
 ./composer.lock
+**/tests/**
+**/test/**
+**/test**

@@ -7,13 +7,15 @@ namespace Composer\Autoload;
 class ComposerStaticInit1a0872979d32784c1cfbad911dd401c5
 {
     public static $files = array (
-        '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
-        'a0edc8309cc5e1d60e3047b5df6b7052' => __DIR__ . '/..' . '/guzzlehttp/psr7/src/functions_include.php',
         '6e3fae29631ef280660b3cdad06f25a8' => __DIR__ . '/..' . '/symfony/deprecation-contracts/function.php',
-        'c964ee0ededf28c96ebd9db5099ef910' => __DIR__ . '/..' . '/guzzlehttp/promises/src/functions_include.php',
+        '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
+        '9c67151ae59aff4788964ce8eb2a0f43' => __DIR__ . '/..' . '/clue/stream-filter/src/functions_include.php',
+        'a0edc8309cc5e1d60e3047b5df6b7052' => __DIR__ . '/..' . '/guzzlehttp/psr7/src/functions_include.php',
+        'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
+        '8cff32064859f4559445b89279f3199c' => __DIR__ . '/..' . '/php-http/message/src/filters.php',
         '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
         '37a3dc5111fe8f707ab4c132ef1dbc62' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/functions_include.php',
-        'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
+        'fb4ca2d97fe7ba6af750497425204e70' => __DIR__ . '/..' . '/sentry/sentry/src/functions.php',
     );
 
     public static $prefixLengthsPsr4 = array (
@@ -54,7 +56,12 @@ class ComposerStaticInit1a0872979d32784c1cfbad911dd401c5
         array (
             'Symfony\\Polyfill\\Php80\\' => 23,
             'Symfony\\Polyfill\\Ctype\\' => 23,
+            'Symfony\\Contracts\\Service\\' => 26,
+            'Symfony\\Contracts\\HttpClient\\' => 29,
             'Symfony\\Component\\Yaml\\' => 23,
+            'Symfony\\Component\\OptionsResolver\\' => 34,
+            'Symfony\\Component\\HttpClient\\' => 29,
+            'Sentry\\' => 7,
         ),
         'P' => 
         array (
@@ -62,6 +69,7 @@ class ComposerStaticInit1a0872979d32784c1cfbad911dd401c5
             'Psr\\Http\\Message\\' => 17,
             'Psr\\Http\\Client\\' => 16,
             'Psr\\EventDispatcher\\' => 20,
+            'Psr\\Container\\' => 14,
             'PHPHtmlParser\\' => 14,
         ),
         'O' => 
@@ -77,9 +85,17 @@ class ComposerStaticInit1a0872979d32784c1cfbad911dd401c5
             'League\\Config\\' => 14,
             'League\\CommonMark\\' => 18,
         ),
+        'J' => 
+        array (
+            'Jean85\\' => 7,
+        ),
         'H' => 
         array (
             'Http\\Promise\\' => 13,
+            'Http\\Message\\' => 13,
+            'Http\\Factory\\Guzzle\\' => 20,
+            'Http\\Discovery\\' => 15,
+            'Http\\Client\\Common\\' => 19,
             'Http\\Client\\' => 12,
         ),
         'G' => 
@@ -94,6 +110,10 @@ class ComposerStaticInit1a0872979d32784c1cfbad911dd401c5
             'Doctrine\\Common\\Collections\\' => 28,
             'Dflydev\\DotAccessData\\' => 22,
             'Delight\\Str\\' => 12,
+        ),
+        'C' => 
+        array (
+            'Clue\\StreamFilter\\' => 18,
         ),
     );
 
@@ -214,17 +234,38 @@ class ComposerStaticInit1a0872979d32784c1cfbad911dd401c5
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-ctype',
         ),
+        'Symfony\\Contracts\\Service\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/service-contracts',
+        ),
+        'Symfony\\Contracts\\HttpClient\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/http-client-contracts',
+        ),
         'Symfony\\Component\\Yaml\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/yaml',
         ),
+        'Symfony\\Component\\OptionsResolver\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/options-resolver',
+        ),
+        'Symfony\\Component\\HttpClient\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/http-client',
+        ),
+        'Sentry\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/sentry/sentry/src',
+        ),
         'Psr\\Log\\' => 
         array (
-            0 => __DIR__ . '/..' . '/psr/log/Psr/Log',
+            0 => __DIR__ . '/..' . '/psr/log/src',
         ),
         'Psr\\Http\\Message\\' => 
         array (
-            0 => __DIR__ . '/..' . '/psr/http-message/src',
+            0 => __DIR__ . '/..' . '/psr/http-factory/src',
+            1 => __DIR__ . '/..' . '/psr/http-message/src',
         ),
         'Psr\\Http\\Client\\' => 
         array (
@@ -233,6 +274,10 @@ class ComposerStaticInit1a0872979d32784c1cfbad911dd401c5
         'Psr\\EventDispatcher\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/event-dispatcher/src',
+        ),
+        'Psr\\Container\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/container/src',
         ),
         'PHPHtmlParser\\' => 
         array (
@@ -254,9 +299,30 @@ class ComposerStaticInit1a0872979d32784c1cfbad911dd401c5
         array (
             0 => __DIR__ . '/..' . '/league/commonmark/src',
         ),
+        'Jean85\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/jean85/pretty-package-versions/src',
+        ),
         'Http\\Promise\\' => 
         array (
             0 => __DIR__ . '/..' . '/php-http/promise/src',
+        ),
+        'Http\\Message\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/php-http/message/src',
+            1 => __DIR__ . '/..' . '/php-http/message-factory/src',
+        ),
+        'Http\\Factory\\Guzzle\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/http-interop/http-factory-guzzle/src',
+        ),
+        'Http\\Discovery\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/php-http/discovery/src',
+        ),
+        'Http\\Client\\Common\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/php-http/client-common/src',
         ),
         'Http\\Client\\' => 
         array (
@@ -289,6 +355,10 @@ class ComposerStaticInit1a0872979d32784c1cfbad911dd401c5
         'Delight\\Str\\' => 
         array (
             0 => __DIR__ . '/..' . '/delight-im/str/src',
+        ),
+        'Clue\\StreamFilter\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/clue/stream-filter/src',
         ),
     );
 
@@ -363,7 +433,7 @@ class ComposerStaticInit1a0872979d32784c1cfbad911dd401c5
         'Nette\\Utils\\UnknownImageFileException' => __DIR__ . '/..' . '/nette/utils/src/Utils/exceptions.php',
         'Nette\\Utils\\Validators' => __DIR__ . '/..' . '/nette/utils/src/Utils/Validators.php',
         'PhpToken' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/PhpToken.php',
-        'Stringable' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Stringable.php',
+        'Stringable' => __DIR__ . '/..' . '/myclabs/php-enum/stubs/Stringable.php',
         'UnhandledMatchError' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/UnhandledMatchError.php',
         'ValueError' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/ValueError.php',
     );

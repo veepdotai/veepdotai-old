@@ -62,28 +62,35 @@ Class Veepdotai_Admin_Editorial_Calendar {
         Veepdotai_Util::log("Generating article callback");
         check_ajax_referer( 'my-special-string', 'security' );
 
-        $prompt = <<<_EOF_
+        $prompt_pre = <<<_EOF_
+Voici un entretien :
+_EOF_;
+
+        $prompt_post = <<<_EOF_
+Fin de l'entretien
+
+Rédige, à partir de cet entretien un article de blog de 40 lignes en français, en agissant comme un copywriter spécialisé dans le SEO, dans un style journalistique et professionnel. Tu mettras en gras les mots déjà présents dans l'entretien.
+
 La réponse doit être formatée en json strict en respectant la structure suivante, sans ajouter d'éléments en dehors de cette structure :
 {
     "title": mets le titre ici,
     "description": mets la description SEO ici,
     "content": mets le contenu de l'article de blog au format markdown ici,
+    "linkedin": mets ici une reformulation du contenu de l'article de blog sous la forme d'un post linkedin de 10 lignes avec des emojis,
     "hashtags": mets les hastags ici,
     "themes": extrais les 5 thèmes principaux du texte et mets-les ici,
     "keywords": extrais les 5 mots clés SEO du texte et mets-les ici,
     "image": mets ici un prompt permettant de générer une image pour cet article
 }
-
-Rédige comme un copywriter spécialisé dans le SEO un article de blog de 40 lignes en français, à partir du texte à analyser ci-dessous, en mettant en gras les mots déjà présents dans ce texte
-
 _EOF_;
 
         //$content_id = '20230605-071132-edcal-article-prompt.txt';
         $content_id = $_POST['content_id'];
         Veepdotai_Util::log('content_id: ' . $content_id);        
         if (! $content_id) {
-            $prompt = $prompt
-                        . "\n\n" . Veepdotai_Util::get_option("ai-section-edcal0-transcription");
+            $prompt = $prompt_pre
+                        . "\n\n" . Veepdotai_Util::get_option("ai-section-edcal0-transcription")
+                        . "\n\n" . $prompt_post;
 
             Veepdotai_Util::log('Storing prompt.');
             Veepdotai_Util::store_data($prompt, "edcal-article-prompt.txt");
@@ -223,8 +230,32 @@ _EOF_;
         return;
     }
 
+    public function get_image($ts, $prompt, $i) {
+        $pn = $this->plugin_name;
+
+        $pexels_key = get_option($pn . '-pexels-api-key');
+        $provider = new ApiProvider($pexels_key);
+
+        // Create a Search photos request.
+        $request = new SearchPhotosRequest();
+        $request->setQuery($prompt);
+        $request->setOrientation("landscape"); // Optional
+        $request->setSize("large"); // Optional
+        $request->setLocale("fr-FR"); // Optional
+
+        $response = $provider->sendRequest($request);
+
+        $images = $response->getPhotos();
+        if (! empty($images)) {
+            $image = $images[0];
+            return $image;
+        } else {
+            return null;
+        }
+    }
+
     /**
-     * 
+     * Pexels support
      */
     public function get_image_with_pexels($ts, $prompt, $i) {
         $pn = $this->plugin_name;

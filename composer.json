@@ -5,7 +5,8 @@
         "paquettg/php-html-parser": "^3.1",
         "webeweb/pexels-library": "^3.2",
         "league/commonmark": "^2.4",
-        "delight-im/str": "^2.20"
+        "delight-im/str": "^2.20",
+        "sentry/sdk": "^3.4"
     },
     "autoload": {
         "psr-4": {
@@ -20,7 +21,8 @@
     ],
     "config": {
         "allow-plugins": {
-            "pestphp/pest-plugin": false
+            "pestphp/pest-plugin": false,
+            "php-http/discovery": true
         }
     }
 }

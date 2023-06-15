@@ -1,6 +1,28 @@
 CHANGELOG
 =========
 
+### [8.76.0](https://github.com/webeweb/core-library/tree/v8.76.0) (2023-06-06)
+
+- Add summation() into Integer helper
+- Improve unit tests
+
+### [8.75.1](https://github.com/webeweb/core-library/tree/v8.75.1) (2023-06-05)
+
+- Fix float maximum trait
+- Fix float max trait
+- Fix float minimum trait
+- Fix float min trait
+- Fix float score trait
+
+### [8.75.0](https://github.com/webeweb/core-library/tree/v8.75.0) (2023-06-05)
+
+- Add float total trait
+- Fix factorial() into Integer helper
+
+### [8.74.0](https://github.com/webeweb/core-library/tree/v8.74.0) (2023-06-03)
+
+- Update dependencies
+
 ### [8.73.0](https://github.com/webeweb/core-library/tree/v8.73.0) (2023-05-03)
 
 - Add factorial() into Integer helper
