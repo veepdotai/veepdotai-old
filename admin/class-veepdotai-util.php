@@ -67,7 +67,7 @@ class Veepdotai_Util {
 //                'model' => 'gpt-4',
                 'prompt' => $_params,
                 'temperature' => 0.7,
-                'max_tokens' => 2000,
+                'max_tokens' => 2500,
                 'frequency_penalty' => 0,
                 'presence_penalty' => 0.6,
             ];    
@@ -88,7 +88,7 @@ class Veepdotai_Util {
     public static function get_storage_filename($suffix) {
         $date = date_create();
         return Veepdotai_Util::get_storage_directory($date)
-                . '/' . date_format($date, 'Y-m-d\TH:m:s') . '-' . $suffix;
+                . '/' . date_format($date, 'Ymd\THms') . '-' . $suffix;
     }
 
     public static function get_storage_directory($_date = null) {
@@ -111,7 +111,7 @@ class Veepdotai_Util {
 
     public static function get_data($filename) {
 
-        $date_extracted = preg_match("/(\d{4}-\d{2}-\d{2T\d{2}:\d{2}:\d{2})/", $filename);
+        $date_extracted = preg_match("/(\d{4}\d{2}\d{2T\d{2}\d{2}\d{2})/", $filename);
         if (! $date_extracted) {
             $data = file_get_contents(Veepdotai_Util::get_storage_directory() . "/" . $filename);
         } else {
@@ -130,7 +130,7 @@ class Veepdotai_Util {
         $directory = Veepdotai_Util::get_storage_directory($date);
         mkdir($directory, 0777, true);
 
-        $abs_filename = $directory . "/" . date_format($date, 'Y-m-d\TH:i:s') . "-" . $filename;
+        $abs_filename = $directory . "/" . date_format($date, 'Ymd\THis') . "-" . $filename;
 
         $r = file_put_contents($abs_filename, $content);
 
@@ -265,6 +265,15 @@ class Veepdotai_Util {
         $text = (new \Delight\Str\Str($raw))->normalizeLineEndings("EOL");
 
         $blank_chars = '\s|EOL|\t';
+
+        //    Réponse:   {|[ => {|[
+        // ^[^{\[]*({|[) => '{|[' because it breaks json format
+        $string = preg_replace( '/^' . '[^\{\[]*(\{|\[)/', "$1", $text );
+
+        Veepdotai_Util::log("$i. ############\n" . $string);
+        $i++;
+        
+        // ^EOL{|[
         $string = preg_replace('/(' . $blank_chars . ')*{(' . $blank_chars . ')*/', "{", $text);
         Veepdotai_Util::log("$i. ############\n" . $string);
         $i++;
@@ -295,6 +304,10 @@ class Veepdotai_Util {
         // EOL  }EOL}
         //$string = preg_replace('/(' . $blank_chars . ')*}(' . $blank_chars . ')*}/', '}}', $string);
         $string = preg_replace('/(' . $blank_chars . ')*}/', '}', $string);
+        Veepdotai_Util::log("$i. ############\n" . $string);
+
+        // EOL => ''
+        $string = preg_replace('/EOL/', '', $string);
         Veepdotai_Util::log("$i. ############\n" . $string);
 
         return $string;
