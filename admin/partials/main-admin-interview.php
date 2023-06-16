@@ -1,24 +1,26 @@
 <div class="wrap <?php esc_attr_e( $this->plugin_name.'-main-admin-interview' ) ?>">
     <h2><?php esc_html_e(get_admin_page_title() . ' / Interview')?></h2>
     <hr>
-        <input type="button" value="Je suis prêt" onclick="start(document.getElementById('context').innerHTML)"/>
+        <!-- input type="button" value="Je suis prêt" onclick="start(document.getElementById('context').innerHTML)"/-->
         <form method="post" action="">
 
         <?php
             echo wp_kses_post( init_nonce() );
 
-            $context = esc_html( 'Hello, I am VEEP. I am an AI and I am going to interview you. Thanks to make detailed answers to my questions. Do not worry neither about missing ponctuation nor orthograph, I will take care of them during content processing.' );
+            $general_context = esc_html( 'Tell your organization\'s pitch.' );
+            $benefits_context = esc_html( 'Tell the value for your users. What is the interest of your organization, your products, your solutions? Don\'t be afraid to repeat yourself.' );
+            $pains_context = esc_html( 'Tell the pains you address. Talk about you users\' needs. Talk about your persona.' );
+            $solutions_context = esc_html( 'Talk about your products and services or solutions that resolve thier pains. Name and describe them briefly.' );
+            $strengths_context = esc_html( 'Talk about your difference. What makes you unique? Give examples.' );
 
-            echo wp_kses_post( generate_context($context) );
+            echo wp_kses_post( generate_context($general_context) );
 
             echo generate_tabs_escaped();
 
-            echo generate_interview_hero_section( true, 'benefices', 'Bénéfice', 0, '' );
-            echo wp_kses_post( generate_interview_form_section(true, 'besoins', 'Besoins',1) );
-            echo wp_kses_post( generate_interview_form_section(true, 'solutions', 'Solutions', 2) );
-            echo wp_kses_post( generate_interview_form_section(true, 'differenciation', 'Différenciation', 3) );
-            echo wp_kses_post( generate_interview_form_section(true, 'faq', 'FAQ', 4) );
-            echo wp_kses_post( generate_interview_contact_section(true, 'contact', 'Prise de contact', 5) );
+            echo generate_interview_hero_section( true, 'benefits', __( 'Benefits' ), 0, $benefits_context );
+            echo wp_kses_post( generate_interview_form_section(true, 'pains', __( 'Pains' ),1, $pains_context ) );
+            echo wp_kses_post( generate_interview_form_section(true, 'solutions', __( 'Solutions' ), 2, $solutions_context) );
+            echo wp_kses_post( generate_interview_form_section(true, 'strengths', __( 'Strengths' ), 3, $strengths_context) );
         ?>
       
         <div class="timer">

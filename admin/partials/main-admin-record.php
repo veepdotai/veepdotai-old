@@ -22,10 +22,10 @@ _EOC_;
 
             echo generate_tabs_escaped();
 
-            echo wp_kses_post( generate_interview_hero_section(true, 'benefices', 'Bénéfice', 0, '') );
-            echo wp_kses_post( generate_interview_form_section(true, 'besoins', 'Besoins',1) );
-            echo wp_kses_post( generate_interview_form_section(true, 'solutions', 'Solutions', 2) );
-            echo wp_kses_post( generate_interview_form_section(true, 'differenciation', 'Différenciation', 3) );
+            echo wp_kses_post( generate_interview_hero_section(true, 'benefits', __( 'Benefits' ), 0, '') );
+            echo wp_kses_post( generate_interview_form_section(true, 'pains', __( 'Pains' ),1) );
+            echo wp_kses_post( generate_interview_form_section(true, 'solutions', __( 'Solutions' ), 2) );
+            echo wp_kses_post( generate_interview_form_section(true, 'strengths', __( 'Strengths' ), 3) );
             echo wp_kses_post( generate_interview_form_section(true, 'faq', 'FAQ', 4) );
             echo wp_kses_post( generate_interview_contact_section(true, 'contact', 'Prise de contact', 5) );
         ?>

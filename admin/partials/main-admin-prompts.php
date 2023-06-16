@@ -9,10 +9,10 @@
 
             echo generate_checkbox();
 
-            echo wp_kses_post( generate_prompt_form_section(false, 'benefices', 'Bénéfice', 0, '') );
-            echo wp_kses_post( generate_prompt_form_section(false, 'besoins', 'Besoins',1) );
-            echo wp_kses_post( generate_prompt_form_section(false, 'solutions', 'Solutions', 2) );
-            echo wp_kses_post( generate_prompt_form_section(false, 'differenciation', 'Différenciation', 3) );
+            echo wp_kses_post( generate_prompt_form_section(false, 'benefits', __( 'Benefits' ), 0, '') );
+            echo wp_kses_post( generate_prompt_form_section(false, 'pains', __( 'Pains' ),1) );
+            echo wp_kses_post( generate_prompt_form_section(false, 'solutions', __( 'Solutions' ), 2) );
+            echo wp_kses_post( generate_prompt_form_section(false, 'strengths', __( 'Strengths' ), 3) );
             echo wp_kses_post( generate_prompt_form_section(false, 'faq', 'FAQ', 4) );
             echo wp_kses_post( generate_prompt_form_section(false, 'contact', 'contact', 5) );
         ?>

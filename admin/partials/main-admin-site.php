@@ -7,10 +7,10 @@
 
             echo generate_tabs_escaped();
 
-            echo generate_hero_section_escaped(false, 'benefices', 'Bénéfice', 0, '');
-            echo generate_form_section_escaped(false, 'besoins', 'Besoins',1);
-            echo generate_form_section_escaped(false, 'solutions', 'Solutions', 2);
-            echo generate_form_section_escaped(false, 'differenciation', 'Différenciation', 3);
+            echo generate_hero_section_escaped(false, 'benefits', __( 'Benefits' ), 0, '');
+            echo generate_form_section_escaped(false, 'pains', __( 'Pains' ),1);
+            echo generate_form_section_escaped(false, 'solutions', __( 'Solutions' ), 2);
+            echo generate_form_section_escaped(false, 'strengths', __( 'Strengths' ), 3);
             echo generate_form_section_escaped(false, 'faq', 'FAQ', 4);
             echo generate_contact_section_escaped(false, 'contact', 'Prise de contact', 5);
 

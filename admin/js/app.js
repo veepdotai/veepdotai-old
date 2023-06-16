@@ -12,7 +12,7 @@ var audioContext //audio context to help us record
 // I know, a better architecture should be welcome :-(
 var themes = [
 	'vocal', // Vocal page
-	'benefices', 'besoins', 'solutions', 'differenciation' // Interview page
+	'benefits', 'pains', 'solutions', 'strengths' // Interview page
 ]
 themes.forEach(element => {
 	addEventListeners(element);

@@ -40,10 +40,10 @@ function generate_editorial_calendar_tabs_escaped() {
 
 function generate_tabs_escaped() {
     $questions = [
-        'benefices' => 'Bénéfices',
-        'besoins' => 'Besoins',
-        'solutions' => 'Solutions',
-        'differenciation' => 'Différenciation',
+        'benefits' => 'Bénéfices',
+        'pains' => __( 'Pains' ),
+        'solutions' => __( 'Solutions' ),
+        'strengths' => __( 'Strengths' ),
     ];
 
     $list_items = '';

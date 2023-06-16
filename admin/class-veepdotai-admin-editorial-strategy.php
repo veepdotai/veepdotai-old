@@ -14,7 +14,7 @@ Class Veepdotai_Admin_Editorial_Strategy {
 
         $prompt = <<<_EOF_
 A partir de l'entretien ci-dessus, composé des parties Bénéfices, Besoins, Produits/Services et Différenciation, agis en spécialiste de la communication et propose une stratégie éditoriale au format csv composée d'une liste de 10 questions sans faire d'introduction ni de conclusion à ta réponse. La ligne d'en-tête de l'export csv sera la suivante :
-* thème : le thème principal correspondant parmi bénéfices, besoins, produits/services ou différenciation
+* thème : le thème principal correspondant parmi bénéfices, pains, produits/services ou différenciation
 * question : la question, dans le style le plus direct possible
 * destinataire : le type de personne susceptible de répondre parmi directeur général ou responsable commercial ou responsable marketing ou responsable technique
 * type : le type de la question parmi TOFU, MOFU ou BOFU
@@ -31,7 +31,7 @@ _EOF_;
             $prompt = "L'entretien est le suivant:"
                         . "\n\nQuels sont les bénéfices pour les utilisateurs ?\n\n"
                             . Veepdotai_Util::get_option("ai-section0-text-interview")
-                        . "\n\nQuels sont les besoins des utilisateurs ?\n\n"
+                        . "\n\nQuels sont les pains des utilisateurs ?\n\n"
                             . Veepdotai_Util::get_option("ai-section1-text-interview")
                         . "\n\nQuels sont les produits et services de la société ?\n\n"
                             . Veepdotai_Util::get_option("ai-section2-text-interview")
@@ -155,7 +155,7 @@ _EOF_;
         if (isset($post[$pn .'-' .$field])){
             $field_name = $pn .'-' . $field;
             $field_value = sanitize_textarea_field($post[$field_name]);
-            error_log('field_name : ' . $field_name . ' = ' . $field_value);
+            Veepdotai_Util::log('field_name : ' . $field_name . ' = ' . $field_value);
             $r = Veepdotai_Util::update_option($field, wp_unslash( $field_value ));
         }
         return $r;
