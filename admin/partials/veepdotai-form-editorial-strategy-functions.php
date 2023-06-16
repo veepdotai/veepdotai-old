@@ -8,7 +8,7 @@ include('veepdotai-form-functions.php');
 function generate_editorial_strategy_form_section_escaped($enable_voice, $intent, $section_title, int $num_section, $context = '') {
     //$pn = $this->plugin_name;
     $pn = VEEPDOTAI_PLUGIN_NAME;
-    $name_escaped = $pn . "-ai-section-edstrat" . $num_section;
+    $name_escaped = "ai-section-edstrat" . $num_section;
     $section = '<div id="veep_id_' . $intent . '" class="veep_section">'
                 . '<label>' . $section_title . ' [' . $num_section . ']</label>'
                 . '<p id="context-' . $num_section . '" class="veep_context">' . $context . '</p>'

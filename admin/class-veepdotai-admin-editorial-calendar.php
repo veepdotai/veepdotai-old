@@ -62,28 +62,6 @@ Class Veepdotai_Admin_Editorial_Calendar {
         Veepdotai_Util::log("Generating article callback");
         check_ajax_referer( 'my-special-string', 'security' );
 
-        $prompt_pre = <<<_EOF_
-Voici un entretien :
-_EOF_;
-
-        $prompt_post = <<<_EOF_
-Fin de l'entretien
-
-Rédige, à partir de cet entretien un article de blog de 40 lignes en français, en agissant comme un copywriter spécialisé dans le SEO, dans un style journalistique et professionnel. Tu mettras en gras les mots déjà présents dans l'entretien.
-
-La réponse doit être formatée en json strict en respectant la structure suivante, sans ajouter d'éléments en dehors de cette structure :
-{
-    "title": mets le titre ici,
-    "description": mets la description SEO ici,
-    "content": mets le contenu de l'article de blog au format markdown ici,
-    "linkedin": mets ici une reformulation du contenu de l'article de blog sous la forme d'un post linkedin de 10 lignes avec des emojis,
-    "hashtags": mets les hastags ici,
-    "themes": extrais les 5 thèmes principaux du texte et mets-les ici,
-    "keywords": extrais les 5 mots clés SEO du texte et mets-les ici,
-    "image": mets ici un prompt permettant de générer une image pour cet article
-}
-_EOF_;
-
         //$content_id = '20230605-071132-edcal-article-prompt.txt';
         $content_id = $_POST['content_id'];
         Veepdotai_Util::log('content_id: ' . $content_id);        
@@ -92,6 +70,13 @@ _EOF_;
                         . "\n\n" . Veepdotai_Util::get_option("ai-section-edcal0-transcription")
                         . "\n\n" . $prompt_post;
 
+            $inspiration = Veepdotai_Util::get_option("ai-section-edcal0-transcription");
+            // $prompt contains a reference to $inspiration
+            $prompt = strtr(
+                        Veepdotai_Util::get_option("ai-section-edcal0-prompt"),
+                        ['$inspiration' => $inspiration]
+            );
+                
             Veepdotai_Util::log('Storing prompt.');
             Veepdotai_Util::store_data($prompt, "edcal-article-prompt.txt");
 
@@ -204,7 +189,7 @@ _EOF_;
             $field_name = $pn .'-' . $field;
             $field_value = sanitize_textarea_field($post[$field_name]);
             error_log('field_name : ' . $field_name . ' = ' . $field_value);
-            $r = update_option($field_name, wp_unslash( $field_value ));
+            $r = Veepdotai_Util::update_option($field, wp_unslash( $field_value ));
         }
         return $r;
     }
@@ -219,6 +204,7 @@ _EOF_;
         if($this->security_check($post, $pn .'-main_admin_editorial_calendar')) {
             $this->update_option_if_set($post, $pn, 'ai-section-edcal0-transcription');
             $this->update_option_if_set($post, $pn, 'ai-section-edcal0-verbatim');
+            $this->update_option_if_set($post, $pn, 'ai-section-edcal0-prompt');
             for($i = 1; $i < 4; $i++) {
                 $this->update_option_if_set($post, $pn, 'ai-section-edcal' . $i . '-title');
                 $this->update_option_if_set($post, $pn, 'ai-section-edcal' . $i . '-description');
@@ -263,7 +249,7 @@ _EOF_;
     public function get_image_with_pexels($ts, $prompt, $i) {
         $pn = $this->plugin_name;
 
-        $pexels_key = get_option($pn . '-pexels-api-key');
+        $pexels_key = Veepdotai_Util::get_option('pexels-api-key');
         $provider = new ApiProvider($pexels_key);
 
         // Create a Search photos request.

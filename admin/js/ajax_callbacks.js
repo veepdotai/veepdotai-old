@@ -14,7 +14,12 @@ function ajax_transcribe(blob, filename) {
         id = this.parentElement.parentElement.parentElement.id;
         fd.append('audio', id);
 
-        content_id = jQuery('#veepdotai-content-id')[0].value;
+        content_id = null;
+        try {
+            content_id = jQuery('#veepdotai-content-id')[0].value;
+        } catch (e) {
+            console.log("No content-id available.");
+        }
         if (! content_id) {
             fd.append('veepdotai-ai-record-audio_data', blob, filename);
         }
@@ -98,7 +103,13 @@ function ajax_edcal_generate_article(e) {
     var fd = new FormData();
     fd.append('action', 'generate_article');
     fd.append('security', MyAjax.security);
-    fd.append('content_id', document.getElementById('veepdotai-content-id').value);
+    contentId = "";
+    try {
+        contentId = document.getElementById('veepdotai-content-id').value;
+    } catch (e) {
+        console.log("No content id.");
+    }
+    fd.append('content_id', contentId);
 
     function setValue(selector, value, widgetType = 'text') {
         try {

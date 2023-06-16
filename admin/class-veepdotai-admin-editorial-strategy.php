@@ -110,7 +110,7 @@ _EOF_;
 
         // Compute the editorial strategy from the corresponding prompt.
 
-        update_option($pn . '-ai-section-edstrat0-strategy', 'Coucou');
+        Veepdotai_Util::update_option('ai-section-edstrat0-strategy', 'Coucou');
 
         return ('editorial-strategy');
     }
@@ -156,7 +156,7 @@ _EOF_;
             $field_name = $pn .'-' . $field;
             $field_value = sanitize_textarea_field($post[$field_name]);
             error_log('field_name : ' . $field_name . ' = ' . $field_value);
-            $r = update_option($field_name, wp_unslash( $field_value ));
+            $r = Veepdotai_Util::update_option($field, wp_unslash( $field_value ));
         }
         return $r;
     }

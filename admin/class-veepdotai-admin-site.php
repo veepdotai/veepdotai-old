@@ -148,8 +148,8 @@ Class Veepdotai_Admin_Site {
         if (isset($post[$pn .'-' .$field])){
             $field_name = $pn .'-' . $field;
             $field_value = sanitize_textarea_field($post[$field_name]);
-            error_log('field_name : ' . $field_name . ' = ' . $field_value);
-            $r = update_option($field_name, wp_unslash( $field_value ));
+           Veepdotai_Util::log('field_name : ' . $field_name . ' = ' . $field_value);
+            $r = Veepdotai_Util::update_option($field, wp_unslash( $field_value ));
         }
         return $r;
     }
@@ -188,7 +188,7 @@ Class Veepdotai_Admin_Site {
         try {
             $section->find($selector)[0]->firstChild()->setText($value);
         } catch (e) {
-            error_log("Error while getting first-child of $selector. Does it exist?");
+           Veepdotai_Util::log("Error while getting first-child of $selector. Does it exist?");
             return $section;
         } finally {
             return $section;
@@ -203,9 +203,9 @@ Class Veepdotai_Admin_Site {
             $image->setAttribute('src', $href);
             $image->setAttribute('alt', $alt);
 
-            error_log("Image: " . $image);
+           Veepdotai_Util::log("Image: " . $image);
         } catch (e) {
-            error_log("Image : Error while getting first-child of $selector. Does it exist?");
+           Veepdotai_Util::log("Image : Error while getting first-child of $selector. Does it exist?");
             return $section;
         } finally {
             return $section;
@@ -219,7 +219,7 @@ Class Veepdotai_Admin_Site {
             $a->setAttribute('href', $href);
             $a->firstChild()->setText($text);
         } catch (e) {
-            error_log("Error while getting first-child of $selector. Does it exist?");
+           Veepdotai_Util::log("Error while getting first-child of $selector. Does it exist?");
             return $section;
         } finally {
             return $section;
@@ -271,7 +271,7 @@ Class Veepdotai_Admin_Site {
             $newcontent = $r->text;
 
             // Stores content in the corresponding option
-            update_option($pn ."-ai-section$i-page", $newcontent);
+            Veepdotai_Util::update_option("ai-section$i-page", $newcontent);
         }
 
         // Compute post_name for future reference by welcome|landing page
@@ -281,7 +281,7 @@ Class Veepdotai_Admin_Site {
         $post_name = strtolower($post_name);
 
         $template = $post[$pn .'-lp-templates'];
-        error_log("post name for $i: " . $post_name);
+       Veepdotai_Util::log("post name for $i: " . $post_name);
 
         Veepdotai_Util::log_direct("<p class='post_name'>Post_name for this generation: " . $post_name . ".</p>");
         Veepdotai_Util::log_direct("<p class='template'>Template for this generation: " . $template . ".</p>");
@@ -373,7 +373,7 @@ Class Veepdotai_Admin_Site {
                     $newcontent = $r->text;
 
                     // Stores content in the corresponding option
-                    update_option($pn ."-ai-section$i-page", $newcontent);
+                    Veepdotai_Util::update_option("ai-section$i-page", $newcontent);
                 }
 
                 // Compute post_name for future reference by welcome|landing page
@@ -383,7 +383,7 @@ Class Veepdotai_Admin_Site {
                 $post_name = strtolower($post_name);
 
                 $template = $post[$pn .'-lp-templates'];
-                error_log("post name for $i: " . $post_name);
+               Veepdotai_Util::log("post name for $i: " . $post_name);
 
                 Veepdotai_Util::log_direct("<p class='post_name'>Post_name for this generation: " . $post_name . ".</p>");
                 Veepdotai_Util::log_direct("<p class='template'>Template for this generation: " . $template . ".</p>");
@@ -514,7 +514,7 @@ Class Veepdotai_Admin_Site {
             $this->store_image($ts, $i, $params, $raw);
         }
 
-        error_log($raw);
+       Veepdotai_Util::log($raw);
 
         return $raw;
     }
@@ -570,8 +570,8 @@ Class Veepdotai_Admin_Site {
                 $prompt = Veepdotai_Util::get_option($prefix . 'img-prompt');
 //                $prompt = "nature";
                 $image = $this->get_image_with_pexels($date, $prompt, $i);
-                error_log("Image URL: " . $image->getSrc()->getLarge() . ".");
-                $res = update_option($prefix . 'img-href', $image->getSrc()->getLarge()); // $this->update_option ?
+               Veepdotai_Util::log("Image URL: " . $image->getSrc()->getLarge() . ".");
+                $res = Veepdotai_Util::update_option($prefix . 'img-href', $image->getSrc()->getLarge()); // $this->update_option ?
 
                 $results[] = $res; // useless. @TODO Fix needed.
             }
@@ -618,7 +618,7 @@ Class Veepdotai_Admin_Site {
                     $veep_cta_href = $post_name;
                 }
 
-                error_log("Processing $i");
+               Veepdotai_Util::log("Processing $i");
                 try {
                     /**
                      * Syntax NOK :
@@ -630,8 +630,8 @@ Class Veepdotai_Admin_Site {
                     $this->set_section_ahref($section, '.veep_cta a', $veep_cta_href, $veep_cta_text);
                     $this->set_section_image($section, 'img', $veep_img, $veep_title);
                 } catch (\Exception $e) {
-                    error_log("One of the value doesn't exist for the $i section.");
-                    error_log("Exception: " . $e->getMessage() . "\n");
+                   Veepdotai_Util::log("One of the value doesn't exist for the $i section.");
+                   Veepdotai_Util::log("Exception: " . $e->getMessage() . "\n");
                 }
             }
 
@@ -643,7 +643,7 @@ Class Veepdotai_Admin_Site {
                 '/(>[a-zA-Z\s]*)\*([a-zA-Z\s]*)\*/',
                 "\\1<span>\\2</span>", $content);
 
-            error_log($content);
+           Veepdotai_Util::log($content);
 
             $new_page = array(
                 'post_title' => Veepdotai_Util::get_option('ai-section0-title'),

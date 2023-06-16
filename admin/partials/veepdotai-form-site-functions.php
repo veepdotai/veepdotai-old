@@ -16,7 +16,7 @@ function generate_contact_section_escaped($enable_voice, $intent, $section_title
 function generate_form_section_escaped($enable_voice, $intent, $section_title, int $num_section, $context = '') {
     //$pn = $this->plugin_name;
     $pn = 'veepdotai';
-    $name_escaped = $pn . "-ai-section" . $num_section;
+    $name_escaped = "ai-section" . $num_section;
     $section = '<div id="veep_id_' . $intent . '" class="veep_section">'
                 . '<label>' . $section_title . ' [' . $num_section . ']</label>'
                 . '<p id="context-' . $num_section . '" class="veep_context">' . $context . '</p>'

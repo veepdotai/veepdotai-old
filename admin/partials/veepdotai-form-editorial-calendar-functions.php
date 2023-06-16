@@ -32,11 +32,12 @@ function generate_editorial_calendar_selector($class_css) {
 function generate_editorial_calendar_vocal_form_section($enable_voice, $intent, $section_title, int $num_section, $context = '') {
     //$pn = $this->plugin_name;
     $pn = 'veepdotai';
-    $name_escaped = $pn . "-ai-section-edcal" . $num_section;
+    $name_escaped = "ai-section-edcal" . $num_section;
     $section = '<div id="veep_id_' . $intent . '" class="veep_section">'
                 . '<label>' . $section_title . ' [' . $num_section . ']</label>'
                 . '<p id="context-' . $num_section . '" class="veep_context">' . $context . '</p>'
                 . display_escaped($enable_voice, "Retranscription", $name_escaped . "-transcription", "textarea", true)
+                . display_escaped(false, "Prompt", $name_escaped . "-prompt", "textarea", true)
                 . '</div>';
     return $section;
 }
@@ -44,7 +45,7 @@ function generate_editorial_calendar_vocal_form_section($enable_voice, $intent, 
 function generate_editorial_calendar_form_section_escaped($enable_voice, $intent, $section_title, int $num_section, $context = '') {
     //$pn = $this->plugin_name;
     $pn = 'veepdotai';
-    $name_escaped = $pn . "-ai-section-edcal" . $num_section;
+    $name_escaped = "ai-section-edcal" . $num_section;
     $section = '<div id="veep_id_' . $intent . '" class="veep_section">'
                 . '<label>' . $section_title . ' [' . $num_section . ']</label>'
                 . '<p id="context-' . $num_section . '" class="veep_context">' . $context . '</p>'

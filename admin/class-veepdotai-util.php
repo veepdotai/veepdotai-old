@@ -64,26 +64,60 @@ class Veepdotai_Util {
         return $data;
     }
 
-    public static function set_option($param, $value) {
-        $pn = VEEPDOTAI_PLUGIN_NAME;
-        $param_name = $pn . '-' . $param;
-        Veepdotai_Util::log("Setting option: " . $param_name . " = " . $value);
-        return update_option($param_name, $value);
+    public static function update_option($param, $value) {
+        return Veepdotai_Util::set_option($param, $value);
     }
 
-    public static function get_option($param) {
+    public static function set_option($param, $value) {
         $pn = VEEPDOTAI_PLUGIN_NAME;
+        $user = wp_get_current_user()->user_login;
 
+//        if (preg_match("/^" . $user . '-' . $pn . "/", $param)) {
         if (preg_match("/^" . $pn . "/", $param)) {
-            // The param starts with the $pn, so we don't add it
+                // The param starts with the $pn, so we don't add the $pn again
             $param_name = $param;
         } else {
             // We add it
             $param_name = $pn . '-' . $param;
         }
 
-        Veepdotai_Util::log("Getting option: " . $param_name);
-        return get_option($param_name);
+        $user_param_name = $user . '-' . $param_name;
+        Veepdotai_Util::log("Setting option: " . $user_param_name . " = " . $value);
+
+        return update_option($user_param_name, $value);
+    }
+
+    public static function get_option($param) {
+        $pn = VEEPDOTAI_PLUGIN_NAME;
+        Veepdotai_Util::log("Get option/plugin name: " . $pn);
+        Veepdotai_Util::log("Get option/param name: " . $param);
+
+        if (preg_match("/^openai-api-key/", $param)) {
+            Veepdotai_Util::log("Option: admin-veepdotai-" . $param);
+            return get_option("admin-veepdotai-" . $param);
+        } else if (preg_match("/^pexels-api-key/", $param)) {
+            Veepdotai_Util::log("Option: admin-veepdotai-" . $param);
+            return get_option("admin-veepdotai-" . $param);
+        } else if (preg_match("/prompt/", $param)) {
+            Veepdotai_Util::log("Option: admin-veepdotai-" . $param);
+            return get_option("admin-veepdotai-" . $param);
+        }
+        
+        $user = wp_get_current_user()->user_login;
+        Veepdotai_Util::log("User name: " . $user);
+
+//        if (preg_match("/^" . $user . '-' . $pn . "/", $param)) {
+        if (preg_match("/^" . $pn . "/", $param)) {
+                // The param starts with the $pn, so we don't add it
+            $param_name = $param;
+        } else {
+            // We add it
+            $param_name = $pn . '-' . $param;
+        }
+
+        $user_param_name = $user . '-' . $param_name;
+        Veepdotai_Util::log("Getting option: " . $user_param_name);
+        return get_option($user_param_name);
     }
 
     public static function get_content_from_ai($_params) {
@@ -178,11 +212,13 @@ class Veepdotai_Util {
 
         if ($r) {
             $text = $r->choices[0]->text;
-            $string = preg_replace('/Résultat :/', '', $text);
-            $string = preg_replace('/Résumé :/', '', $text);
-            $string = preg_replace('/^[^{]*/', '', $text);
+            $string_json = Veepdotai_Util::fix_json($text);
 
-            $results = json_decode($string);
+//            $string = preg_replace('/Résultat :/', '', $text);
+//            $string = preg_replace('/Résumé :/', '', $text);
+//            $string = preg_replace('/^[^{]*/', '', $text);
+
+            $results = json_decode($string_json);
 
             if ($results) {
                 Veepdotai_Util::error_log("OK");
@@ -192,7 +228,7 @@ class Veepdotai_Util {
                 return Veepdotai_Util::get_last_error();
             }
         } else {
-            error_log("Error 1: format error.");
+           Veepdotai_Util::log("Error 1: format error.");
             return Veepdotai_Util::get_last_error();
         }
     }
@@ -215,75 +251,19 @@ class Veepdotai_Util {
                 Veepdotai_Util::log('Section is an array : $section = $r->section[0].');
                 $section = $r->section[0];
             } else {
-                error_log("The format of the r->section is not known.");
+               Veepdotai_Util::log("The format of the r->section is not known.");
             }    
         } elseif (property_exists($r, 'sections')) {
             if (is_array($r->sections)) {
                 $section = $r->sections[0];
             } else {
-                error_log("The format of the r->sections is not known.");
+               Veepdotai_Util::log("The format of the r->sections is not known.");
             }
         } else {
             $section = $r;
         }
         
         return $section;
-    }
-
-    /**
-     * Fix json by removing \n and \s in json source, i. e. beetween data,
-     * but double \n in json data
-     */
-    public static function fix_json2($text) {
-        // \n breaks json decoding so we must get rid of these
-        // We just convert them in \\n.
-
-        $blank_chars = '\s|\n|\r|\t';
-        $string = preg_replace('/^(' . $blank_chars . ')*{/', "{", $text);
-        $string = preg_replace('/{(' . $blank_chars . ')*/', "{", $string);
-        $string = preg_replace('/(' . $blank_chars . ')*}/', "}", $string);
-        $string = preg_replace('/\[(' . $blank_chars . ')*/', "[", $string);
-        $string = preg_replace('/(' . $blank_chars . ')]/', "]", $string);
-        $string = preg_replace('/\":(' . $blank_chars . ')*\"]/', "\":\"", $string);
-        $string = preg_replace('/(' . $blank_chars . ')*],(' . $blank_chars . ')*/', "],", $string);
-        $string = preg_replace('/\",(' . $blank_chars . ')*\"/', "\",\"", $string);
-        $string = preg_replace('/\n/', "\\n", $string);
-
-        $string = preg_replace('/\\r/', "", $string);
-        $string = preg_replace('/\\n/', "#_#_#n", $string);
-        $string = preg_replace('/\n/', "", $string);
-        $string = preg_replace('/#_#_#n/', "\\\\n", $string);
-
-        //Veepdotai_Util::log('In fix_json: ' . $string);
-        return $string;
-
-    }
-
-    public static function fix_json3($text) {
-
-        $blank_chars = '\s|\n|\r|\t';
-
-        $string = preg_replace('/^(' . $blank_chars . ')*{/', "{", $text);
-        $string = preg_replace('/{(' . $blank_chars . ')*/', "{", $string);
-        $string = preg_replace('/(' . $blank_chars . ')*}/', "}", $string);
-        $string = preg_replace('/\[(' . $blank_chars . ')*/', "[", $string);
-        $string = preg_replace('/(' . $blank_chars . ')]/', "]", $string);
-        $string = preg_replace('/\":(' . $blank_chars . ')*\"]/', "\":\"", $string);
-        $string = preg_replace('/(' . $blank_chars . ')*],(' . $blank_chars . ')*/', "],", $string);
-        $string = preg_replace('/\",(' . $blank_chars . ')*\"/', "\",\"", $string);
-        $string = preg_replace('/[^,]\n/', "\\n", $string);
-
-        $string = preg_replace('/\",\n\"/', "\",\"", $string);
-        
-                //$string = preg_replace('/\n/', "\\n", $string);
-        $string = preg_replace('/\\r/', "", $string);
-        $string = preg_replace('/[^,]\\\\n/', "#_#_#n", $string);
-        $string = preg_replace('/\n/', "", $string);
-        $string = preg_replace('/#_#_#n/', "\\\\n", $string);
-        $string = preg_replace('/\n/', "", $string);
-        $string = preg_replace('/\\"/', 'aa', $string);
-            
-        return $string;
     }
 
     public static function fix_json($raw) {
@@ -326,6 +306,9 @@ class Veepdotai_Util {
         $string = preg_replace('/"(' . $blank_chars . ')*}(' . $blank_chars . ')*],"/', '"}],"', $string);
         Veepdotai_Util::log("$i. ############\n" . $string);
         $i++;
+
+        // ",}" => }
+        $string = preg_replace('/"(' . $blank_chars . ')*,(' . $blank_chars . ')*}/', '"}', $string);
 
         // EOL  }EOL}
         //$string = preg_replace('/(' . $blank_chars . ')*}(' . $blank_chars . ')*}/', '}}', $string);
@@ -416,7 +399,7 @@ class Veepdotai_Util {
     /**
      * Logs information without buffering so you can see process progression
      */
-    public static function log_direct( $o ){
+    public static function log_direct( $o ) {
         ob_end_flush();
         ob_start();
         echo $o;
@@ -425,20 +408,20 @@ class Veepdotai_Util {
         ob_end_flush();
     }
 
-	public static function log( $object=null ){
-        return Veepdotai_Util::var_error_log($object);
+	public static function log( $object=null ) {
+        Veepdotai_Util::var_error_log($object);
     }
 
-    public static function error_log( $object=null ){
-        return Veepdotai_Util::var_error_log($object);
+    public static function error_log( $object=null ) {
+        Veepdotai_Util::var_error_log($object);
 	}
 
-    public static function var_error_log( $object=null ){
+    public static function var_error_log( $object=null ) {
         ob_start();                    // start buffer capture
 		var_dump( $object );           // dump the values
 		$contents = ob_get_contents(); // put the buffer into a variable
 		ob_end_clean();                // end capture
-		error_log( $contents );        // log contents of the result of var_dump( $object )
+		error_log( $contents, 3, "/tmp/wordpress.log" );        // log contents of the result of var_dump( $object )
 	}
 	 
 }

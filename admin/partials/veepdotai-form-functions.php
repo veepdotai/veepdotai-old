@@ -58,13 +58,14 @@ function generate_tabs_escaped() {
 }
 
 function display_escaped(bool $enable_voice, string $legend, string $field_name, string $_type, bool $in_section = false) {
+    $pn = VEEPDOTAI_PLUGIN_NAME;
     $fieldform = '';
     $fieldstyle = '';
-    $value = get_option($field_name);
+    $value = Veepdotai_Util::get_option($field_name);
 
     $type = 'type="' . esc_attr( ($_type == 'img' ? 'url' : 'text')) . '"';
-    $name = 'name="' . esc_attr( $field_name ) . '"';
-    $class = 'class="' . esc_attr( $field_name ) . '"';
+    $name = 'name="' . esc_attr( $pn . "-" . $field_name ) . '"';
+    $class = 'class="' . esc_attr( $pn ."-" . $field_name ) . '"';
 
     $common_attrs_escaped = "$type $name $class";
     if ($_type == "textarea") {

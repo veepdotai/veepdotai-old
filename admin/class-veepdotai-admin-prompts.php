@@ -82,9 +82,9 @@ Class Veepdotai_Admin_Prompts {
             $field_value = sanitize_textarea_field( $post[$field_name] );
             //$field_value = str_replace('\\\'', '\'', $field_value);
         }
-        error_log('field_name : ' . $field_name . ' = ' . $field_value);
+        Veepdotai_Util::log('field_name : ' . $field_name . ' = ' . $field_value);
         //$r = update_option($field_name, addslashes( stripslashes($field_value) ));
-        $r = update_option($field_name, wp_unslash ($field_value) );
+        $r = Veepdotai_Util::update_option($field, wp_unslash ($field_value) );
 
         return $r;
     }
@@ -114,24 +114,24 @@ Class Veepdotai_Admin_Prompts {
                 Veepdotai_Admin_Prompts::update_option_if_set($post, $pn, 'ai-section' . $i . '-text-prompt-post');
             }
 
-            //$this->update_option_if_set($post, $pn, 'ai_site_ts');
-            $key = $pn . "_ai_site_ts";
-            update_option($key, sanitize_text_field($post[$key]));
+            //$this->update_option_if_set($post, $pn, 'ai-site-ts');
+            $key = "ai-site-ts";
+            Veepdotai_Util::update_option($key, sanitize_text_field($post[$key]));
         }
 
         return true;
     }
 
     public static function update_option($field_name, $field_value) {
-        error_log("Field name: $field_name / Field value: $field_value");
+        Veepdotai_Util::log("Field name: $field_name / Field value: $field_value");
         // Call the corresponding WP function
         // The case where the field starts with VEEPDOTAI_PLUGIN_NAME- is managed by the get_option method
         $existing_value = Veepdotai_Util::get_option($field_name);
         if ($existing_value) {
-            error_log("Replacing existing value for this field: $existing_value...");
+            Veepdotai_Util::log("Replacing existing value for this field: $existing_value...");
         }
-        update_option($field_name, ""); // resetting data so we know there is a problem
-        update_option($field_name, sanitize_textarea_field($field_value));
+        Veepdotai_Util::update_option($field_name, ""); // resetting data so we know there is a problem
+        Veepdotai_Util::update_option($field_name, sanitize_textarea_field($field_value));
     }
 
     /**
@@ -144,20 +144,21 @@ Class Veepdotai_Admin_Prompts {
         //$content .= "\nSection " . $content_titles[$i] . "\n\n";
         $content = "\nSection " . $content_title . "\n\n";
         $key = 'ai-section' . $i . '-text-interview';
-        error_log("Key: $pn-$key.");
+        Veepdotai_Util::log("Key: $pn-$key.");
         $content .= Veepdotai_Util::get_option($key);
         $content .= "\n";
 
         $prefix_variable = 'ai-section' . $i . '-text-prompt-';
 
         $prompt_pre = Veepdotai_Util::get_option($prefix_variable . 'pre');
-        $prompt_post = Veepdotai_Util::get_option($prefix_variable . 'post');
+        //$prompt_post = Veepdotai_Util::get_option($prefix_variable . 'post');
 
-        $prompt = $prompt_pre
-                    . "\n\n"
-                    . $content
-                    . "\n\n"
-                    . $prompt_post;
+        $inspiration = $content;
+        // $prompt contains a reference to $inspiration
+        $prompt = strtr(
+                    $prompt_pre,
+                    ['$inspiration' => $inspiration]
+        );
 
         return $prompt;
         //return stripslashes( $prompt );
@@ -203,7 +204,7 @@ Class Veepdotai_Admin_Prompts {
 
         $raw = Veepdotai_Admin_Prompts::get_data($i);
         $r;
-        //error_log($this->plugin_name . '_ai_site_ts' . ': ' . $ts . '.');
+        //error_log($this->plugin_name . '-ai-site-ts' . ': ' . $ts . '.');
         if (! $raw) {
             $raw = Veepdotai_Util::get_content_from_ai($prompt);
             $r = Veepdotai_Util::convert_to_valid_json($raw);
@@ -214,7 +215,7 @@ Class Veepdotai_Admin_Prompts {
             // $this->store_data($ts, $i, $params, $raw, $r);
         }
 
-        error_log($raw);
+        Veepdotai_Util::log($raw);
 
         $section = Veepdotai_Util::fix_results($r);
         return $section;

@@ -36,7 +36,7 @@
 
             <?php
                 echo generate_button_escaped($pn, 'ai-save', __('Save'));
-                if (! in_array('veepdotai_role_user', wp_get_current_user()->roles)) {
+//                if (! in_array('veepdotai_role_user', wp_get_current_user()->roles)) {
 //                    echo generate_button_escaped($pn, 'ai-transcribe', __( 'Retranscrire le vocal'));
                     echo generate_button_escaped($pn, 'ai-generate-images', __( 'Generate image'));
                     echo generate_button_escaped($pn, 'ai-generate-article', __( 'Generate blog article & linkedin post' ));
@@ -44,7 +44,7 @@
 //                    echo generate_button_escaped($pn, 'ai-generate-post-linkedin', __( 'Generate linkedin post' ));
 //                    echo generate_button_escaped($pn, 'ai-generate-post-facebook', __( 'Generate facebook post' ));
 //                    echo generate_button_escaped($pn, 'ai-generate-post-instagram', __( 'Generate instagram post' ));
-                }
+//                }
 //                echo generate_button_escaped($pn, 'ai-generate-all', __('Generate all' ));
             ?>
 

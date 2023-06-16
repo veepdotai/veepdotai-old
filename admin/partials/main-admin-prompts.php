@@ -22,7 +22,7 @@
                 echo generate_button_escaped($pn, 'ai-next', __('Next'));
             ?>
 
-            <input class="veepdotai_ai_site_ts" name="veepdotai_ai_site_ts" />
+            <input class="veepdotai-ai-site-ts" name="veepdotai-ai-site-ts" />
         </div>
     </form>
 </div>
