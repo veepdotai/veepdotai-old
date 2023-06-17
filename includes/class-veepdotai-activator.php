@@ -36,6 +36,7 @@ class Veepdotai_Activator {
 
 		Veepdotai_Util::log('Prepare to configure roles and caps.');
 		Veepdotai_Activator::create_roles_and_caps();
+		Veepdotai_Activator::initialize_categories();
 		//register_activation_hook( __FILE__, 'Veepdotai_Activator::create_roles_and_caps');
 		//add_action('init', 'Veepdotai_Activator::create_roles_and_caps');
 	}
@@ -95,6 +96,74 @@ class Veepdotai_Activator {
 				'veepdotai_prompt'    => true,
 			),
 		);
+	}
+
+	public static function initialize_categories() {
+		$site_cat = category_exists('site');
+		if ( ! $site_cat ) {
+			$cat_defaults = array(
+				'cat_ID'               => 0,
+				'taxonomy'             => 'category',
+				'cat_name'             => 'site',
+				'category_description' => 'Web site',
+				'category_nicename'    => 'Site',
+				'category_parent'      => '0',
+			);
+			$site_cat = wp_insert_category($cat_defaults);
+		}
+
+		$blog_cat = category_exists('blog');
+		if ( ! $blog_cat ) {
+			$cat_defaults = array(
+				'cat_ID'               => 0,
+				'taxonomy'             => 'category',
+				'cat_name'             => 'blog',
+				'category_description' => 'Blog articles',
+				'category_nicename'    => 'Blog',
+				'category_parent'      => '0',
+			);
+			$blog_cat = wp_insert_category($cat_defaults);
+		}
+
+		$faq_cat = category_exists('faq');
+		if ( ! $faq_cat ) {
+			$cat_defaults = array(
+				'cat_ID'               => 0,
+				'taxonomy'             => 'category',
+				'cat_name'             => 'faq',
+				'category_description' => 'Frequently Asked Questions',
+				'category_nicename'    => 'FAQ',
+				'category_parent'      => $site_cat,
+			);
+			$faq_cat = wp_insert_category($cat_defaults);
+		}
+
+		$reviews_cat = category_exists('reviews');
+		if ( ! $reviews_cat ) {
+			$cat_defaults = array(
+				'cat_ID'               => 0,
+				'taxonomy'             => 'category',
+				'cat_name'             => 'reviews',
+				'category_description' => 'Customer reviews',
+				'category_nicename'    => 'Customers reviews',
+				'category_parent'      => $blog_cat,
+			);
+			$reviews_cat = wp_insert_category($cat_defaults);
+		}
+
+		$customers_cat = category_exists('customers');
+		if ( ! $customers_cat ) {
+			$cat_defaults = array(
+				'cat_ID'               => 0,
+				'taxonomy'             => 'category',
+				'cat_name'             => 'stories',
+				'category_description' => 'Customers stories',
+				'category_nicename'    => 'Customers stories',
+				'category_parent'      => $blog_cat,
+			);
+			$customers_cat = wp_insert_category($cat_defaults);
+		}
+
 	}
 
 }
