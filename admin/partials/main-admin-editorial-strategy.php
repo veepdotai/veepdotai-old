@@ -11,7 +11,9 @@
         <?php
             echo wp_kses_post( init_nonce() );
 
-            echo ( generate_editorial_strategy_form_section_escaped(false, 'edstrat', 'Editorial Strategy', 0) );
+            $general_context = esc_html( 'A set of questions is going to be generated from the context you provided during your project pitch.' );
+
+            echo ( generate_editorial_strategy_form_section_escaped(false, 'edstrat', 'Editorial Strategy', 0, $general_context) );
 
         ?>
 

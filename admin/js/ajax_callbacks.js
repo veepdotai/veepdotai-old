@@ -177,7 +177,8 @@ function ajax_edstrat_generate_editorial_strategy(e) {
             //response = get_json(data);
             response = JSON.parse(data);
             post = response.choices[0].text;
-            setValue(".veepdotai-ai-section-edstrat0-strategy", post, "textarea");
+            strategy = post.split(/\r?\n/).filter(line => line.trim() !== '').join('\n');
+            setValue(".veepdotai-ai-section-edstrat0-strategy", strategy, "textarea");
         }	
     })
 }

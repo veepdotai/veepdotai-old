@@ -120,14 +120,14 @@ class Veepdotai_Util {
         return get_option($user_param_name);
     }
 
-    public static function get_content_from_ai($_params) {
+    public static function get_content_from_ai($_params, $max_tokens = 2500) {
         if (is_string($_params)) {
             $params = [
                 'model' => 'text-davinci-003',
 //                'model' => 'gpt-4',
                 'prompt' => $_params,
                 'temperature' => 0.7,
-                'max_tokens' => 2500,
+                'max_tokens' => $max_tokens,
                 'frequency_penalty' => 0,
                 'presence_penalty' => 0.6,
             ];    

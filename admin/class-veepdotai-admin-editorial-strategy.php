@@ -12,45 +12,39 @@ Class Veepdotai_Admin_Editorial_Strategy {
         Veepdotai_Util::log("Generating editorial strategy callback");
         check_ajax_referer( 'my-special-string', 'security' );
 
-        $prompt = <<<_EOF_
-A partir de l'entretien ci-dessus, composé des parties Bénéfices, Besoins, Produits/Services et Différenciation, agis en spécialiste de la communication et propose une stratégie éditoriale au format csv composée d'une liste de 10 questions sans faire d'introduction ni de conclusion à ta réponse. La ligne d'en-tête de l'export csv sera la suivante :
-* thème : le thème principal correspondant parmi bénéfices, pains, produits/services ou différenciation
-* question : la question, dans le style le plus direct possible
-* destinataire : le type de personne susceptible de répondre parmi directeur général ou responsable commercial ou responsable marketing ou responsable technique
-* type : le type de la question parmi TOFU, MOFU ou BOFU
-* format : le type de format de publication le plus pertinent parmi article de blog, post instagram, post facebook ou post linkedin
-    
-Les questions seront alternées en fonction des thèmes, des types de questions et des formats.
-
-_EOF_;
-
         //$content_id = '20230605-071132-edcal-article-prompt.txt';
         $content_id = $_POST['content_id'];
         Veepdotai_Util::log('edstrat: content_id: ' . $content_id);        
         if (! $content_id) {
-            $prompt = "L'entretien est le suivant:"
-                        . "\n\nQuels sont les bénéfices pour les utilisateurs ?\n\n"
+            $context = __( "L'entretien est le suivant:" )
+                        . "\n\n" . __( "Quels sont les bénéfices pour les utilisateurs ?" ) . "\n\n"
                             . Veepdotai_Util::get_option("ai-section0-text-interview")
-                        . "\n\nQuels sont les pains des utilisateurs ?\n\n"
+                        . "\n\n" . __( "Quels sont les pains des utilisateurs ?" ) . "\n\n"
                             . Veepdotai_Util::get_option("ai-section1-text-interview")
-                        . "\n\nQuels sont les produits et services de la société ?\n\n"
+                        . "\n\n" . __( "Quels sont les produits et services de la société ?" ) . "\n\n"
                             . Veepdotai_Util::get_option("ai-section2-text-interview")
-                        . "\n\nQuels sont les éléments de différenciation de la société ?\n\n"
+                        . "\n\n" . __( "Quels sont les éléments de différenciation de la société ?" ) . "\n\n"
                             . Veepdotai_Util::get_option("ai-section3-text-interview")
-                        . "\n\n" . $prompt;
-            Veepdotai_Util::store_data($prompt, "edstrat-prompt.txt");
+                        . "\n\n" . __( "Fin de l'entretien." );
 
-            Veepdotai_Util::log('edstrat: Getting content from AI.');
-            $raw = Veepdotai_Util::get_content_from_ai([
-                'model' => 'text-davinci-003',
-                'prompt' => $prompt,
-                'temperature' => 0.7,
-                'max_tokens' => 1000,
-                'frequency_penalty' => 0,
-                'presence_penalty' => 0.6,
-            ]);
+            $keywords = Veepdotai_Util::get_option("ai-section-edstrat0-keywords");
 
-            Veepdotai_Util::store_data($raw, "edstrat-raw.json");
+            $prompt = strtr(
+                        Veepdotai_Util::get_option("ai-section-edstrat0-prompt"),
+                        [
+                            '$context' => $context,
+                            '$keywords' => $keywords
+                        ]
+            );
+
+            Veepdotai_Util::log('Storing prompt.');
+            Veepdotai_Util::store_data($prompt, "ai-section-edstrat0-prompt.txt");
+
+            Veepdotai_Util::log('Getting content from AI');
+            $raw = Veepdotai_Util::get_content_from_ai($prompt, 2000);
+
+            Veepdotai_Util::log('Storing json');
+            Veepdotai_Util::store_data($raw, "ai-section-edstrat0-raw.json");
         } else {
             Veepdotai_Util::log('edstrat: Getting content already stored: ' . $content_id);
             $raw = Veepdotai_Util::get_data($content_id);
@@ -109,10 +103,12 @@ _EOF_;
         $pn = $this->plugin_name;
 
         // Compute the editorial strategy from the corresponding prompt.
+        $prompt = Veepdotai_Util::get_data('ai-section-edstrat0-prompt');
 
-        Veepdotai_Util::update_option('ai-section-edstrat0-strategy', 'Coucou');
+        $raw = Veepdotai_Util::get_content_from_ai($prompt);
+        Veepdotai_Util::update_option('ai-section-edstrat0-strategy', $raw);
 
-        return ('editorial-strategy');
+        return $raw;
     }
 
     public function manage_action() {
@@ -169,7 +165,9 @@ _EOF_;
         $pn = $this->plugin_name;
 
         if($this->security_check($post, $pn .'-main_admin_editorial_strategy')) {
+            $this->update_option_if_set($post, $pn, 'ai-section-edstrat0-keywords');
             $this->update_option_if_set($post, $pn, 'ai-section-edstrat0-strategy');
+            $this->update_option_if_set($post, $pn, 'ai-section-edstrat0-prompt');
         }
 
         return;
