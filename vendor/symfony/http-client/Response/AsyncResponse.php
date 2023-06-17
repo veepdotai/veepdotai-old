@@ -36,7 +36,7 @@ final class AsyncResponse implements ResponseInterface, StreamableInterface
 
     private $client;
     private $response;
-    private array $info = ['canceled' => false];
+    private $info = ['canceled' => false];
     private $passthru;
     private $stream;
     private $yieldedState;
@@ -114,7 +114,7 @@ final class AsyncResponse implements ResponseInterface, StreamableInterface
         return $headers;
     }
 
-    public function getInfo(string $type = null): mixed
+    public function getInfo(string $type = null)
     {
         if (null !== $type) {
             return $this->info[$type] ?? $this->response->getInfo($type);

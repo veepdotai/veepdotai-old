@@ -61,30 +61,9 @@ class Cleaner implements CleanerInterface
         }
 
         // strip out comments
-        if ($options->isRemoveComments()) {
-            //$str = \mb_eregi_replace('<!--(.*?)-->', '', $str);
-            $str = \mb_eregi_replace('<!--(.*?)-->', '', $str);
-            if ($str === false) {
-                throw new LogicalException('mb_eregi_replace returned false instead of a string. Error when attempting to strip comments.');
-            }
-        }
-
-        // replace - with _;_ and / with _:_ in comments 
-        if ($options->isFixComments()) {
-            //$str = \mb_eregi_replace('<!--(.*?)-->', '', $str);
-            $str = \mb_ereg_replace_callback('<!--(.*?)-->', function ($matches) {
-                $match = $matches[1]; // it contains at least a space
-                //error_log('Match: Avant : ' . $match);
-                $match = \mb_eregi_replace('-', '_;_', $match);
-                //error_log('Match: Remplacements des - : ' . $match);
-                $match = \mb_eregi_replace('/', '_:_', $match);
-                //error_log('Match: Remplacement des / : ' . $match);
-                return '<!--' . $match . '-->';
-            }, $str);
-
-            if ($str === false) {
-                throw new LogicalException('mb_eregi_replace returned false instead of a string. Error when attempting to strip comments.');
-            }
+        $str = \mb_eregi_replace('<!--(.*?)-->', '', $str);
+        if ($str === false) {
+            throw new LogicalException('mb_eregi_replace returned false instead of a string. Error when attempting to strip comments.');
         }
 
         // strip out cdata

@@ -47,17 +47,18 @@ final class AmpHttpClient implements HttpClientInterface, LoggerAwareInterface, 
     use HttpClientTrait;
     use LoggerAwareTrait;
 
-    private array $defaultOptions = self::OPTIONS_DEFAULTS;
-    private static array $emptyDefaults = self::OPTIONS_DEFAULTS;
+    private $defaultOptions = self::OPTIONS_DEFAULTS;
+    private static $emptyDefaults = self::OPTIONS_DEFAULTS;
 
+    /** @var AmpClientState */
     private $multi;
 
     /**
-     * @param array    $defaultOptions     Default requests' options
-     * @param callable $clientConfigurator A callable that builds a {@see DelegateHttpClient} from a {@see PooledHttpClient};
-     *                                     passing null builds an {@see InterceptedHttpClient} with 2 retries on failures
-     * @param int      $maxHostConnections The maximum number of connections to a single host
-     * @param int      $maxPendingPushes   The maximum number of pushed responses to accept in the queue
+     * @param array         $defaultOptions     Default requests' options
+     * @param callable|null $clientConfigurator A callable that builds a {@see DelegateHttpClient} from a {@see PooledHttpClient};
+     *                                          passing null builds an {@see InterceptedHttpClient} with 2 retries on failures
+     * @param int           $maxHostConnections The maximum number of connections to a single host
+     * @param int           $maxPendingPushes   The maximum number of pushed responses to accept in the queue
      *
      * @see HttpClientInterface::OPTIONS_DEFAULTS for available options
      */
@@ -150,10 +151,12 @@ final class AmpHttpClient implements HttpClientInterface, LoggerAwareInterface, 
     /**
      * {@inheritdoc}
      */
-    public function stream(ResponseInterface|iterable $responses, float $timeout = null): ResponseStreamInterface
+    public function stream($responses, float $timeout = null): ResponseStreamInterface
     {
         if ($responses instanceof AmpResponse) {
             $responses = [$responses];
+        } elseif (!is_iterable($responses)) {
+            throw new \TypeError(sprintf('"%s()" expects parameter 1 to be an iterable of AmpResponse objects, "%s" given.', __METHOD__, get_debug_type($responses)));
         }
 
         return new ResponseStream(AmpResponse::stream($responses, $timeout));

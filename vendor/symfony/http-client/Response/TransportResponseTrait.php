@@ -28,8 +28,8 @@ use Symfony\Component\HttpClient\Internal\ClientState;
 trait TransportResponseTrait
 {
     private $canary;
-    private array $headers = [];
-    private array $info = [
+    private $headers = [];
+    private $info = [
         'response_headers' => [],
         'http_code' => 0,
         'error' => null,
@@ -38,11 +38,11 @@ trait TransportResponseTrait
 
     /** @var object|resource */
     private $handle;
-    private int|string $id;
-    private ?float $timeout = 0;
-    private $inflate = null;
-    private ?array $finalInfo = null;
-    private $logger = null;
+    private $id;
+    private $timeout = 0;
+    private $inflate;
+    private $finalInfo;
+    private $logger;
 
     /**
      * {@inheritdoc}

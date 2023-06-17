@@ -88,32 +88,6 @@ class Dom implements DomInterface
     }
 
     /**
-     * Returns the inner html of the root node after updating comments
-     *
-     * @throws ChildNotFoundException
-     * @throws UnknownChildTypeException
-     * @throws NotLoadedException
-     */
-    public function export(): string
-    {
-        $this->isLoaded();
-
-        $content = $this->root->innerHtml();
-
-        $content = \mb_ereg_replace_callback('<!--(.*?)-->', function ($matches) {
-            $match = $matches[1]; // it contains at least a space
-            //error_log('Match: Avant : ' . $match);
-            $match = \mb_eregi_replace('_;_', '-', $match);
-            //error_log('Match: Remplacements des _;_ : ' . $match);
-            $match = \mb_eregi_replace('_:_', '/', $match);
-            //error_log('Match: Remplacement des _:_ : ' . $match);
-            return '<!--' . $match . '-->';
-        }, $content);
-
-        return $content;
-    }
-
-    /**
      * Loads the dom from a document file/url.
      *
      * @throws ChildNotFoundException

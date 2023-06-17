@@ -25,8 +25,10 @@ class StreamWrapper
     /** @var resource|null */
     public $context;
 
+    /** @var HttpClientInterface */
     private $client;
 
+    /** @var ResponseInterface */
     private $response;
 
     /** @var resource|string|null */
@@ -35,10 +37,10 @@ class StreamWrapper
     /** @var resource|null */
     private $handle;
 
-    private bool $blocking = true;
-    private ?float $timeout = null;
-    private bool $eof = false;
-    private ?int $offset = 0;
+    private $blocking = true;
+    private $timeout;
+    private $eof = false;
+    private $offset = 0;
 
     /**
      * Creates a PHP stream resource from a ResponseInterface.

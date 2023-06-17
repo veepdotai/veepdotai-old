@@ -36,19 +36,24 @@ final class CurlHttpClient implements HttpClientInterface, LoggerAwareInterface,
 {
     use HttpClientTrait;
 
-    private array $defaultOptions = self::OPTIONS_DEFAULTS + [
+    private $defaultOptions = self::OPTIONS_DEFAULTS + [
         'auth_ntlm' => null, // array|string - an array containing the username as first value, and optionally the
                              //   password as the second one; or string like username:password - enabling NTLM auth
         'extra' => [
             'curl' => [],    // A list of extra curl options indexed by their corresponding CURLOPT_*
         ],
     ];
-    private static array $emptyDefaults = self::OPTIONS_DEFAULTS + ['auth_ntlm' => null];
+    private static $emptyDefaults = self::OPTIONS_DEFAULTS + ['auth_ntlm' => null];
 
-    private ?LoggerInterface $logger = null;
+    /**
+     * @var LoggerInterface|null
+     */
+    private $logger;
 
     /**
      * An internal object to share state between the client and its responses.
+     *
+     * @var CurlClientState
      */
     private $multi;
 
@@ -90,10 +95,7 @@ final class CurlHttpClient implements HttpClientInterface, LoggerAwareInterface,
         $scheme = $url['scheme'];
         $authority = $url['authority'];
         $host = parse_url($authority, \PHP_URL_HOST);
-        $proxy = $options['proxy']
-            ?? ('https:' === $url['scheme'] ? $_SERVER['https_proxy'] ?? $_SERVER['HTTPS_PROXY'] ?? null : null)
-            // Ignore HTTP_PROXY except on the CLI to work around httpoxy set of vulnerabilities
-            ?? $_SERVER['http_proxy'] ?? (\in_array(\PHP_SAPI, ['cli', 'phpdbg'], true) ? $_SERVER['HTTP_PROXY'] ?? null : null) ?? $_SERVER['all_proxy'] ?? $_SERVER['ALL_PROXY'] ?? null;
+        $proxy = self::getProxyUrl($options['proxy'], $url);
         $url = implode('', $url);
 
         if (!isset($options['normalized_headers']['user-agent'])) {
@@ -314,13 +316,15 @@ final class CurlHttpClient implements HttpClientInterface, LoggerAwareInterface,
     /**
      * {@inheritdoc}
      */
-    public function stream(ResponseInterface|iterable $responses, float $timeout = null): ResponseStreamInterface
+    public function stream($responses, float $timeout = null): ResponseStreamInterface
     {
         if ($responses instanceof CurlResponse) {
             $responses = [$responses];
+        } elseif (!is_iterable($responses)) {
+            throw new \TypeError(sprintf('"%s()" expects parameter 1 to be an iterable of CurlResponse objects, "%s" given.', __METHOD__, get_debug_type($responses)));
         }
 
-        if ($this->multi->handle instanceof \CurlMultiHandle) {
+        if (\is_resource($this->multi->handle) || $this->multi->handle instanceof \CurlMultiHandle) {
             $active = 0;
             while (\CURLM_CALL_MULTI_PERFORM === curl_multi_exec($this->multi->handle, $active)) {
             }
@@ -404,7 +408,7 @@ final class CurlHttpClient implements HttpClientInterface, LoggerAwareInterface,
             }
         }
 
-        return static function ($ch, string $location, bool $noContent) use (&$redirectHeaders) {
+        return static function ($ch, string $location, bool $noContent) use (&$redirectHeaders, $options) {
             try {
                 $location = self::parseUrl($location);
             } catch (InvalidArgumentException $e) {
@@ -429,11 +433,7 @@ final class CurlHttpClient implements HttpClientInterface, LoggerAwareInterface,
             $url = self::parseUrl(curl_getinfo($ch, \CURLINFO_EFFECTIVE_URL));
             $url = self::resolveUrl($location, $url);
 
-            curl_setopt($ch, \CURLOPT_PROXY, $options['proxy']
-                ?? ('https:' === $url['scheme'] ? $_SERVER['https_proxy'] ?? $_SERVER['HTTPS_PROXY'] ?? null : null)
-                // Ignore HTTP_PROXY except on the CLI to work around httpoxy set of vulnerabilities
-                ?? $_SERVER['http_proxy'] ?? (\in_array(\PHP_SAPI, ['cli', 'phpdbg'], true) ? $_SERVER['HTTP_PROXY'] ?? null : null) ?? $_SERVER['all_proxy'] ?? $_SERVER['ALL_PROXY'] ?? null
-            );
+            curl_setopt($ch, \CURLOPT_PROXY, self::getProxyUrl($options['proxy'], $url));
 
             return implode('', $url);
         };

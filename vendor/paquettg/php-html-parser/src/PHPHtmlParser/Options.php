@@ -39,26 +39,6 @@ class Options
     private $cleanupInput = true;
 
     /**
-     * Set this to false to skip fixing the comments tags from the document body. This might have adverse effects.
-     * Defaults to true.
-     *
-     * NOTE: Ignored if cleanupInit is true.
-     *
-     * @var bool
-     */
-    private $fixComments = true;
-
-    /**
-     * Set this to false to skip removing the comments tags from the document body. This might have adverse effects.
-     * Defaults to false.
-     *
-     * NOTE: Ignored if cleanupInit is true.
-     *
-     * @var bool
-     */
-    private $removeComments = false;
-
-    /**
      * Set this to false to skip removing the script tags from the document body. This might have adverse effects.
      * Defaults to true.
      *
@@ -184,30 +164,6 @@ class Options
     public function setCleanupInput(bool $cleanupInput): Options
     {
         $this->cleanupInput = $cleanupInput;
-
-        return clone $this;
-    }
-
-    public function isFixComments(): bool
-    {
-        return $this->fixComments;
-    }
-
-    public function setFixComments(bool $fixComments): Options
-    {
-        $this->fixComments = $fixComments;
-
-        return clone $this;
-    }
-
-    public function isRemoveComments(): bool
-    {
-        return $this->removeComments;
-    }
-
-    public function setRemoveComments(bool $removeComments): Options
-    {
-        $this->removeComments = $removeComments;
 
         return clone $this;
     }
@@ -400,8 +356,6 @@ class Options
             ->setHtmlSpecialCharsDecode($options->isHtmlSpecialCharsDecode())
             ->setPreserveLineBreaks($options->isPreserveLineBreaks())
             ->setRemoveDoubleSpace($options->isRemoveDoubleSpace())
-            ->setFixComments($options->isFixComments())
-            ->setRemoveComments($options->isRemoveComments())
             ->setRemoveScripts($options->isRemoveScripts())
             ->setRemoveSmartyScripts($options->isRemoveSmartyScripts())
             ->setRemoveStyles($options->isRemoveStyles())
