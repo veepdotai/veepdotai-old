@@ -18,6 +18,10 @@ function generate_configuration_form_section($enable_voice, $intent, $section_ti
                 . '<p>**'
                     . __( 'If you dont have one, <a href="https://www.pexels.com/fr-fr/api/new/" target="_blank">get an API Key</a>', $pn )
                 . '</p>'
+                . display_escaped(false, "Unsplash API Key**", "unsplash-api-key", "text", true)
+                . '<p>**'
+                    . __( 'If you dont have one, <a href="https://unsplash.com/developers" target="_blank">get an API Key</a>', $pn )
+                . '</p>'
                 . '</div>';
                 
     return $section;
