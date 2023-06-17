@@ -88,6 +88,7 @@ Class Veepdotai_Admin_Configuration {
         if($this->security_check($vp, $pn .'-main_admin_menu')) {
             Veepdotai_Util::update_option('openai-api-key', sanitize_text_field($vp[$pn.'-openai-api-key']));
             Veepdotai_Util::update_option('pexels-api-key', sanitize_text_field($vp[$pn.'-pexels-api-key']));
+            Veepdotai_Util::update_option('unsplash-api-key', sanitize_text_field($vp[$pn.'-unsplash-api-key']));
         }
 
     }

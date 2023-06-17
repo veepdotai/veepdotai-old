@@ -97,6 +97,52 @@ function ajax_edcal_publish_article(e) {
 
 }
 
+function ajax_edcal_generate_image(e) {
+    e.preventDefault();
+
+    function setValue(selector, value, widgetType = 'text') {
+        try {
+            if ("textarea" === widgetType) {
+                jQuery(selector)[0].innerHTML = value.replace(/EOL/g,'\n');
+            } else {
+                jQuery(selector)[0].value = value;
+            }
+        } catch (e) {
+
+        }
+    }
+
+    function process(ajaxurl, fd) {
+        jQuery.ajax({
+            url: ajaxurl,
+            data: fd,
+            processData: false,
+            contentType: false,
+            type: 'POST',
+            success: function(data) {
+                console.log(new Date() + ": edcal_generate_image returns from the server");
+                response = JSON.parse(data);
+                setValue(".veepdotai-ai-section-edcal1-img-href", response[0].media);
+            }	
+        })    
+    }
+    
+    var fd = new FormData();
+    fd.append('action', 'generate_image');
+    fd.append('security', MyAjax.security);
+    prompt = "";
+
+    try {
+        prompt = jQuery('.veepdotai-ai-section-edcal1-img-prompt')[0].value;
+        fd.append('prompt', prompt);
+        process(MyAjax.ajaxurl, fd);
+    } catch (e) {
+        console.log("No prompt id.");
+        alert('Pas de prompt disponible pour l\image. Indiquez des mots-clés pour permettre une recherche sur la base d\'images.');
+    }
+
+}
+
 function ajax_edcal_generate_article(e) {
     e.preventDefault();
 
@@ -142,6 +188,7 @@ function ajax_edcal_generate_article(e) {
             setValue(".veepdotai-ai-section-edcal1-themes", post.themes);
             setValue(".veepdotai-ai-section-edcal1-hashtags", post.hashtags);
             setValue(".veepdotai-ai-section-edcal1-keywords", post.keywords);
+            setValue(".veepdotai-ai-section-edcal1-img-prompt", post['img-prompt']);
         }	
     })
 }

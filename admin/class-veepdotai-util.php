@@ -50,16 +50,14 @@ class Veepdotai_Util {
      * Extracted data are saved into the options table before being returned to the user.
      */
     public static function article_generation_save_extracted_data($i, $data) {
-        //for($i = 1; $i < 4; $i++) {
-            Veepdotai_Util::set_option('ai-section-edcal' . $i . '-title', $data->title);
-            Veepdotai_Util::set_option('ai-section-edcal' . $i . '-description', $data->description);
-            Veepdotai_Util::set_option('ai-section-edcal' . $i . '-content', $data->content);
-            Veepdotai_Util::set_option('ai-section-edcal' . $i . '-linkedin', $data->linkedin);
-            Veepdotai_Util::set_option('ai-section-edcal' . $i . '-themes', $data->themes);
-            Veepdotai_Util::set_option('ai-section-edcal' . $i . '-hashtags', $data->hashtags);
-            Veepdotai_Util::set_option('ai-section-edcal' . $i . '-keywords', $data->keywords);
-            Veepdotai_Util::set_option('ai-section-edcal' . $i . '-image', $data->image);
-        //}
+        Veepdotai_Util::set_option('ai-section-edcal' . $i . '-title', $data->title);
+        Veepdotai_Util::set_option('ai-section-edcal' . $i . '-description', $data->description);
+        Veepdotai_Util::set_option('ai-section-edcal' . $i . '-content', $data->content);
+        Veepdotai_Util::set_option('ai-section-edcal' . $i . '-linkedin', $data->linkedin);
+        Veepdotai_Util::set_option('ai-section-edcal' . $i . '-themes', $data->themes);
+        Veepdotai_Util::set_option('ai-section-edcal' . $i . '-hashtags', $data->hashtags);
+        Veepdotai_Util::set_option('ai-section-edcal' . $i . '-keywords', $data->keywords);
+        Veepdotai_Util::set_option('ai-section-edcal' . $i . '-img-prompt', $data->image);
 
         return $data;
     }
@@ -143,6 +141,58 @@ class Veepdotai_Util {
         $raw = $open_ai->completion($params);
 
         return $raw;
+    }
+
+    /**
+     * Based on ginsen/img-finder which works with pexels and unsplash repositories
+     */
+    public static function get_images($prompt) {
+        $pexel_auth = Veepdotai_Util::get_option("pexels-api-key");
+        $unsplash_auth = Veepdotai_Util::get_option("unsplash-api-key");
+        $settings = [
+            'img-finder' => [
+                'repositories' => [
+                    ImgFinder\Repository\PexelsRepository::class => [
+                        'params' => [
+                            'authorization' => $pexel_auth
+                        ]
+                    ],
+                    ImgFinder\Repository\UnsplashRepository::class => [
+                        'params' => [
+                            'authorization' => $unsplash_auth
+                        ]
+                    ],
+                ],
+                // ...
+            ]
+            //...
+        ];
+
+        $config = ImgFinder\Config::fromArray($settings);
+        $finder = new ImgFinder\ImgFinder($config);
+
+        //$request  = Request::set('nature', ['pexels', 'unsplash']);
+        
+        $request  = ImgFinder\Request::set($prompt, ['pexels']);
+        $response = $finder->search($request);
+
+        $imagesUrls = $response->toArray();
+        //var_dump($imagesUrls);
+        Veepdotai_Util::log( 'Prompt image: ' . $prompt );
+        Veepdotai_Util::log( 'ImagesUrl: ' . count($imagesUrls) );
+
+        return $imagesUrls;
+    }
+
+    public static function get_image($prompt) {
+        $images = Veepdotai_Util::get_images($prompt);
+        if (! empty($images)) {
+            $image = $images[0];
+        } else {
+            $image = "";
+        }
+
+        return $image;
     }
 
     public static function get_storage_filename($suffix) {

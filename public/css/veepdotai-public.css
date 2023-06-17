@@ -51,6 +51,9 @@ body.single-post main {
    object-fit: cover;
  }
 
+ .wp-block-post-featured-image img {
+   border-radius: 5px;
+ }
  .wp-block-latest-posts__featured-image a {
       width: 100%;
  }

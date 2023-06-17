@@ -161,7 +161,7 @@ Class Veepdotai_Admin_Site {
         $pn = $this->plugin_name;
 
         if($this->security_check($post, $pn .'-main_admin_site')) {
-            for ($i = 0; $i < 6; $i++) {
+            for ($i = 0; $i < 4; $i++) {
                 // Everything needs to be saved because all parts may have been updated
                 $this->update_option_if_set($post, $pn, 'ai-section' . $i . '-img-prompt');
                 $this->update_option_if_set($post, $pn, 'ai-section' . $i . '-img-href');
@@ -432,23 +432,6 @@ Class Veepdotai_Admin_Site {
         return $page_url;
     }
 
-        /**
-     * 
-     */
-    public function get_image($i) {
-        $pn = $this->plugin_name;
-
-        // Gets an already computed data, for example: 20230509-135300
-        $ts = Veepdotai_Util::get_option('-ai-site-ts');
-        if ($ts) {
-            $raw = file_get_contents(WP_PLUGIN_DIR
-                    . "/$pn/data/$ts-$pn-ai-section$i-result.txt");
-        } else {
-            $raw = "";
-        }
-
-        return json_encode($raw);
-    }
     /**
      * Stores computed data to check errors or enables users
      * to replay a previous prompt or reuse previous results
@@ -466,33 +449,6 @@ Class Veepdotai_Admin_Site {
         file_put_contents($filename_result, $raw);
 
         return $raw;
-    }
-
-    /**
-     * 
-     */
-    public function get_image_with_pexels($ts, $prompt, $i) {
-        $pn = $this->plugin_name;
-
-        $pexels_key = Veepdotai_Util::get_option('pexels-api-key');
-        $provider = new ApiProvider($pexels_key);
-
-        // Create a Search photos request.
-        $request = new SearchPhotosRequest();
-        $request->setQuery($prompt);
-        $request->setOrientation("landscape"); // Optional
-        $request->setSize("large"); // Optional
-        $request->setLocale("fr-FR"); // Optional
-
-        $response = $provider->sendRequest($request);
-
-        $images = $response->getPhotos();
-        if (! empty($images)) {
-            $image = $images[0];
-            return $image;
-        } else {
-            return null;
-        }
     }
 
     /**
@@ -549,11 +505,6 @@ Class Veepdotai_Admin_Site {
         if ($this->security_check($post, $pn .'-main_admin_site')) {
             $content_titles = ["Bénéfices", "Besoins", "Solutions", "Avantages concurrentiels"];
 
-            // Process each prompt through the content of the corresponding field
-            // input through voice during the interview ?
-            // Or concat everything before providing the content to AI ?
-            // Last method will be cheaper and more efficient
-
             $date = date("Ymd-His");
             for ($i = 0; $i < 4; $i++) {
                 $prefix = 'ai-section' . $i . '-';
@@ -568,10 +519,9 @@ Class Veepdotai_Admin_Site {
                 // Pexels
                 // Images are better. A search is done with the provided information.
                 $prompt = Veepdotai_Util::get_option($prefix . 'img-prompt');
-//                $prompt = "nature";
-                $image = $this->get_image_with_pexels($date, $prompt, $i);
-               Veepdotai_Util::log("Image URL: " . $image->getSrc()->getLarge() . ".");
-                $res = Veepdotai_Util::update_option($prefix . 'img-href', $image->getSrc()->getLarge()); // $this->update_option ?
+                $image = Veepdotai_Util::get_image($prompt);
+                Veepdotai_Util::log("Image URL: " . $image . ".");
+                $res = Veepdotai_Util::update_option($prefix . 'img-href', $image); // $this->update_option ?
 
                 $results[] = $res; // useless. @TODO Fix needed.
             }
