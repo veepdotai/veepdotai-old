@@ -56,6 +56,8 @@ function generate_editorial_calendar_form_section_escaped($enable_voice, $intent
                 . display_escaped($enable_voice, "Hashtags", $name_escaped . "-hashtags", "text", true)
                 . display_escaped($enable_voice, "Thèmes", $name_escaped . "-themes", "text", true)
                 . display_escaped($enable_voice, "Mots-clés", $name_escaped . "-keywords", "text", true)
+                . display_escaped($enable_voice, "Image prompt", $name_escaped . "-img-prompt", "text", true)
+                . display_escaped($enable_voice, "Image href", $name_escaped . "-img-href", "url", true)
                 . '</div>';
     return $section;
 }

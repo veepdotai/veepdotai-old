@@ -4,6 +4,7 @@ require_once "class-veepdotai-util.php";
 
 use Psr\Log\LoggerInterface;
 
+add_action( 'wp_ajax_generate_image', 'Veepdotai_Admin_Editorial_Calendar::generate_image_callback' );
 add_action( 'wp_ajax_generate_article', 'Veepdotai_Admin_Editorial_Calendar::generate_article_callback' );
 add_action( 'wp_ajax_publish_article', 'Veepdotai_Admin_Editorial_Calendar::publish_article_callback' );
 
@@ -20,6 +21,7 @@ Class Veepdotai_Admin_Editorial_Calendar {
         $hashtags = Veepdotai_Util::get_option("ai-section-edcal1-hashtags");
         $themes = Veepdotai_Util::get_option("ai-section-edcal1-themes");
         $keywords = Veepdotai_Util::get_option("ai-section-edcal1-keywords");
+        $img_href = Veepdotai_Util::get_option("ai-section-edcal1-img-href");
 
         $audio_path = Veepdotai_Util::get_option("ai-vocal-path");
         Veepdotai_Util::log("Veepdotai-ai-vocal-path: " . $audio_path);
@@ -44,7 +46,9 @@ Class Veepdotai_Admin_Editorial_Calendar {
                 'veepdotai_meta_tag_main_query' => 'main query',
                 'veepdotai_meta_tag_keywords' => $hashtags
                                                     . ',' . $keywords
-                                                    . ',' . $themes
+                                                    . ',' . $themes,
+                '_thumbnail_ext_url' => $img_href,
+                '_thumbnail_id' => 'by_url'
             ]
 //            'page_template' => $template
         );
@@ -58,6 +62,17 @@ Class Veepdotai_Admin_Editorial_Calendar {
         echo $page_url;
     }
 
+    public static function generate_image_callback() {
+        Veepdotai_Util::log("Generating article callback");
+        check_ajax_referer( 'my-special-string', 'security' );
+
+        $prompt = Veepdotai_Util::get_option("ai-section-edcal1-img-prompt");
+        $images = Veepdotai_Util::get_images($prompt);
+        Veepdotai_Util::set_option("ai-section-edcal1-img-href", $image[0]['media']);
+        echo json_encode($images);
+        die();
+    }
+
     public static function generate_article_callback() {
         Veepdotai_Util::log("Generating article callback");
         check_ajax_referer( 'my-special-string', 'security' );
@@ -66,10 +81,6 @@ Class Veepdotai_Admin_Editorial_Calendar {
         $content_id = $_POST['content_id'];
         Veepdotai_Util::log('content_id: ' . $content_id);        
         if (! $content_id) {
-            $prompt = $prompt_pre
-                        . "\n\n" . Veepdotai_Util::get_option("ai-section-edcal0-transcription")
-                        . "\n\n" . $prompt_post;
-
             $inspiration = Veepdotai_Util::get_option("ai-section-edcal0-transcription");
             // $prompt contains a reference to $inspiration
             $prompt = strtr(
@@ -91,12 +102,7 @@ Class Veepdotai_Admin_Editorial_Calendar {
             Veepdotai_Util::log('raw: ' . $raw);
         }
 
-        //Veepdotai_Util::log("Fixing json then decoding it.");
-        //$json_string = Veepdotai_Util::fix_json($raw);
-        //Veepdotai_Util::log("json->string: " . $json_string);
-        //$ai_response = json_decode($json_string);
         $ai_response = json_decode($raw);
-        //$ai_response = json_decode($raw);
         $text = $ai_response->choices[0]->text;
         Veepdotai_Util::log('text: ' . $text);
 
@@ -188,7 +194,7 @@ Class Veepdotai_Admin_Editorial_Calendar {
         if (isset($post[$pn .'-' .$field])){
             $field_name = $pn .'-' . $field;
             $field_value = sanitize_textarea_field($post[$field_name]);
-            error_log('field_name : ' . $field_name . ' = ' . $field_value);
+            Veepdotai_Util::log('field_name : ' . $field_name . ' = ' . $field_value);
             $r = Veepdotai_Util::update_option($field, wp_unslash( $field_value ));
         }
         return $r;
@@ -213,61 +219,12 @@ Class Veepdotai_Admin_Editorial_Calendar {
                 $this->update_option_if_set($post, $pn, 'ai-section-edcal' . $i . '-themes');
                 $this->update_option_if_set($post, $pn, 'ai-section-edcal' . $i . '-hashtags');
                 $this->update_option_if_set($post, $pn, 'ai-section-edcal' . $i . '-keywords');
+                $this->update_option_if_set($post, $pn, 'ai-section-edcal' . $i . '-img-prompt');
+                $this->update_option_if_set($post, $pn, 'ai-section-edcal' . $i . '-img-href');
             }
         }
 
         return;
-    }
-
-    public function get_image($ts, $prompt, $i) {
-        $pn = $this->plugin_name;
-
-        $pexels_key = Veepdotai_Util::get_option('pexels-api-key');
-        $provider = new ApiProvider($pexels_key);
-
-        // Create a Search photos request.
-        $request = new SearchPhotosRequest();
-        $request->setQuery($prompt);
-        $request->setOrientation("landscape"); // Optional
-        $request->setSize("large"); // Optional
-        $request->setLocale("fr-FR"); // Optional
-
-        $response = $provider->sendRequest($request);
-
-        $images = $response->getPhotos();
-        if (! empty($images)) {
-            $image = $images[0];
-            return $image;
-        } else {
-            return null;
-        }
-    }
-
-    /**
-     * Pexels support
-     */
-    public function get_image_with_pexels($ts, $prompt, $i) {
-        $pn = $this->plugin_name;
-
-        $pexels_key = Veepdotai_Util::get_option('pexels-api-key');
-        $provider = new ApiProvider($pexels_key);
-
-        // Create a Search photos request.
-        $request = new SearchPhotosRequest();
-        $request->setQuery($prompt);
-        $request->setOrientation("landscape"); // Optional
-        $request->setSize("large"); // Optional
-        $request->setLocale("fr-FR"); // Optional
-
-        $response = $provider->sendRequest($request);
-
-        $images = $response->getPhotos();
-        if (! empty($images)) {
-            $image = $images[0];
-            return $image;
-        } else {
-            return null;
-        }
     }
 
     /**
@@ -289,7 +246,7 @@ Class Veepdotai_Admin_Editorial_Calendar {
             $this->store_image($ts, $i, $params, $raw);
         }
 
-        error_log($raw);
+        Veepdotai_Util::log($raw);
 
         return $raw;
     }

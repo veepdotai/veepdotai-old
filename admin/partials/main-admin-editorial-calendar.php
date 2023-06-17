@@ -38,7 +38,7 @@
                 echo generate_button_escaped($pn, 'ai-save', __('Save'));
 //                if (! in_array('veepdotai_role_user', wp_get_current_user()->roles)) {
 //                    echo generate_button_escaped($pn, 'ai-transcribe', __( 'Retranscrire le vocal'));
-                    echo generate_button_escaped($pn, 'ai-generate-images', __( 'Generate image'));
+                    echo generate_button_escaped($pn, 'ai-generate-image', __( 'Generate image'));
                     echo generate_button_escaped($pn, 'ai-generate-article', __( 'Generate blog article & linkedin post' ));
                     echo generate_button_escaped($pn, 'ai-publish-article', __( 'Publish article' ));
 //                    echo generate_button_escaped($pn, 'ai-generate-post-linkedin', __( 'Generate linkedin post' ));
@@ -52,6 +52,7 @@
     </form>
     <script>
         //jQuery("input[name='veepdotai-ai-transcribe']")[0].addEventListener('click', function() {ajax_edcal_transcribe(event)});
+        jQuery("input[name='veepdotai-ai-generate-image']")[0].addEventListener('click', function() {ajax_edcal_generate_image(event)});
         jQuery("input[name='veepdotai-ai-generate-article']")[0].addEventListener('click', function() {ajax_edcal_generate_article(event)});
         jQuery("input[name='veepdotai-ai-publish-article']")[0].addEventListener('click', function() {ajax_edcal_publish_article(event)});
 
