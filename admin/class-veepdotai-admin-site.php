@@ -7,12 +7,6 @@ use PHPHtmlParser\Options;
 
 use Psr\Log\LoggerInterface;
 
-use WBW\Library\Pexels\Model\Photo;
-use WBW\Library\Pexels\Model\Source;
-use WBW\Library\Pexels\Provider\ApiProvider;
-use WBW\Library\Pexels\Request\SearchPhotosRequest;
-use WBW\Library\Pexels\Response\PhotosResponse;
-
 use Orhanerday\OpenAi\OpenAi;
 
 Class Veepdotai_Admin_Site {
@@ -521,7 +515,7 @@ Class Veepdotai_Admin_Site {
                 $prompt = Veepdotai_Util::get_option($prefix . 'img-prompt');
                 $image = Veepdotai_Util::get_image($prompt);
                 Veepdotai_Util::log("Image URL: " . $image . ".");
-                $res = Veepdotai_Util::update_option($prefix . 'img-href', $image); // $this->update_option ?
+                $res = Veepdotai_Util::update_option($prefix . 'img-href', $image['media']); // $this->update_option ?
 
                 $results[] = $res; // useless. @TODO Fix needed.
             }

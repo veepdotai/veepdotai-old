@@ -96,7 +96,7 @@ class Veepdotai_Util {
         } else if (preg_match("/^pexels-api-key/", $param)) {
             Veepdotai_Util::log("Option: admin-veepdotai-" . $param);
             return get_option("admin-veepdotai-" . $param);
-        } else if (preg_match("/prompt/", $param)) {
+        } else if (preg_match("/(img-)?!prompt/", $param)) {
             Veepdotai_Util::log("Option: admin-veepdotai-" . $param);
             return get_option("admin-veepdotai-" . $param);
         }

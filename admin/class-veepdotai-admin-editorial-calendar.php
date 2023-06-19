@@ -21,6 +21,7 @@ Class Veepdotai_Admin_Editorial_Calendar {
         $hashtags = Veepdotai_Util::get_option("ai-section-edcal1-hashtags");
         $themes = Veepdotai_Util::get_option("ai-section-edcal1-themes");
         $keywords = Veepdotai_Util::get_option("ai-section-edcal1-keywords");
+        $img_prompt = Veepdotai_Util::get_option("ai-section-edcal1-img-prompt");
         $img_href = Veepdotai_Util::get_option("ai-section-edcal1-img-href");
 
         $audio_path = Veepdotai_Util::get_option("ai-vocal-path");
@@ -68,7 +69,7 @@ Class Veepdotai_Admin_Editorial_Calendar {
 
         $prompt = Veepdotai_Util::get_option("ai-section-edcal1-img-prompt");
         $images = Veepdotai_Util::get_images($prompt);
-        Veepdotai_Util::set_option("ai-section-edcal1-img-href", $image[0]['media']);
+        Veepdotai_Util::set_option("ai-section-edcal1-img-href", $images[0]['media']);
         echo json_encode($images);
         die();
     }
