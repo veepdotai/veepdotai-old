@@ -16,7 +16,7 @@
  * Plugin Name:       Veepdotai
  * Plugin URI:        https://www.veep.ai
  * Description:       Veepdotai is a project to create a complete autonomous virtual presence through voice and AI (ChatGPT).
- * Version:           1.2.2
+ * Version:           1.4.1
  * Requires at least: 6.0
  * Requires PHP:      8.0
  * Author:            Jean-Christophe Kermagoret
@@ -61,6 +61,7 @@ function veepdotai_load_textdomain() {
 define( 'VEEPDOTAI_VERSION', '1.0.0' );
 define( 'VEEPDOTAI_PLUGIN_NAME', 'veepdotai' );
 define( 'VEEPDOTAI_PLUGIN_DIR', plugin_dir_path( __FILE__ ));
+define( 'VEEPDOTAI_DATA_DIR', WP_CONTENT_DIR . '/data/veepdotai');
 
 /**
  * The code that runs during plugin activation.
