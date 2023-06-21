@@ -138,7 +138,7 @@ function ajax_edcal_generate_image(e) {
         process(MyAjax.ajaxurl, fd);
     } catch (e) {
         console.log("No prompt id.");
-        alert('Pas de prompt disponible pour l\image. Indiquez des mots-clés pour permettre une recherche sur la base d\'images.');
+        alert('Pas de prompt disponible pour l\'image. Indiquez des mots-clés pour permettre une recherche sur la base d\'images.');
     }
 
 }
@@ -188,7 +188,9 @@ function ajax_edcal_generate_article(e) {
             setValue(".veepdotai-ai-section-edcal1-themes", post.themes);
             setValue(".veepdotai-ai-section-edcal1-hashtags", post.hashtags);
             setValue(".veepdotai-ai-section-edcal1-keywords", post.keywords);
-            setValue(".veepdotai-ai-section-edcal1-img-prompt", post['img-prompt']);
+            setValue(".veepdotai-ai-section-edcal1-img-prompt", post['image']);
+
+            console.log('The article has been generated.');
         }	
     })
 }

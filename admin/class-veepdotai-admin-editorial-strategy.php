@@ -51,15 +51,10 @@ Class Veepdotai_Admin_Editorial_Strategy {
             Veepdotai_Util::log('raw: ' . $raw);
         }
 
-        //$ai_response = json_decode(Veepdotai_Util::fix_json($raw));
+        // We are generating csv here, not json
         $ai_response = json_decode($raw);
         Veepdotai_Util::log('edstrat: text: ' . $ai_response->choices[0]->text);
-//        $text = $ai_response->choices[0]->text;
-//        $text_fixed = Veepdotai_Util::fix_json($text);
-//        $ai_response->choices[0]->text = json_decode($text_fixed);
-//        Veepdotai_Util::log('After fix_json' . json_encode($ai_response));
-//        echo json_encode($ai_response);
-          echo $raw;
+        echo $raw;
         die();
     }
 
