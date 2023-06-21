@@ -214,7 +214,7 @@ class Veepdotai_Util {
         $month = date_format($date, 'm');
         $day = date_format($date, 'd');
         $user_login = wp_get_current_user()->user_login;
-        $directory = WP_PLUGIN_DIR . "/$pn/data/users/$user_login/$year/$month/$day";
+        $directory = VEEPDOTAI_DATA_DIR . "/users/$user_login/$year/$month/$day";
 
         return $directory;
     }
@@ -248,26 +248,13 @@ class Veepdotai_Util {
     }
 
      public static function convert_to_valid_json($text) {
-/*
-        $result = preg_replace('/\\\\n/', '##n', $text);
-        $infos = json_decode($result);
-        $text = $infos->choices[0]->text;
-        $text = preg_replace('/^##n##n/', '', $text);
-        $output = preg_replace('/##n/', '&#13;', $text);
-        return $output;
-*/
-        // Decodes the data provided by GPT. It respects JSON format
-        // but the data corresponding to the key text maybe not.
+        // Decodes the data provided by GPT. It globally respects JSON format
+        // but data generation is sometimes capricious
         $r = json_decode($text);
 
         if ($r) {
             $text = $r->choices[0]->text;
             $string_json = Veepdotai_Util::fix_json($text);
-
-//            $string = preg_replace('/Résultat :/', '', $text);
-//            $string = preg_replace('/Résumé :/', '', $text);
-//            $string = preg_replace('/^[^{]*/', '', $text);
-
             $results = json_decode($string_json);
 
             if ($results) {
@@ -322,10 +309,9 @@ class Veepdotai_Util {
 
         $blank_chars = '\s|EOL|\t';
 
-        //    Réponse:   {|[ => {|[
+        // Some chars before { or |: [a-zA-Z...]* {|[ => {|[
         // ^[^{\[]*({|[) => '{|[' because it breaks json format
         $string = preg_replace( '/^' . '[^\{\[]*(\{|\[)/', "$1", $text );
-
         Veepdotai_Util::log("$i. ############\n" . $string);
         $i++;
         
@@ -365,8 +351,11 @@ class Veepdotai_Util {
         $string = preg_replace('/(' . $blank_chars . ')*}/', '}', $string);
         Veepdotai_Util::log("$i. ############\n" . $string);
 
+        // Some chars before/after the {} or [] and not enclosed in ""
+        $string = preg_replace('/(}|])[^",}\]]*/', '$1', $string);
+        $string = preg_replace('/[^",}\]]*(}|])/', '$1', $string);
         // EOL => ''
-        $string = preg_replace('/EOL/', '', $string);
+        $string = preg_replace('/EOL/', '\n', $string);
         Veepdotai_Util::log("$i. ############\n" . $string);
 
         return $string;
