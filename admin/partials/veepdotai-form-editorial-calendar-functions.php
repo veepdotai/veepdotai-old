@@ -36,8 +36,8 @@ function generate_editorial_calendar_vocal_form_section($enable_voice, $intent, 
     $section = '<div id="veep_id_' . $intent . '" class="veep_section">'
                 . '<label>' . $section_title . ' [' . $num_section . ']</label>'
                 . '<p id="context-' . $num_section . '" class="veep_context">' . $context . '</p>'
-                . display_escaped($enable_voice, "Retranscription", $name_escaped . "-transcription", "textarea", true)
-                . display_escaped(false, "Prompt", $name_escaped . "-prompt", "textarea", true)
+                . display_escaped($enable_voice, __( 'Retranscription', 'veepdotai' ), $name_escaped . "-transcription", "textarea", true)
+                . display_escaped(false, __( 'Prompt', 'veepdotai' ), $name_escaped . "-prompt", "textarea", true)
                 . '</div>';
     return $section;
 }
@@ -49,15 +49,15 @@ function generate_editorial_calendar_form_section_escaped($enable_voice, $intent
     $section = '<div id="veep_id_' . $intent . '" class="veep_section">'
                 . '<label>' . $section_title . ' [' . $num_section . ']</label>'
                 . '<p id="context-' . $num_section . '" class="veep_context">' . $context . '</p>'
-                . display_escaped($enable_voice, "Titre", $name_escaped . "-title", "text", true)
-                . display_escaped($enable_voice, "Description", $name_escaped . "-description", "textarea", true)
-                . display_escaped($enable_voice, "Contenu", $name_escaped . "-content", "textarea", true)
-                . display_escaped($enable_voice, "Linkedin", $name_escaped . "-linkedin", "textarea", true)
-                . display_escaped($enable_voice, "Hashtags", $name_escaped . "-hashtags", "text", true)
-                . display_escaped($enable_voice, "Thèmes", $name_escaped . "-themes", "text", true)
-                . display_escaped($enable_voice, "Mots-clés", $name_escaped . "-keywords", "text", true)
-                . display_escaped($enable_voice, "Image prompt", $name_escaped . "-img-prompt", "text", true)
-                . display_escaped($enable_voice, "Image href", $name_escaped . "-img-href", "url", true)
+                . display_escaped($enable_voice, __( 'Title', 'veepdotai' ), $name_escaped . "-title", "text", true)
+                . display_escaped($enable_voice, __( 'Description', 'veepdotai' ), $name_escaped . "-description", "textarea", true)
+                . display_escaped($enable_voice, __( 'Content', 'veepdotai' ), $name_escaped . "-content", "textarea", true)
+                . display_escaped($enable_voice, __( 'Linkedin', 'veepdotai' ), $name_escaped . "-linkedin", "textarea", true)
+                . display_escaped($enable_voice, __( 'Hashtags', 'veepdotai' ), $name_escaped . "-hashtags", "text", true)
+                . display_escaped($enable_voice, __( 'Themes', 'veepdotai' ), $name_escaped . "-themes", "text", true)
+                . display_escaped($enable_voice, __( 'Keywords', 'veepdotai' ), $name_escaped . "-keywords", "text", true)
+                . display_escaped($enable_voice, __( 'Image prompt', 'veepdotai' ), $name_escaped . "-img-prompt", "text", true)
+                . display_escaped($enable_voice, __( 'Image href', 'veepdotai' ), $name_escaped . "-img-href", "url", true)
                 . '</div>';
     return $section;
 }

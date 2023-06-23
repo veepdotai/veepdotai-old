@@ -146,8 +146,8 @@ class Veepdotai_Admin {
 
         add_submenu_page(
             $this->plugin_name,
-            __( 'Veepdotai', $this->plugin_name ),
-            __( 'Configuration', $this->plugin_name ),
+            __( 'Veepdotai', "veepdotai" ),
+            __( 'Configuration', "veepdotai" ),
             'veepdotai_configure',
             $this->plugin_name.'-veepdotai-configuration-site',
             array($this, 'main_admin_submenu_configuration_callback')
@@ -156,8 +156,8 @@ class Veepdotai_Admin {
         /*
         add_submenu_page(
             $this->plugin_name,
-            __( 'Veepdotai', $this->plugin_name  ),
-            __( 'Menu', $this->plugin_name  ),
+            __( 'Veepdotai', "veepdotai"  ),
+            __( 'Menu', "veepdotai"  ),
             'veepdotai_menu',
             $this->plugin_name.'-veepdotai-menu-logo',
             array($this, 'main_admin_submenu_menu_callback')
@@ -166,59 +166,59 @@ class Veepdotai_Admin {
 
         add_submenu_page(
             $this->plugin_name,
-            __( 'Veepdotai', $this->plugin_name  ),
-            __( 'Interview', $this->plugin_name  ),
-            'veepdotai_interview',
+            __( 'Veepdotai', "veepdotai"  ),
+            __( 'Interview', "veepdotai"  ),
+            'veepdotai_site',
             $this->plugin_name.'-veepdotai-menu-interview',
             array($this, 'main_admin_submenu_interview_callback')
         );
 
         add_submenu_page(
             $this->plugin_name,
-            __( 'Veepdotai', $this->plugin_name  ),
-            __( 'Prompts', $this->plugin_name  ),
-            'veepdotai_prompt',
+            __( 'Veepdotai', "veepdotai"  ),
+            __( 'Prompts', "veepdotai"  ),
+            'veepdotai_site',
             $this->plugin_name.'-veepdotai-menu-prompts',
             array($this, 'main_admin_submenu_prompts_callback')
         );
 
         add_submenu_page(
             $this->plugin_name,
-            __( 'Veepdotai', $this->plugin_name ),
-            __( 'Site', $this->plugin_name ),
-            'veepdotai_generate',
+            __( 'Veepdotai', "veepdotai" ),
+            __( 'Site', "veepdotai" ),
+            'veepdotai_site',
             $this->plugin_name.'-veepdotai-menu-site',
             array($this, 'main_admin_submenu_site_callback')
         );
 
         add_submenu_page(
             $this->plugin_name,
-            __( 'Veepdotai', $this->plugin_name ),
-            __( 'Editorial Strategy', $this->plugin_name ),
-            'veepdotai_generate',
+            __( 'Veepdotai', "veepdotai" ),
+            __( 'Editorial Strategy', "veepdotai" ),
+            'veepdotai_blog',
             $this->plugin_name.'-veepdotai-menu-editorial-strategy',
             array($this, 'main_admin_submenu_editorial_strategy_callback')
         );
 
         add_submenu_page(
             $this->plugin_name,
-            __( 'Veepdotai', $this->plugin_name ),
-            __( 'Editorial Calendar', $this->plugin_name ),
-            'veepdotai_generate',
+            __( 'Veepdotai', "veepdotai" ),
+            __( 'Editorial Calendar', "veepdotai" ),
+            'veepdotai_blog',
             $this->plugin_name.'-veepdotai-menu-editorial-calendar',
             array($this, 'main_admin_submenu_editorial_calendar_callback')
         );
 
         add_submenu_page(
             $this->plugin_name,
-            __( 'Veepdotai', $this->plugin_name ),
-            __( 'About', $this->plugin_name ),
+            __( 'Veepdotai', "veepdotai" ),
+            __( 'About', "veepdotai" ),
             'veepdotai',
             $this->plugin_name.'-veepdotai-menu-about',
             array($this, 'main_admin_submenu_about_callback')
         );
 
-        remove_submenu_page($this->plugin_name, $this->plugin_name);
+        remove_submenu_page($this->plugin_name, "veepdotai");
     }
 
     /**

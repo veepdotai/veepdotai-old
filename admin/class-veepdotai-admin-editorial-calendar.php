@@ -26,7 +26,7 @@ Class Veepdotai_Admin_Editorial_Calendar {
 
         $audio_path = Veepdotai_Util::get_option("ai-vocal-path");
         Veepdotai_Util::log("Veepdotai-ai-vocal-path: " . $audio_path);
-        $audio = Veepdotai_Util::generate_audio(site_url() . '/wp-content/plugins/veepdotai/' . $audio_path);
+        $audio = Veepdotai_Util::generate_audio(VEEPDOTAI_DATA_DIR . $audio_path);
 
         $post_name = Veepdotai_Util::replace_special_chars($title);
         $post_name = strtr($title, ["'" => "_", " " => "_"]);

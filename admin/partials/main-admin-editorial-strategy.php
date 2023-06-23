@@ -27,11 +27,11 @@
             <p id="loadingDiv">Loading...</p>
 
             <?php
-                echo generate_button_escaped($pn, 'ai-save', __('Save'));
+                echo generate_button_escaped($pn, 'ai-save', __( 'Save', 'veepdotai' ));
                 if (! in_array('veepdotai_role_user', wp_get_current_user()->roles)) {
-                    echo generate_button_escaped($pn, 'ai-generate-editorial-strategy', __( 'Generate editorial strategy'));
+                    echo generate_button_escaped($pn, 'ai-generate-editorial-strategy', __( 'Generate editorial strategy', 'veepdotai' ));
                 }
-                echo generate_button_escaped($pn, 'ai-generate-all', __('Generate all' ));
+                echo generate_button_escaped($pn, 'ai-generate-all', __('Generate all', 'veepdotai' ));
             ?>
 
         </div>

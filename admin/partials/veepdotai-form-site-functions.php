@@ -20,16 +20,16 @@ function generate_form_section_escaped($enable_voice, $intent, $section_title, i
     $section = '<div id="veep_id_' . $intent . '" class="veep_section">'
                 . '<label>' . $section_title . ' [' . $num_section . ']</label>'
                 . '<p id="context-' . $num_section . '" class="veep_context">' . $context . '</p>'
-                . display_escaped($enable_voice, 'Title', $name_escaped . '-title', 'text', true).''
-                . display_escaped($enable_voice, 'Résumé', $name_escaped . '-text', 'textarea', true)
-//                . display_escaped($enable_voice, 'Transcription', $name_escaped . '-transcription', 'textarea', true)
-                . display_escaped($enable_voice, 'Contenu', $name_escaped . '-page', 'textarea', true)
-//                . display_escaped($enable_voice, 'Themes', $name_escaped . '-themes', 'textarea', true)
-                . display_escaped($enable_voice, 'Image prompt', $name_escaped . '-img-prompt', 'text', true)
-                . display_escaped(false, 'Image href', $name_escaped . '-img-href', 'img', true)
-                . display_escaped($enable_voice, 'Image alt', $name_escaped . '-img-alt', 'text', true)
-                . display_escaped($enable_voice, 'CTA text', $name_escaped . '-cta-text', 'text', true)
-                . display_escaped(false, 'CTA href', $name_escaped . '-cta-href', 'text', true)
+                . display_escaped($enable_voice, __( 'Title', 'veepdotai' ), $name_escaped . '-title', 'text', true).''
+                . display_escaped($enable_voice, __( 'Summary', 'veepdotai' ), $name_escaped . '-text', 'textarea', true)
+//                . display_escaped($enable_voice, __( 'Transcription', 'veepdotai' ), $name_escaped . '-transcription', 'textarea', true)
+                . display_escaped($enable_voice, __( 'Content', 'veepdotai' ), $name_escaped . '-page', 'textarea', true)
+//                . display_escaped($enable_voice, __( 'Themes', 'veepdotai' ), $name_escaped . '-themes', 'textarea', true)
+                . display_escaped($enable_voice, __( 'Image prompt', 'veepdotai' ), $name_escaped . '-img-prompt', 'text', true)
+                . display_escaped(false, __( 'Image href', 'veepdotai' ), $name_escaped . '-img-href', 'img', true)
+                . display_escaped($enable_voice, __( 'Image alt', 'veepdotai' ), $name_escaped . '-img-alt', 'text', true)
+                . display_escaped($enable_voice, __( 'CTA text', 'veepdotai' ), $name_escaped . '-cta-text', 'text', true)
+                . display_escaped(false, __( 'CTA href', 'veepdotai' ), $name_escaped . '-cta-href', 'text', true)
                 . '</div>';
     return $section;
 }

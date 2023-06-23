@@ -16,8 +16,8 @@
 
             <div class="veep_actions">
                 <?php
-                    echo generate_button_escaped($pn, 'ai-save', __('Save'));
-                    echo generate_button_escaped($pn, 'ai-next', __('Next'));
+                    echo generate_button_escaped($pn, 'ai-save', __('Save', 'veepdotai'));
+                    echo generate_button_escaped($pn, 'ai-next', __('Next', 'veepdotai'));
                 ?>
             </div>
         </form>
