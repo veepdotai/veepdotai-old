@@ -87,35 +87,44 @@ class Veepdotai_Util {
 
     public static function get_option($param) {
         $pn = VEEPDOTAI_PLUGIN_NAME;
+        $default_user = 'admin';
+
         Veepdotai_Util::log("Get option/plugin name: " . $pn);
         Veepdotai_Util::log("Get option/param name: " . $param);
 
         if (preg_match("/^openai-api-key/", $param)) {
             Veepdotai_Util::log("Option: admin-veepdotai-" . $param);
-            return get_option("admin-veepdotai-" . $param);
+            return get_option($default_user . "-veepdotai-" . $param);
         } else if (preg_match("/^pexels-api-key/", $param)) {
             Veepdotai_Util::log("Option: admin-veepdotai-" . $param);
-            return get_option("admin-veepdotai-" . $param);
+            return get_option($default_user . "-veepdotai-" . $param);
         } else if (preg_match("/(img-)?!prompt/", $param)) {
             Veepdotai_Util::log("Option: admin-veepdotai-" . $param);
-            return get_option("admin-veepdotai-" . $param);
-        }
-        
-        $user = wp_get_current_user()->user_login;
-        Veepdotai_Util::log("User name: " . $user);
-
-//        if (preg_match("/^" . $user . '-' . $pn . "/", $param)) {
-        if (preg_match("/^" . $pn . "/", $param)) {
-                // The param starts with the $pn, so we don't add it
-            $param_name = $param;
+            return get_option($default_user . "-veepdotai-" . $param);
         } else {
-            // We add it
-            $param_name = $pn . '-' . $param;
-        }
+            $user = wp_get_current_user()->user_login;
+            Veepdotai_Util::log("User name: " . $user);
 
-        $user_param_name = $user . '-' . $param_name;
-        Veepdotai_Util::log("Getting option: " . $user_param_name);
-        return get_option($user_param_name);
+    //        if (preg_match("/^" . $user . '-' . $pn . "/", $param)) {
+            if (preg_match("/^" . $pn . "/", $param)) {
+                    // The param starts with the $pn, so we don't add it
+                $param_name = $param;
+            } else {
+                // We add it
+                $param_name = $pn . '-' . $param;
+            }
+
+            $user_param_name = $user . '-' . $param_name;
+            Veepdotai_Util::log("Getting option: " . $user_param_name);
+            $option = get_option($user_param_name);
+
+            // A prompt is required to work correctly.
+            if (! $option && preg_match("/-prompt/", $param)) {
+                Veepdotai_Util::log("Option: admin-veepdotai-" . $param);
+                return get_option($default_user . "-veepdotai-" . $param);
+            }
+            return $option;
+        }
     }
 
     public static function get_content_from_ai($_params, $max_tokens = 2500) {
@@ -244,7 +253,7 @@ class Veepdotai_Util {
 
         $r = file_put_contents($abs_filename, $content);
 
-        return $r;
+        return $abs_filename;
     }
 
      public static function convert_to_valid_json($text) {
@@ -322,7 +331,7 @@ class Veepdotai_Util {
 
         // 1234,EOL  "
         //$string = preg_replace('/,(' . $blank_chars . ')*\"/', ',"', $string);
-        $string = preg_replace('/,EOL(\s|\t)*\"/', ',"', $string);
+        $string = preg_replace('/,(\s|\t)*EOL(\s|\t)*\"/', ',"', $string);
         Veepdotai_Util::log("$i. ############\n" . $string);
         $i++;
 
@@ -334,7 +343,7 @@ class Veepdotai_Util {
 
         // :EOL"
         //$string = preg_replace('/:EOL\"/', ':"', $string);
-        $string = preg_replace('/:EOL/', ':', $string);
+        $string = preg_replace('/"(' . $blank_chars . ')*:(' . $blank_chars . ')*"/', '":"', $string);
         Veepdotai_Util::log("$i. ############\n" . $string);
         $i++;
 
@@ -462,5 +471,9 @@ class Veepdotai_Util {
 		ob_end_clean();                // end capture
 		error_log( $contents, 3, "/tmp/wordpress.log" );        // log contents of the result of var_dump( $object )
 	}
-	 
+
+    public static function s($str, $charset = null) {
+        return new \Delight\Str\Str($str, $charset);
+    }
+
 }

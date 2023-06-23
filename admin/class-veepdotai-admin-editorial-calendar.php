@@ -96,18 +96,28 @@ Class Veepdotai_Admin_Editorial_Calendar {
             $raw = Veepdotai_Util::get_content_from_ai($prompt);
 
             Veepdotai_Util::log('Storing json');
-            Veepdotai_Util::store_data($raw, "edcal-article-raw.json");
+            $content_id = Veepdotai_Util::store_data($raw, "edcal-article-raw.json");
         } else {
             Veepdotai_Util::log('Getting content already stored: ' . $content_id);  
             $raw = Veepdotai_Util::get_data($content_id);
             Veepdotai_Util::log('raw: ' . $raw);
         }
 
-        $ai_response = json_decode($raw);
+        $text = Veepdotai_Util::s($raw)->normalizeLineEndings("EOL");
+        $text = preg_replace('/EOL/', '', $text);
+        Veepdotai_Util::store_data($text, $content_id . "-after-EOL.json");
+
+        try {
+            $ai_response = json_decode($text);
+        } catch (e) {
+            var_dump($text);
+        }
+        //$ai_response = json_decode($raw);
         $text = $ai_response->choices[0]->text;
-        Veepdotai_Util::log('text: ' . $text);
 
         $text_fixed = Veepdotai_Util::fix_json($text);
+        Veepdotai_Util::store_data($text_fixed, $content_id . "-fixed.json");
+        Veepdotai_Util::log('text: ' . $text);
         Veepdotai_Util::log("text_fixed: json->string: " . $text_fixed);
 
         $text_json = json_decode($text_fixed);
