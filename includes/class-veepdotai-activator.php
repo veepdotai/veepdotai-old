@@ -58,6 +58,33 @@ class Veepdotai_Activator {
 			),
 		);
 
+		Veepdotai_Util::log('Configuring Veepdotai_role_site.');
+		add_role(
+			'veepdotai_role_site',
+			'Veepdotai Site Role',
+			array(
+				'read'  => true,
+				'veepdotai'  => true,
+				'veepdotai_site'  => true,
+				'veepdotai_generate'  => true,
+				'veepdotai_interview' => true,
+				'veepdotai_prompt'    => true,
+			),
+		);
+
+		Veepdotai_Util::log('Configuring Veepdotai_role_blog.');
+		add_role(
+			'veepdotai_role_blog',
+			'Veepdotai Blog Role',
+			array(
+				'read'  => true,
+				'veepdotai'  => true,
+				'veepdotai_blog'  => true,
+				'veepdotai_generate_blog'  => true,
+				'veepdotai_publish_article'  => true,
+			),
+		);
+
 		Veepdotai_Util::log('Configuring Veepdotai_role_user.');
 		add_role(
 			'veepdotai_role_user',
@@ -96,6 +123,28 @@ class Veepdotai_Activator {
 				'veepdotai_prompt'    => true,
 			),
 		);
+
+		// We give super power to the admin user
+		$user = get_user_by( 'ID', 1 );
+		if ( $user && 'admin' == $user->user_login ) {
+			var_dump($user);
+
+			$username = $user->user_login;
+
+			Veepdotai_Util::log('Setting roles for: ' . $username . '.');
+
+			Veepdotai_Util::log('Setting veep admin role for: ' . $username . '.');
+			$user->add_role( 'veepdotai_role_admin' );
+
+			Veepdotai_Util::log('Setting veep user role for: ' . $username . '.');
+			$user->add_role( 'veepdotai_role_user' );
+
+			Veepdotai_Util::log('Setting veep site role for: ' . $username . '.');
+			$user->add_role( 'veepdotai_role_site' );
+
+			Veepdotai_Util::log('Setting veep blog role for: ' . $username . '.');
+			$user->add_role( 'veepdotai_role_blog' );
+		}
 	}
 
 	public static function initialize_categories() {
