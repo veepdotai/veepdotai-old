@@ -82,7 +82,7 @@ Class Veepdotai_Admin_Prompts {
             $field_value = sanitize_textarea_field( $post[$field_name] );
             //$field_value = str_replace('\\\'', '\'', $field_value);
         }
-        Veepdotai_Util::log('field_name : ' . $field_name . ' = ' . $field_value);
+        Veepdotai_Util::log('debug', 'field_name : ' . $field_name . ' = ' . $field_value);
         //$r = update_option($field_name, addslashes( stripslashes($field_value) ));
         $r = Veepdotai_Util::update_option($field, wp_unslash ($field_value) );
 
@@ -123,12 +123,12 @@ Class Veepdotai_Admin_Prompts {
     }
 
     public static function update_option($field_name, $field_value) {
-        Veepdotai_Util::log("Field name: $field_name / Field value: $field_value");
+        Veepdotai_Util::log('debug', "Field name: $field_name / Field value: $field_value");
         // Call the corresponding WP function
         // The case where the field starts with VEEPDOTAI_PLUGIN_NAME- is managed by the get_option method
         $existing_value = Veepdotai_Util::get_option($field_name);
         if ($existing_value) {
-            Veepdotai_Util::log("Replacing existing value for this field: $existing_value...");
+            Veepdotai_Util::log('debug', "Replacing existing value for this field: $existing_value...");
         }
         Veepdotai_Util::update_option($field_name, ""); // resetting data so we know there is a problem
         Veepdotai_Util::update_option($field_name, sanitize_textarea_field($field_value));
@@ -144,7 +144,7 @@ Class Veepdotai_Admin_Prompts {
         //$content .= "\nSection " . $content_titles[$i] . "\n\n";
         $content = "\nSection " . $content_title . "\n\n";
         $key = 'ai-section' . $i . '-text-interview';
-        Veepdotai_Util::log("Key: $pn-$key.");
+        Veepdotai_Util::log('debug', "Key: $pn-$key.");
         $content .= Veepdotai_Util::get_option($key);
         $content .= "\n";
 
@@ -215,7 +215,7 @@ Class Veepdotai_Admin_Prompts {
             // $this->store_data($ts, $i, $params, $raw, $r);
         }
 
-        Veepdotai_Util::log($raw);
+        Veepdotai_Util::log('debug', $raw);
 
         $section = Veepdotai_Util::fix_results($r);
         return $section;

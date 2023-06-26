@@ -9,12 +9,12 @@ add_action( 'wp_ajax_generate_editorial_strategy', 'Veepdotai_Admin_Editorial_St
 Class Veepdotai_Admin_Editorial_Strategy {
 
     public static function generate_editorial_strategy_callback() {
-        Veepdotai_Util::log("Generating editorial strategy callback");
+        Veepdotai_Util::log('debug', "Generating editorial strategy callback");
         check_ajax_referer( 'my-special-string', 'security' );
 
         //$content_id = '20230605-071132-edcal-article-prompt.txt';
         $content_id = $_POST['content_id'];
-        Veepdotai_Util::log('edstrat: content_id: ' . $content_id);        
+        Veepdotai_Util::log('debug', 'edstrat: content_id: ' . $content_id);        
         if (! $content_id) {
             $context = __( "L'entretien est le suivant:" )
                         . "\n\n" . __( "Quels sont les bénéfices pour les utilisateurs ?" ) . "\n\n"
@@ -37,23 +37,23 @@ Class Veepdotai_Admin_Editorial_Strategy {
                         ]
             );
 
-            Veepdotai_Util::log('Storing prompt.');
+            Veepdotai_Util::log('debug', 'Storing prompt.');
             Veepdotai_Util::store_data($prompt, "ai-section-edstrat0-prompt.txt");
 
-            Veepdotai_Util::log('Getting content from AI');
+            Veepdotai_Util::log('debug', 'Getting content from AI');
             $raw = Veepdotai_Util::get_content_from_ai($prompt, 2000);
 
-            Veepdotai_Util::log('Storing json');
+            Veepdotai_Util::log('debug', 'Storing json');
             Veepdotai_Util::store_data($raw, "ai-section-edstrat0-raw.json");
         } else {
-            Veepdotai_Util::log('edstrat: Getting content already stored: ' . $content_id);
+            Veepdotai_Util::log('debug', 'edstrat: Getting content already stored: ' . $content_id);
             $raw = Veepdotai_Util::get_data($content_id);
-            Veepdotai_Util::log('raw: ' . $raw);
+            Veepdotai_Util::log('debug', 'raw: ' . $raw);
         }
 
         // We are generating csv here, not json
         $ai_response = json_decode($raw);
-        Veepdotai_Util::log('edstrat: text: ' . $ai_response->choices[0]->text);
+        Veepdotai_Util::log('debug', 'edstrat: text: ' . $ai_response->choices[0]->text);
         echo $raw;
         die();
     }
@@ -115,7 +115,7 @@ Class Veepdotai_Admin_Editorial_Strategy {
 
         $page_url = "";
         if (isset($vp[$pn .'-ai-save'])) {
-            Veepdotai_Util::log("Editorial Strategy: Saving form data");
+            Veepdotai_Util::log('debug', "Editorial Strategy: Saving form data");
             //$this.save_configuration($post);
             $self->save_configuration($vp);
         } elseif (isset($vp[$pn .'-ai-generate-editorial-strategy'])) {
@@ -146,7 +146,7 @@ Class Veepdotai_Admin_Editorial_Strategy {
         if (isset($post[$pn .'-' .$field])){
             $field_name = $pn .'-' . $field;
             $field_value = sanitize_textarea_field($post[$field_name]);
-            Veepdotai_Util::log('field_name : ' . $field_name . ' = ' . $field_value);
+            Veepdotai_Util::log('debug', 'field_name : ' . $field_name . ' = ' . $field_value);
             $r = Veepdotai_Util::update_option($field, wp_unslash( $field_value ));
         }
         return $r;

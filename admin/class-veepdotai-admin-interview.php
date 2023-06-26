@@ -56,7 +56,7 @@ Class Veepdotai_Admin_Interview {
             // We are on the vocal section
             if ('veep_id_vocal' === $audio) {
                 $path = preg_replace("#.*/wp-content\/plugins/veepdotai/(.*)#", "$1", $output);
-                Veepdotai_Util::log('Storing path to retrieve it later: ' . $path);
+                Veepdotai_Util::log('debug', 'Storing path to retrieve it later: ' . $path);
                 Veepdotai_Util::set_option('ai-vocal-path', $path);                
             }
 
@@ -161,7 +161,7 @@ Class Veepdotai_Admin_Interview {
             $field_name = $pn .'-' . $field;
             //$field_value = sanitize_text_field($post[$field_name]);
             $field_value = sanitize_text_field($post[$field_name]);
-            Veepdotai_Util::log('field_name : ' . $field_name . ' = ' . $field_value);
+            Veepdotai_Util::log('debug', 'field_name : ' . $field_name . ' = ' . $field_value);
             $r = Veepdotai_Util::update_option($field, wp_unslash( $field_value ));
         }
         return $r;
@@ -174,7 +174,7 @@ Class Veepdotai_Admin_Interview {
         $pn = $this->plugin_name;
 
         if($this->security_check($post, $pn .'-main_admin_site')) {
-            for ($i = 0; $i < 6; $i++) {
+            for ($i = 0; $i < 4; $i++) {
                 $this->update_option_if_set($post, $pn, 'ai-section' . $i . '-text-interview');
             }
             $selected_lp_template = isset($post[$pn .'-lp-templates']) ? $post[$pn .'-lp-templates'] : Veepdotai_Util::get_option('lp-templates');

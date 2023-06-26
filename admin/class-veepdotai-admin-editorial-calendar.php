@@ -11,7 +11,7 @@ add_action( 'wp_ajax_publish_article', 'Veepdotai_Admin_Editorial_Calendar::publ
 Class Veepdotai_Admin_Editorial_Calendar {
 
     public static function publish_article_callback() {
-        Veepdotai_Util::log("Publishing article callback");
+        Veepdotai_Util::log('debug', "Publishing article callback");
         check_ajax_referer( 'my-special-string', 'security' );
 
         $title = Veepdotai_Util::get_option("ai-section-edcal1-title");
@@ -25,7 +25,7 @@ Class Veepdotai_Admin_Editorial_Calendar {
         $img_href = Veepdotai_Util::get_option("ai-section-edcal1-img-href");
 
         $audio_path = Veepdotai_Util::get_option("ai-vocal-path");
-        Veepdotai_Util::log("Veepdotai-ai-vocal-path: " . $audio_path);
+        Veepdotai_Util::log('debug', "Veepdotai-ai-vocal-path: " . $audio_path);
         $audio = Veepdotai_Util::generate_audio(VEEPDOTAI_DATA_DIR . $audio_path);
 
         $post_name = Veepdotai_Util::replace_special_chars($title);
@@ -64,7 +64,7 @@ Class Veepdotai_Admin_Editorial_Calendar {
     }
 
     public static function generate_image_callback() {
-        Veepdotai_Util::log("Generating article callback");
+        Veepdotai_Util::log('debug', "Generating article callback");
         check_ajax_referer( 'my-special-string', 'security' );
 
         $prompt = Veepdotai_Util::get_option("ai-section-edcal1-img-prompt");
@@ -75,12 +75,12 @@ Class Veepdotai_Admin_Editorial_Calendar {
     }
 
     public static function generate_article_callback() {
-        Veepdotai_Util::log("Generating article callback");
+        Veepdotai_Util::log('debug', "Generating article callback");
         check_ajax_referer( 'my-special-string', 'security' );
 
         //$content_id = '20230605-071132-edcal-article-prompt.txt';
         $content_id = $_POST['content_id'];
-        Veepdotai_Util::log('content_id: ' . $content_id);        
+        Veepdotai_Util::log('debug', 'content_id: ' . $content_id);        
         if (! $content_id) {
             $inspiration = Veepdotai_Util::get_option("ai-section-edcal0-transcription");
             // $prompt contains a reference to $inspiration
@@ -89,18 +89,18 @@ Class Veepdotai_Admin_Editorial_Calendar {
                         ['$inspiration' => $inspiration]
             );
                 
-            Veepdotai_Util::log('Storing prompt.');
+            Veepdotai_Util::log('debug', 'Storing prompt.');
             Veepdotai_Util::store_data($prompt, "edcal-article-prompt.txt");
 
-            Veepdotai_Util::log('Getting content from AI');
+            Veepdotai_Util::log('debug', 'Getting content from AI');
             $raw = Veepdotai_Util::get_content_from_ai($prompt);
 
-            Veepdotai_Util::log('Storing json');
+            Veepdotai_Util::log('debug', 'Storing json');
             $content_id = Veepdotai_Util::store_data($raw, "edcal-article-raw.json");
         } else {
-            Veepdotai_Util::log('Getting content already stored: ' . $content_id);  
+            Veepdotai_Util::log('debug', 'Getting content already stored: ' . $content_id);  
             $raw = Veepdotai_Util::get_data($content_id);
-            Veepdotai_Util::log('raw: ' . $raw);
+            Veepdotai_Util::log('debug', 'raw: ' . $raw);
         }
 
         $text = Veepdotai_Util::s($raw)->normalizeLineEndings("EOL");
@@ -117,18 +117,18 @@ Class Veepdotai_Admin_Editorial_Calendar {
 
         $text_fixed = Veepdotai_Util::fix_json($text);
         Veepdotai_Util::store_data($text_fixed, $content_id . "-fixed.json");
-        Veepdotai_Util::log('text: ' . $text);
-        Veepdotai_Util::log("text_fixed: json->string: " . $text_fixed);
+        Veepdotai_Util::log('debug', 'text: ' . $text);
+        Veepdotai_Util::log('debug', "text_fixed: json->string: " . $text_fixed);
 
         $text_json = json_decode($text_fixed);
-        Veepdotai_Util::log("text_fixed: content: " . $text_json->content);
-        Veepdotai_Util::log('Last json decoding error: ' . Veepdotai_Util::get_last_error());
+        Veepdotai_Util::log('debug', "text_fixed: content: " . $text_json->content);
+        Veepdotai_Util::log('debug', 'Last json decoding error: ' . Veepdotai_Util::get_last_error());
 
         $ai_response->choices[0]->text = $text_json;
         // 1 : Post tab
         Veepdotai_Util::article_generation_save_extracted_data(1, $text_json);
         $ai_response_text = json_encode($ai_response);
-        Veepdotai_Util::log('After fix_json' . $ai_response_text);
+        Veepdotai_Util::log('debug', 'After fix_json' . $ai_response_text);
         echo $ai_response_text;
         die();
     }
@@ -178,7 +178,7 @@ Class Veepdotai_Admin_Editorial_Calendar {
 
         $page_url = "";
         if (isset($vp[$pn .'-ai-save'])) {
-            Veepdotai_Util::log("Editorial Calendar: Saving form data");
+            Veepdotai_Util::log('debug', "Editorial Calendar: Saving form data");
             //$this.save_configuration($post);
             $self->save_configuration($vp);
         } elseif (isset($vp[$pn .'-ai-generate-all'])) {
@@ -205,7 +205,7 @@ Class Veepdotai_Admin_Editorial_Calendar {
         if (isset($post[$pn .'-' .$field])){
             $field_name = $pn .'-' . $field;
             $field_value = sanitize_textarea_field($post[$field_name]);
-            Veepdotai_Util::log('field_name : ' . $field_name . ' = ' . $field_value);
+            Veepdotai_Util::log('debug', 'field_name : ' . $field_name . ' = ' . $field_value);
             $r = Veepdotai_Util::update_option($field, wp_unslash( $field_value ));
         }
         return $r;
@@ -257,7 +257,7 @@ Class Veepdotai_Admin_Editorial_Calendar {
             $this->store_image($ts, $i, $params, $raw);
         }
 
-        Veepdotai_Util::log($raw);
+        Veepdotai_Util::log('debug', $raw);
 
         return $raw;
     }

@@ -18,7 +18,7 @@ class Veepdotai_Util {
 
     public static function generate_audio($url) {
         $url_escaped = $url;
-        Veepdotai_Util::log("Generates an audio component for $url_escaped");
+        Veepdotai_Util::log('debug', "Generates an audio component for $url_escaped");
 
         $audio = '<!-- wp:audio -->'
                     . '<figure class="wp-block-audio">'
@@ -31,7 +31,7 @@ class Veepdotai_Util {
 
     public static function generate_paragraph($text, $css_class_name = "") {
         $para_escaped = esc_html($text);
-        Veepdotai_Util::log("Generates an audio component for $para_escaped");
+        Veepdotai_Util::log('debug', "Generates an audio component for $para_escaped");
         $css_class_name_escaped = esc_attr($css_class_name);
 
         $paragraph = '<!-- wp:paragraph {"className":"' . $css_class_name_escaped . '","dynamicAttributes":{"toolsetDSVersion":"230000"}} -->'
@@ -80,7 +80,7 @@ class Veepdotai_Util {
         }
 
         $user_param_name = $user . '-' . $param_name;
-        Veepdotai_Util::log("Setting option: " . $user_param_name . " = " . $value);
+        Veepdotai_Util::log('debug', "Setting option: " . $user_param_name . " = " . $value);
 
         return update_option($user_param_name, $value);
     }
@@ -89,21 +89,21 @@ class Veepdotai_Util {
         $pn = VEEPDOTAI_PLUGIN_NAME;
         $default_user = 'admin';
 
-        Veepdotai_Util::log("Get option/plugin name: " . $pn);
-        Veepdotai_Util::log("Get option/param name: " . $param);
+        Veepdotai_Util::log('debug', "Get option/plugin name: " . $pn);
+        Veepdotai_Util::log('debug', "Get option/param name: " . $param);
 
         if (preg_match("/^openai-api-key/", $param)) {
-            Veepdotai_Util::log("Option: admin-veepdotai-" . $param);
+            Veepdotai_Util::log('debug', "Option: admin-veepdotai-" . $param);
             return get_option($default_user . "-veepdotai-" . $param);
         } else if (preg_match("/^pexels-api-key/", $param)) {
-            Veepdotai_Util::log("Option: admin-veepdotai-" . $param);
+            Veepdotai_Util::log('debug', "Option: admin-veepdotai-" . $param);
             return get_option($default_user . "-veepdotai-" . $param);
         } else if (preg_match("/(img-)?!prompt/", $param)) {
-            Veepdotai_Util::log("Option: admin-veepdotai-" . $param);
+            Veepdotai_Util::log('debug', "Option: admin-veepdotai-" . $param);
             return get_option($default_user . "-veepdotai-" . $param);
         } else {
             $user = wp_get_current_user()->user_login;
-            Veepdotai_Util::log("User name: " . $user);
+            Veepdotai_Util::log('debug', "User name: " . $user);
 
     //        if (preg_match("/^" . $user . '-' . $pn . "/", $param)) {
             if (preg_match("/^" . $pn . "/", $param)) {
@@ -115,12 +115,12 @@ class Veepdotai_Util {
             }
 
             $user_param_name = $user . '-' . $param_name;
-            Veepdotai_Util::log("Getting option: " . $user_param_name);
+            Veepdotai_Util::log('debug', "Getting option: " . $user_param_name);
             $option = get_option($user_param_name);
 
             // A prompt is required to work correctly.
             if (! $option && preg_match("/-prompt/", $param)) {
-                Veepdotai_Util::log("Option: admin-veepdotai-" . $param);
+                Veepdotai_Util::log('debug', "Option: admin-veepdotai-" . $param);
                 return get_option($default_user . "-veepdotai-" . $param);
             }
             return $option;
@@ -187,8 +187,8 @@ class Veepdotai_Util {
 
         $imagesUrls = $response->toArray();
         //var_dump($imagesUrls);
-        Veepdotai_Util::log( 'Prompt image: ' . $prompt );
-        Veepdotai_Util::log( 'ImagesUrl: ' . count($imagesUrls) );
+        Veepdotai_Util::log('debug',  'Prompt image: ' . $prompt );
+        Veepdotai_Util::log('debug',  'ImagesUrl: ' . count($imagesUrls) );
 
         return $imagesUrls;
     }
@@ -274,7 +274,7 @@ class Veepdotai_Util {
                 return Veepdotai_Util::get_last_error();
             }
         } else {
-           Veepdotai_Util::log("Error 1: format error.");
+           Veepdotai_Util::log('debug', "Error 1: format error.");
             return Veepdotai_Util::get_last_error();
         }
     }
@@ -285,25 +285,25 @@ class Veepdotai_Util {
     public static function fix_results($r) {
         $section = null;
         if (property_exists($r, 'section')) {
-            Veepdotai_Util::log("A section property exists.");
+            Veepdotai_Util::log('debug', "A section property exists.");
             $section = $r->section;
             if (is_string($section)) {
-                Veepdotai_Util::log('Section is string : $section = $r.');
+                Veepdotai_Util::log('debug', 'Section is string : $section = $r.');
                 $section = $r;
             } elseif (is_null($section)) {
-                Veepdotai_Util::log('Section is null : $section = $r->sections[0].');
+                Veepdotai_Util::log('debug', 'Section is null : $section = $r->sections[0].');
                 $section = $r->sections[0];
             } elseif (is_array($section)) {
-                Veepdotai_Util::log('Section is an array : $section = $r->section[0].');
+                Veepdotai_Util::log('debug', 'Section is an array : $section = $r->section[0].');
                 $section = $r->section[0];
             } else {
-               Veepdotai_Util::log("The format of the r->section is not known.");
+               Veepdotai_Util::log('debug', "The format of the r->section is not known.");
             }    
         } elseif (property_exists($r, 'sections')) {
             if (is_array($r->sections)) {
                 $section = $r->sections[0];
             } else {
-               Veepdotai_Util::log("The format of the r->sections is not known.");
+               Veepdotai_Util::log('debug', "The format of the r->sections is not known.");
             }
         } else {
             $section = $r;
@@ -321,35 +321,35 @@ class Veepdotai_Util {
         // Some chars before { or |: [a-zA-Z...]* {|[ => {|[
         // ^[^{\[]*({|[) => '{|[' because it breaks json format
         $string = preg_replace( '/^' . '[^\{\[]*(\{|\[)/', "$1", $text );
-        Veepdotai_Util::log("$i. ############\n" . $string);
+        Veepdotai_Util::log('debug', "$i. ############\n" . $string);
         $i++;
         
         // ^EOL{|[
         $string = preg_replace('/(' . $blank_chars . ')*{(' . $blank_chars . ')*/', "{", $text);
-        Veepdotai_Util::log("$i. ############\n" . $string);
+        Veepdotai_Util::log('debug', "$i. ############\n" . $string);
         $i++;
 
         // 1234,EOL  "
         //$string = preg_replace('/,(' . $blank_chars . ')*\"/', ',"', $string);
         $string = preg_replace('/,(\s|\t)*EOL(\s|\t)*\"/', ',"', $string);
-        Veepdotai_Util::log("$i. ############\n" . $string);
+        Veepdotai_Util::log('debug', "$i. ############\n" . $string);
         $i++;
 
         // ",EOL"
         //$string = preg_replace('/\\",EOL\\"/', '\",\"', $string);
         $string = preg_replace('/,EOL/', ',', $string);
-        Veepdotai_Util::log("$i. ############\n" . $string);
+        Veepdotai_Util::log('debug', "$i. ############\n" . $string);
         $i++;
 
         // :EOL"
         //$string = preg_replace('/:EOL\"/', ':"', $string);
         $string = preg_replace('/"(' . $blank_chars . ')*:(' . $blank_chars . ')*"/', '":"', $string);
-        Veepdotai_Util::log("$i. ############\n" . $string);
+        Veepdotai_Util::log('debug', "$i. ############\n" . $string);
         $i++;
 
         // "EOL    }EOL  ],"
         $string = preg_replace('/"(' . $blank_chars . ')*}(' . $blank_chars . ')*],"/', '"}],"', $string);
-        Veepdotai_Util::log("$i. ############\n" . $string);
+        Veepdotai_Util::log('debug', "$i. ############\n" . $string);
         $i++;
 
         // ",}" => }
@@ -358,14 +358,14 @@ class Veepdotai_Util {
         // EOL  }EOL}
         //$string = preg_replace('/(' . $blank_chars . ')*}(' . $blank_chars . ')*}/', '}}', $string);
         $string = preg_replace('/(' . $blank_chars . ')*}/', '}', $string);
-        Veepdotai_Util::log("$i. ############\n" . $string);
+        Veepdotai_Util::log('debug', "$i. ############\n" . $string);
 
         // Some chars before/after the {} or [] and not enclosed in ""
         $string = preg_replace('/(}|])[^",}\]]*/', '$1', $string);
         $string = preg_replace('/[^",}\]]*(}|])/', '$1', $string);
         // EOL => ''
         $string = preg_replace('/EOL/', '\n', $string);
-        Veepdotai_Util::log("$i. ############\n" . $string);
+        Veepdotai_Util::log('debug', "$i. ############\n" . $string);
 
         return $string;
     }
@@ -434,7 +434,7 @@ class Veepdotai_Util {
             $page_url = $page;
         }
 
-        Veepdotai_Util::log('Page_url: ' . $page_url);
+        Veepdotai_Util::log('debug', 'Page_url: ' . $page_url);
 
         if ($move) {
             echo '<script>window.location.replace("' . $page_url . '")</script>';
@@ -456,8 +456,14 @@ class Veepdotai_Util {
         ob_end_flush();
     }
 
-	public static function log( $object=null ) {
-        Veepdotai_Util::var_error_log($object);
+	public static function log( $level, $message, $object=null ) {
+        if ( is_string( $object ) ) {
+            do_action( 'wonolog.log.' . $level, ['message' => $message ]);
+        } else {
+            do_action( 'wonolog.log.' . $level, ['message' => $message ], $object);
+        }
+
+        //Veepdotai_Util::var_error_log($object);
     }
 
     public static function error_log( $object=null ) {

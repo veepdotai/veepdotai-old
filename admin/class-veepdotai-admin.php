@@ -305,7 +305,7 @@ class Veepdotai_Admin {
 	public function main_admin_submenu_about_callback() {
         (new Veepdotai_Admin_About( $this->plugin_name, $this->version ))->manage_action();
     }
-
+/*
 	public function var_error_log( $object=null ){
 		ob_start();                    // start buffer capture
 		var_dump( $object );           // dump the values
@@ -313,5 +313,5 @@ class Veepdotai_Admin {
 		ob_end_clean();                // end capture
 		error_log( $contents );        // log contents of the result of var_dump( $object )
 	}
-	 
+*/	 
 }
