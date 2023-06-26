@@ -2,23 +2,26 @@
 # This file is distributed under the GPL-2.0+.
 msgid ""
 msgstr ""
-"Project-Id-Version: Veepdotai 1.1.0\n"
+"Project-Id-Version: Veepdotai 1.4.3\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/veepdotai\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2023-05-29T10:48:25+00:00\n"
+"POT-Creation-Date: 2023-06-23T21:11:02+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.7.1\n"
+"X-Domain: veepdotai\n"
 
 #. Plugin Name of the plugin
-#: admin/class-veepdotai-admin.php:110
-#: admin/class-veepdotai-admin.php:130
-#: admin/class-veepdotai-admin.php:139
-#: admin/class-veepdotai-admin.php:148
-#: admin/class-veepdotai-admin.php:157
+#: admin/class-veepdotai-admin.php:149
+#: admin/class-veepdotai-admin.php:169
+#: admin/class-veepdotai-admin.php:178
+#: admin/class-veepdotai-admin.php:187
+#: admin/class-veepdotai-admin.php:196
+#: admin/class-veepdotai-admin.php:205
+#: admin/class-veepdotai-admin.php:214
 msgid "Veepdotai"
 msgstr ""
 
@@ -34,133 +37,182 @@ msgstr ""
 msgid "Jean-Christophe Kermagoret"
 msgstr ""
 
-#: admin/class-veepdotai-admin.php:111
+#: admin/class-veepdotai-admin.php:150
 msgid "Configuration"
 msgstr ""
 
-#: admin/class-veepdotai-admin.php:131
+#: admin/class-veepdotai-admin.php:170
 msgid "Interview"
 msgstr ""
 
-#: admin/class-veepdotai-admin.php:140
+#: admin/class-veepdotai-admin.php:179
 msgid "Prompts"
 msgstr ""
 
-#: admin/class-veepdotai-admin.php:149
+#: admin/class-veepdotai-admin.php:188
 msgid "Site"
 msgstr ""
 
-#: admin/class-veepdotai-admin.php:158
+#: admin/class-veepdotai-admin.php:197
+msgid "Editorial Strategy"
+msgstr ""
+
+#: admin/class-veepdotai-admin.php:206
+msgid "Editorial Calendar"
+msgstr ""
+
+#: admin/class-veepdotai-admin.php:215
 msgid "About"
 msgstr ""
 
-#: admin/class-veepdotai-generator-site.php:35
-msgid "Home"
-msgstr ""
-
-#: admin/partials/main-admin-configuration.php:4
-msgid "If you enjoy the plugin, we would really appreciate if you could <a href=\"https://wordpress.org/support/plugin/veep/reviews/\" target=\"_blank\">drop us a review</a> or support us with <a href=\"https://www.paypal.me/veep\" target=\"_blank\">a donation</a>"
-msgstr ""
-
-#: admin/partials/main-admin-configuration.php:5
-msgid "If you find a bug or have any suggestion, create a <a href=\"https://wordpress.org/support/plugin/veep\" target=\"_blank\">new topic in the plugin support</a>"
-msgstr ""
-
-#: admin/partials/main-admin-configuration.php:6
-msgid "If you need detailed information about the plugin, have a look at <a href=\"https://www.veep.ai/veep-user-guide/\" target=\"_blank\">the user guide</a>"
-msgstr ""
-
-#: admin/partials/main-admin-configuration.php:13
-msgid "Open API key configuration"
-msgstr ""
-
-#: admin/partials/main-admin-configuration.php:20
-msgid "If you dont have one, <a href=\"https://platform.openai.com/account/api-keys\" target=\"_blank\">get an API Key</a>"
-msgstr ""
-
-#: admin/partials/main-admin-configuration.php:25
-msgid "Pexels API key configuration"
-msgstr ""
-
-#: admin/partials/main-admin-configuration.php:32
-msgid "If you dont have one, <a href=\"https://www.pexels.com/fr-fr/api/new/\" target=\"_blank\">get an API Key</a>"
-msgstr ""
-
-#: admin/partials/main-admin-configuration.php:38
-#: admin/partials/main-admin-interview.php:24
-#: admin/partials/main-admin-prompts.php:21
-#: admin/partials/main-admin-record.php:34
-#: admin/partials/main-admin-site.php:22
+#: admin/partials/main-admin-configuration.php:19
+#: admin/partials/main-admin-editorial-strategy.php:30
 msgid "Save"
 msgstr ""
 
-#: admin/partials/main-admin-configuration.php:39
-#: admin/partials/main-admin-interview.php:25
-#: admin/partials/main-admin-prompts.php:22
-#: admin/partials/main-admin-record.php:35
+#: admin/partials/main-admin-configuration.php:20
 msgid "Next"
 msgstr ""
 
-#: admin/partials/main-admin-interview.php:9
-msgid "Hello, I am VEEP. I am an AI and I am going to interview you. Thanks to make detailed answers to my questions. Do not worry neither about missing ponctuation nor orthograph, I will take care of them during content processing."
+#: admin/partials/main-admin-editorial-strategy.php:32
+msgid "Generate editorial strategy"
 msgstr ""
 
-#: admin/partials/main-admin-menu.php:7
-msgid "Context"
+#: admin/partials/main-admin-editorial-strategy.php:34
+#: admin/partials/main-admin-site.php:29
+msgid "Generate all"
 msgstr ""
 
-#: admin/partials/main-admin-menu.php:10
-msgid "Context to make the generation more interesting."
+#: admin/partials/main-admin-site.php:10
+msgid "Benefits"
 msgstr ""
 
-#: admin/partials/main-admin-menu.php:11
-msgid "Generate menu"
+#: admin/partials/main-admin-site.php:11
+msgid "Pains"
 msgstr ""
 
-#: admin/partials/main-admin-menu.php:15
-msgid "Menu"
+#: admin/partials/main-admin-site.php:12
+msgid "Solutions"
 msgstr ""
 
-#: admin/partials/main-admin-prompts.php:23
-msgid "Transform original text"
+#: admin/partials/main-admin-site.php:13
+msgid "Strengths"
+msgstr ""
+
+#: admin/partials/main-admin-site.php:14
+msgid "FAQ"
+msgstr ""
+
+#: admin/partials/main-admin-site.php:15
+msgid "Contact"
 msgstr ""
 
 #: admin/partials/main-admin-site.php:24
-msgid "Generate images"
+msgid "Transform original text"
 msgstr ""
 
 #: admin/partials/main-admin-site.php:25
-#: admin/partials/main-admin-site.php:29
-msgid "Generate site"
+msgid "Generate images"
 msgstr ""
 
 #: admin/partials/main-admin-site.php:26
-msgid "Generate pages"
+msgid "Generate site"
 msgstr ""
 
 #: admin/partials/main-admin-site.php:27
-msgid "Generate articles"
+msgid "Generate pages"
 msgstr ""
 
-#: admin/partials/veepdotai-form-interview-functions.php:52
-#: admin/partials/veepdotai-form-prompts-functions.php:64
-#: admin/partials/veepdotai-form-record-functions.php:52
-#: admin/partials/veepdotai-form-site-functions.php:62
-msgid "Landing page template"
+#: admin/partials/veepdotai-form-configuration-functions.php:13
+msgid "OpenAI API Key*"
 msgstr ""
 
-#: plugins/veepdotai-saas.php:95
-#: plugins/veepdotai-saas.php:102
-#: plugins/veepdotai-saas.php:109
-#: plugins/veepdotai-saas.php:116
-#: plugins/veepdotai-saas.php:123
-msgid "<a href=\"%s\""
+#: admin/partials/veepdotai-form-configuration-functions.php:15
+msgid "If you dont have one, <a href=\"https://platform.openai.com/account/api-keys\" target=\"_blank\">get an API Key</a>"
 msgstr ""
 
-#: plugins/veepdotai-saas.php:173
-msgid "All <span class=\"count\">(%s)</span>"
+#: admin/partials/veepdotai-form-configuration-functions.php:17
+msgid "Pexels API Key**"
 msgstr ""
 
-#: plugins/veepdotai-saas.php:189
-msgid "Unattached <span class=\"count\">(%s)</span>"
+#: admin/partials/veepdotai-form-configuration-functions.php:19
+msgid "If you dont have one, <a href=\"https://www.pexels.com/fr-fr/api/new/\" target=\"_blank\">get an API Key</a>"
+msgstr ""
+
+#: admin/partials/veepdotai-form-configuration-functions.php:21
+msgid "Unsplash API Key**"
+msgstr ""
+
+#: admin/partials/veepdotai-form-configuration-functions.php:23
+msgid "If you dont have one, <a href=\"https://unsplash.com/developers\" target=\"_blank\">get an API Key</a>"
+msgstr ""
+
+#: admin/partials/veepdotai-form-editorial-calendar-functions.php:39
+msgid "Retranscription"
+msgstr ""
+
+#: admin/partials/veepdotai-form-editorial-calendar-functions.php:40
+#: admin/partials/veepdotai-form-editorial-strategy-functions.php:17
+msgid "Prompt"
+msgstr ""
+
+#: admin/partials/veepdotai-form-editorial-calendar-functions.php:52
+#: admin/partials/veepdotai-form-site-functions.php:23
+msgid "Title"
+msgstr ""
+
+#: admin/partials/veepdotai-form-editorial-calendar-functions.php:53
+msgid "Description"
+msgstr ""
+
+#: admin/partials/veepdotai-form-editorial-calendar-functions.php:54
+#: admin/partials/veepdotai-form-site-functions.php:26
+msgid "Content"
+msgstr ""
+
+#: admin/partials/veepdotai-form-editorial-calendar-functions.php:55
+msgid "Linkedin"
+msgstr ""
+
+#: admin/partials/veepdotai-form-editorial-calendar-functions.php:56
+msgid "Hashtags"
+msgstr ""
+
+#: admin/partials/veepdotai-form-editorial-calendar-functions.php:57
+msgid "Themes"
+msgstr ""
+
+#: admin/partials/veepdotai-form-editorial-calendar-functions.php:58
+#: admin/partials/veepdotai-form-editorial-strategy-functions.php:15
+msgid "Keywords"
+msgstr ""
+
+#: admin/partials/veepdotai-form-editorial-calendar-functions.php:59
+#: admin/partials/veepdotai-form-site-functions.php:28
+msgid "Image prompt"
+msgstr ""
+
+#: admin/partials/veepdotai-form-editorial-calendar-functions.php:60
+#: admin/partials/veepdotai-form-site-functions.php:29
+msgid "Image href"
+msgstr ""
+
+#: admin/partials/veepdotai-form-editorial-strategy-functions.php:16
+msgid "Strategy"
+msgstr ""
+
+#: admin/partials/veepdotai-form-site-functions.php:24
+msgid "Summary"
+msgstr ""
+
+#: admin/partials/veepdotai-form-site-functions.php:30
+msgid "Image alt"
+msgstr ""
+
+#: admin/partials/veepdotai-form-site-functions.php:31
+msgid "CTA text"
+msgstr ""
+
+#: admin/partials/veepdotai-form-site-functions.php:32
+msgid "CTA href"
 msgstr ""
