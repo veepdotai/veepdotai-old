@@ -125,10 +125,9 @@ class Veepdotai_Activator {
 		);
 
 		// We give super power to the admin user
+		// All other users will have the default role given during member creation
 		$user = get_user_by( 'ID', 1 );
 		if ( $user && 'admin' == $user->user_login ) {
-			var_dump($user);
-
 			$username = $user->user_login;
 
 			Veepdotai_Util::log('Setting roles for: ' . $username . '.');
@@ -144,7 +143,7 @@ class Veepdotai_Activator {
 
 			Veepdotai_Util::log('Setting veep blog role for: ' . $username . '.');
 			$user->add_role( 'veepdotai_role_blog' );
-		}
+		} 
 	}
 
 	public static function initialize_categories() {
