@@ -24,9 +24,11 @@ Class Veepdotai_Admin_Editorial_Calendar {
         $img_prompt = Veepdotai_Util::get_option("ai-section-edcal1-img-prompt");
         $img_href = Veepdotai_Util::get_option("ai-section-edcal1-img-href");
 
-        $audio_path = Veepdotai_Util::get_option("ai-vocal-path");
-        Veepdotai_Util::log('debug', "Veepdotai-ai-vocal-path: " . $audio_path);
-        $audio = Veepdotai_Util::generate_audio(VEEPDOTAI_DATA_DIR . $audio_path);
+        $_audio_path = Veepdotai_Util::get_option("ai-vocal-path");
+        $audio_path = preg_replace("#.*/wp-content/data/veepdotai/(.*)#", "/$1", $_audio_path);
+
+        Veepdotai_Util::log('warning', "Veepdotai-ai-vocal-path: " . $audio_path);
+        $audio = Veepdotai_Util::generate_audio(VEEPDOTAI_DATA_URL . $audio_path);
 
         $post_name = Veepdotai_Util::replace_special_chars($title);
         $post_name = strtr($title, ["'" => "_", " " => "_"]);
