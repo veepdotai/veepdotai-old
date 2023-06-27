@@ -1,7 +1,7 @@
 <div class="wrap <?php esc_attr( $this->plugin_name.'-main-admin-record' ) ?>">
     <h2><?php esc_html_e(get_admin_page_title() . ' / Interview')?></h2>
     <hr>
-    <form method="post" action="">
+    <form id="veep_form" method="post" action="">
         <input type="button" value="Je suis prêt" onclick="start(document.getElementById('context').innerHTML)"/>
         <?php
             echo wp_kses_post( init_nonce() );

@@ -118,3 +118,7 @@
     background: black;
     color: white;
 }
+
+#formats {
+    display: none;
+}

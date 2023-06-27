@@ -9,6 +9,7 @@ use Orhanerday\OpenAi\OpenAi;
 
 // The function that handles the AJAX request
 add_action( 'wp_ajax_transcribe', 'Veepdotai_Admin_Interview::transcribe_callback' );
+add_action( 'wp_ajax_save_interview', 'Veepdotai_Admin_Interview::serve_interview_callback' );
 
 Class Veepdotai_Admin_Interview {
 	/**
@@ -28,6 +29,16 @@ Class Veepdotai_Admin_Interview {
 	 * @var      string    $version    The current version of this plugin.
 	 */
 	private $version;
+
+    public static function save_interview_callback() {
+        Veepdotai_Util::log('debug', 'Saving interview callback');
+        check_ajax_referer( 'my-special-string', 'security' );
+
+        Veepdotai_Admin_Interview::save_configuration($_POST);
+        echo "Configuration saved.";
+        
+        die();
+    }
 
     public static function transcribe_callback() {
         Veepdotai_Util::log('debug', 'Entering transcribe_callback');
@@ -97,7 +108,7 @@ Class Veepdotai_Admin_Interview {
     /**
      * 
      */
-    public function update_option_if_set($post, $pn, $field) {
+    public static function update_option_if_set($post, $pn, $field) {
         $r = null;
         if (isset($post[$pn .'-' .$field])){
             $field_name = $pn .'-' . $field;
@@ -113,11 +124,11 @@ Class Veepdotai_Admin_Interview {
      * 
      */
     public function save_configuration($post) {
-        $pn = $this->plugin_name;
-
-        if($this->security_check($post, $pn .'-main_admin_site')) {
+        
+        $pn = VEEPDOTAI_PLUGIN_NAME;
+        if(Veepdotai_Admin_Interview::security_check($post, $pn .'-main_admin_site')) {
             for ($i = 0; $i < 4; $i++) {
-                $this->update_option_if_set($post, $pn, 'ai-section' . $i . '-text-interview');
+                Veepdotai_Admin_Interview::update_option_if_set($post, $pn, 'ai-section' . $i . '-text-interview');
             }
             $selected_lp_template = isset($post[$pn .'-lp-templates']) ? $post[$pn .'-lp-templates'] : Veepdotai_Util::get_option('lp-templates');
             $selected_generation = isset($post[$pn .'-generation']) ? $post[$pn .'-generation'] : Veepdotai_Util::get_option('generation');
@@ -131,7 +142,7 @@ Class Veepdotai_Admin_Interview {
      *
      * @since  1.0.0
      */
-    public function security_check($parameters, $var_name) {
+    public static function security_check($parameters, $var_name) {
 		return true;
 	}    
 

@@ -7,7 +7,7 @@
 <div class="wrap <?php esc_attr( $this->plugin_name.'-main-admin-editorial_strategy' ) ?>">
     <h2><?php esc_html_e(get_admin_page_title() . ' / Stratégie éditoriale')?></h2>
     <hr>
-    <form method="post" action="">
+    <form id="veep_form" method="post" action="">
         <?php
             echo wp_kses_post( init_nonce() );
 

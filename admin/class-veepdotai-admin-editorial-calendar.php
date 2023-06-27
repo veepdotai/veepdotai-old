@@ -7,8 +7,19 @@ use Psr\Log\LoggerInterface;
 add_action( 'wp_ajax_generate_image', 'Veepdotai_Admin_Editorial_Calendar::generate_image_callback' );
 add_action( 'wp_ajax_generate_article', 'Veepdotai_Admin_Editorial_Calendar::generate_article_callback' );
 add_action( 'wp_ajax_publish_article', 'Veepdotai_Admin_Editorial_Calendar::publish_article_callback' );
+add_action( 'wp_ajax_save_article', 'Veepdotai_Admin_Editorial_Calendar::save_article_callback' );
 
 Class Veepdotai_Admin_Editorial_Calendar {
+
+    public static function save_article_callback() {
+        Veepdotai_Util::log('debug', 'Saving article callback');
+        check_ajax_referer( 'my-special-string', 'security' );
+
+        Veepdotai_Admin_Editorial_Calendar::save_configuration($_POST);
+        echo "Configuration saved.";
+        
+        die();
+    }
 
     public static function publish_article_callback() {
         Veepdotai_Util::log('debug', "Publishing article callback");
@@ -182,7 +193,7 @@ Class Veepdotai_Admin_Editorial_Calendar {
         if (isset($vp[$pn .'-ai-save'])) {
             Veepdotai_Util::log('debug', "Editorial Calendar: Saving form data");
             //$this.save_configuration($post);
-            $self->save_configuration($vp);
+            Veepdotai_Admin_Editorial_Calendar::save_configuration($vp);
         } elseif (isset($vp[$pn .'-ai-generate-all'])) {
             $page_url = $self->generate_all($vp);
         }
@@ -202,7 +213,7 @@ Class Veepdotai_Admin_Editorial_Calendar {
     /**
      * 
      */
-    public function update_option_if_set($post, $pn, $field) {
+    public static function update_option_if_set($post, $pn, $field) {
         $r = null;
         if (isset($post[$pn .'-' .$field])){
             $field_name = $pn .'-' . $field;
@@ -217,23 +228,23 @@ Class Veepdotai_Admin_Editorial_Calendar {
      * Everything needs to be saved because all parts may have been updated
      * 
      */
-    public function save_configuration($post) {
-        $pn = $this->plugin_name;
+    public static function save_configuration($post) {
+        $pn = VEEPDOTAI_PLUGIN_NAME;
 
-        if($this->security_check($post, $pn .'-main_admin_editorial_calendar')) {
-            $this->update_option_if_set($post, $pn, 'ai-section-edcal0-transcription');
-            $this->update_option_if_set($post, $pn, 'ai-section-edcal0-verbatim');
-            $this->update_option_if_set($post, $pn, 'ai-section-edcal0-prompt');
+        if(Veepdotai_Admin_Editorial_Calendar::security_check($post, $pn .'-main_admin_editorial_calendar')) {
+            Veepdotai_Admin_Editorial_Calendar::update_option_if_set($post, $pn, 'ai-section-edcal0-transcription');
+            Veepdotai_Admin_Editorial_Calendar::update_option_if_set($post, $pn, 'ai-section-edcal0-verbatim');
+            Veepdotai_Admin_Editorial_Calendar::update_option_if_set($post, $pn, 'ai-section-edcal0-prompt');
             for($i = 1; $i < 4; $i++) {
-                $this->update_option_if_set($post, $pn, 'ai-section-edcal' . $i . '-title');
-                $this->update_option_if_set($post, $pn, 'ai-section-edcal' . $i . '-description');
-                $this->update_option_if_set($post, $pn, 'ai-section-edcal' . $i . '-content');
-                $this->update_option_if_set($post, $pn, 'ai-section-edcal' . $i . '-linkedin');
-                $this->update_option_if_set($post, $pn, 'ai-section-edcal' . $i . '-themes');
-                $this->update_option_if_set($post, $pn, 'ai-section-edcal' . $i . '-hashtags');
-                $this->update_option_if_set($post, $pn, 'ai-section-edcal' . $i . '-keywords');
-                $this->update_option_if_set($post, $pn, 'ai-section-edcal' . $i . '-img-prompt');
-                $this->update_option_if_set($post, $pn, 'ai-section-edcal' . $i . '-img-href');
+                Veepdotai_Admin_Editorial_Calendar::update_option_if_set($post, $pn, 'ai-section-edcal' . $i . '-title');
+                Veepdotai_Admin_Editorial_Calendar::update_option_if_set($post, $pn, 'ai-section-edcal' . $i . '-description');
+                Veepdotai_Admin_Editorial_Calendar::update_option_if_set($post, $pn, 'ai-section-edcal' . $i . '-content');
+                Veepdotai_Admin_Editorial_Calendar::update_option_if_set($post, $pn, 'ai-section-edcal' . $i . '-linkedin');
+                Veepdotai_Admin_Editorial_Calendar::update_option_if_set($post, $pn, 'ai-section-edcal' . $i . '-themes');
+                Veepdotai_Admin_Editorial_Calendar::update_option_if_set($post, $pn, 'ai-section-edcal' . $i . '-hashtags');
+                Veepdotai_Admin_Editorial_Calendar::update_option_if_set($post, $pn, 'ai-section-edcal' . $i . '-keywords');
+                Veepdotai_Admin_Editorial_Calendar::update_option_if_set($post, $pn, 'ai-section-edcal' . $i . '-img-prompt');
+                Veepdotai_Admin_Editorial_Calendar::update_option_if_set($post, $pn, 'ai-section-edcal' . $i . '-img-href');
             }
         }
 
@@ -281,7 +292,7 @@ Class Veepdotai_Admin_Editorial_Calendar {
      *
      * @since  1.0.0
      */
-    public function security_check($parameters, $var_name) {
+    public static function security_check($parameters, $var_name) {
 		return true;
 	}    
 

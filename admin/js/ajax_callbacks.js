@@ -1,58 +1,133 @@
-function ajax_transcribe(blob, filename) {
-    var upload = document.createElement('a');
+function ajax_save_interview() {
+    let form = document.getElementById("veep_form");
+    let fd = new FormData(form );
+    fd.append('action', 'save_interview');
+    fd.append('security', MyAjax.security);
 
-    upload.href="#";
-    upload.innerHTML = "✅ Publier";
-    upload.addEventListener("click", function(e){
-        e.preventDefault();
-
-        var fd = new FormData();
-        fd.append('action', 'transcribe');
-        fd.append('security', MyAjax.security);
-
-        // This information is required to indicate where does the audio come from
-        id = this.parentElement.parentElement.parentElement.id;
-        fd.append('audio', id);
-
-        content_id = null;
-        try {
-            content_id = jQuery('#veepdotai-content-id')[0].value;
-        } catch (e) {
-            console.log("No content-id available.");
+    jQuery.ajax({
+        url: MyAjax.ajaxurl,
+        data: fd,
+        processData: false,
+        contentType: false,
+        type: 'POST',
+        success: function (response) {
+            console.log(response);
         }
-        if (! content_id) {
-            fd.append('veepdotai-ai-record-audio_data', blob, filename);
-        }
-
-        self = this;
-        jQuery.ajax({
-            url: MyAjax.ajaxurl,
-            data: fd,
-            processData: false,
-            contentType: false,
-            type: 'POST',
-            success: function(data){
-                console.log(new Date() + ": returns from the server");
-                id = self.parentElement.parentElement.parentElement.id;
-                textarea = jQuery('#' + id + ' textarea')[0];
-                textarea.innerHTML = data;
-            }	
-        })
-
-		/*
-		var xhr=new XMLHttpRequest();
-		xhr.onload=function(e) {
-		    if (this.readyState === 4) {
-		        console.log("Server returned: ",e.target.responseText);
-		    }
-		};
-		xhr.open("POST", MyAjax.ajaxurl, true);
-		xhr.send(fd);
-		*/
-
     });
+}
 
-    return upload;
+function ajax_save_article(e, nexts) {
+    let form = document.getElementById("veep_form");
+    let fd = new FormData(form );
+    fd.append('action', 'save_article');
+    fd.append('security', MyAjax.security);
+
+    jQuery.ajax({
+        url: MyAjax.ajaxurl,
+        data: fd,
+        processData: false,
+        contentType: false,
+        type: 'POST',
+        success: function (response) {
+            console.log(response);
+            if (nexts) {
+                next = nexts[0];
+                if (nexts.length > 1) {
+                    next(e, nexts.slice(1));
+                } else {
+                    next(e, null);
+                }
+            }
+        }
+    });
+}
+
+function ajax_transcribe(e, nexts) {
+    e.preventDefault();
+    elt = e.currentTarget;
+
+    var fd = new FormData();
+    fd.append('action', 'transcribe');
+    fd.append('security', MyAjax.security);
+
+    // This information is required to indicate where does the audio come from
+    //id = elt.parentElement.parentElement.parentElement.parentElement.id;
+    if (elt.nodeName == 'IMG') {
+        id = elt.parentElement.parentElement.parentElement.parentElement.id;
+    } else {
+        id = elt.parentElement.parentElement.parentElement.id;
+    }
+    fd.append('audio', id);
+
+    content_id = null;
+    try {
+        content_id = jQuery('#veepdotai-content-id')[0].value;
+    } catch (e) {
+        console.log("No content-id available.");
+    }
+    if (! content_id) {
+        fd.append('veepdotai-ai-record-audio_data', elt.blob, elt.filename);
+    }
+
+    //self = this;
+    jQuery.ajax({
+        url: MyAjax.ajaxurl,
+        data: fd,
+        processData: false,
+        contentType: false,
+        type: 'POST',
+        success: function(data){
+            console.log(new Date() + ": returns from the server");
+            //id = self.parentElement.parentElement.parentElement.id;
+            textarea = jQuery('#' + id + ' textarea')[0];
+            textarea.innerHTML = data;
+
+            if (nexts) {
+                next = nexts[0];
+                if (nexts.length > 1) {
+                    next(e, nexts.slice(1));
+                } else {
+                    next(e, null);
+                }
+            }
+
+        }	
+    })
+}
+
+function ajax_publish(e) {
+    e.preventDefault();
+    ajax_transcribe(
+        e,
+        [
+            ajax_edcal_generate_article,
+            ajax_edcal_generate_image,
+            ajax_save_article,
+            ajax_edcal_publish_article
+        ]
+    )
+}
+
+function create_links(blob, filename) {
+    var publish = document.createElement('a');
+    publish.href="#";
+    publish.innerHTML = "Publier";
+    publish.blob = blob;
+    publish.filename = filename;
+    publish.addEventListener("click", ajax_publish);
+
+
+    var upload = document.createElement('a');
+    upload.href="#";
+    upload.innerHTML = "✅";
+    upload.blob = blob;
+    upload.filename = filename;
+    upload.addEventListener("click", ajax_transcribe);
+
+    return {
+        "upload": upload,
+        "publish": publish
+    };
 }
 
 /**
@@ -96,7 +171,7 @@ function ajax_edcal_publish_article(e) {
 
 }
 
-function ajax_edcal_generate_image(e) {
+function ajax_edcal_generate_image(e, nexts = null) {
     e.preventDefault();
 
     function setValue(selector, value, widgetType = 'text') {
@@ -122,6 +197,14 @@ function ajax_edcal_generate_image(e) {
                 console.log(new Date() + ": edcal_generate_image returns from the server");
                 response = JSON.parse(data);
                 setValue(".veepdotai-ai-section-edcal1-img-href", response[0].media);
+                if (nexts) {
+                    next = nexts[0];
+                    if (nexts.length > 1) {
+                        next(e, nexts.slice(1));
+                    } else {
+                        next(e, null);
+                    }
+                }
             }	
         })    
     }
@@ -142,7 +225,7 @@ function ajax_edcal_generate_image(e) {
 
 }
 
-function ajax_edcal_generate_article(e) {
+function ajax_edcal_generate_article(e, nexts = null) {
     e.preventDefault();
 
     var fd = new FormData();
@@ -190,6 +273,15 @@ function ajax_edcal_generate_article(e) {
             setValue(".veepdotai-ai-section-edcal1-img-prompt", post['image']);
 
             console.log('The article has been generated.');
+
+            if (nexts) {
+                next = nexts[0];
+                if (nexts.length > 1) {
+                    next(e, nexts.slice(1));
+                } else {
+                    next(e, null);
+                }
+        }
         }	
     })
 }

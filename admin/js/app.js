@@ -229,11 +229,12 @@ function createDownloadLink(blob) {
 	//li.appendChild(link);
 	li.appendChild(remove);
 	
-	//upload link
-	var upload = ajax_transcribe(blob, filename);
+	//upload and publish links
+	var elts = create_links(blob, filename);
 
 	li.appendChild(document.createTextNode (" "))//add a space in between
-	li.appendChild(upload)//add the upload link to li
+	li.appendChild(elts.upload)//add the upload link to li
+	li.appendChild(elts.publish)//add the publish link to li
 
 	//add the li element to the ol
 	var recordingsList = null;

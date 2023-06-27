@@ -4,7 +4,7 @@
 <div class="wrap <?php esc_attr( $this->plugin_name.'-main-admin-site' ) ?>">
     <h2><?php esc_html_e(get_admin_page_title() . ' / Calendrier éditorial')?></h2>
     <hr>
-    <form method="post" action="">
+    <form id="veep_form" method="post" action="">
         <?php
             echo wp_kses_post( init_nonce() );
 
@@ -32,7 +32,7 @@
                     echo('<p><input id="veepdotai-content-id" type="text" placeholder="Type your content id" value=""/></p>');
                 }
             ?>
-            <p id="loadingDiv">Loading...</p>
+            <p id="loadingDiv" class="modal">Loading...</p>
 
             <?php
                 echo generate_button_escaped($pn, 'ai-save', __('Save'));

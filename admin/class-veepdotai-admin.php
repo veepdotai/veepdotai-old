@@ -126,7 +126,15 @@ class Veepdotai_Admin {
             $this->version,
             true
         );
-
+/*
+        wp_enqueue_script(
+            'jquery',
+            plugin_dir_url( __FILE__ ) . 'js/jquery.modal.min.js',
+            array(),
+            $this->version,
+            true
+        );
+*/
 	}
 
     /**

@@ -6,7 +6,7 @@
         <li><?php _e( 'If you need detailed information about the plugin, have a look at <a href="https://www.veep.ai/veep-user-guide/" target="_blank">the user guide</a>', $this->plugin_name ) ?></li>
     </ul>
     <div class="veep_configuration">
-        <form method="post" action="">
+        <form id="veep_form" method="post" action="">
             <?php
             
             wp_nonce_field( $this->plugin_name . '-main_admin_configuration', $this->plugin_name . '-main_admin_configuration_nonce' );

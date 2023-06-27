@@ -54,12 +54,6 @@
 			});			
 		}
 
-		try {
-			jQuery("#veep_id_vocal textarea")[0].setAttribute('readonly', 'readonly');
-		} catch (e) {
-			// We are not on the interview page
-		}
-
 		init_loading_page();
 		init_sections();
 
@@ -68,23 +62,26 @@
 })( jQuery );
 
 function init_loading_page() {
-	jQuery.modal.defaults = {
-		escapeClose: false,      // Allows the user to close the modal by pressing `ESC`
-		clickClose: false,       // Allows the user to close the modal by clicking the overlay
-		showClose: false,        // Shows a (X) icon/link in the top-right corner
-		fadeDuration: 250,     // Number of milliseconds the fade transition takes (null means no transition)
-		fadeDelay: 1.0          // Point during the overlay's fade-in that the modal begins to fade in (.5 = 50%, 1.5 = 150%, etc.)
-	};
 
 	var loading = jQuery('#loadingDiv');
 	jQuery(document)
 		.ajaxStart(function () {
+			jQuery.modal.defaults = {
+				escapeClose: false,      // Allows the user to close the modal by pressing `ESC`
+				clickClose: false,       // Allows the user to close the modal by clicking the overlay
+				showClose: false,        // Shows a (X) icon/link in the top-right corner
+				fadeDuration: 250,     // Number of milliseconds the fade transition takes (null means no transition)
+				fadeDelay: 1.0          // Point during the overlay's fade-in that the modal begins to fade in (.5 = 50%, 1.5 = 150%, etc.)
+			};
+			
 			console.log("Starting ajax call: " + (new Date()).toLocaleTimeString());
 			loading.modal();
 		})
 		.ajaxStop(function () {
 			console.log("Ending ajax call: " + (new Date()).toLocaleTimeString());
-			jQuery.modal.close();
+			if (jQuery.modal) {
+				jQuery.modal.close();
+			}
 		});
 }
 
