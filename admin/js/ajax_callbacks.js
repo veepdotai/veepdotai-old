@@ -36,7 +36,6 @@ function ajax_transcribe(blob, filename) {
                 id = self.parentElement.parentElement.parentElement.id;
                 textarea = jQuery('#' + id + ' textarea')[0];
                 textarea.innerHTML = data;
-                textarea.setAttribute('readonly', 'readonly');
             }	
         })
 
