@@ -68,13 +68,23 @@
 })( jQuery );
 
 function init_loading_page() {
-	var $loading = jQuery('#loadingDiv').hide();
+	jQuery.modal.defaults = {
+		escapeClose: false,      // Allows the user to close the modal by pressing `ESC`
+		clickClose: false,       // Allows the user to close the modal by clicking the overlay
+		showClose: false,        // Shows a (X) icon/link in the top-right corner
+		fadeDuration: 250,     // Number of milliseconds the fade transition takes (null means no transition)
+		fadeDelay: 1.0          // Point during the overlay's fade-in that the modal begins to fade in (.5 = 50%, 1.5 = 150%, etc.)
+	};
+
+	var loading = jQuery('#loadingDiv');
 	jQuery(document)
 		.ajaxStart(function () {
-			$loading.show();
+			console.log("Starting ajax call: " + (new Date()).toLocaleTimeString());
+			loading.modal();
 		})
 		.ajaxStop(function () {
-			$loading.hide();
+			console.log("Ending ajax call: " + (new Date()).toLocaleTimeString());
+			jQuery.modal.close();
 		});
 }
 
@@ -153,6 +163,33 @@ function init_loading_page() {
 
   }
 
+  	/**
+	 * Cleans objects
+	 * @param {*} eltName input or textarea
+	 */
+  	function cleanForm() {
+		  
+		function cleanElements(eltName) {
+			elts = jQuery(eltName);
+			console.log('There are ' + elts.length + ' elements.');
+			if (elts) {
+				elts.map(function(i) {
+					_name = elts[i].name;
+					_type = elts[i].type
+					if (_name
+							&& _name.startsWith('veepdotai-ai-')
+							&& ! /[\d]-prompt$/.test(_name)
+							&& 'submit' != _type) {
+						console.log('Setting ' + _name + ' to "".');
+						eltName == 'textarea' ? elts[i].innerHTML = "" : elts[i].value = "";
+					}
+				})
+			}
+		}
+
+		cleanElements('input');
+		cleanElements('textarea');
+	}
   /**
    * Voice synthesis 
    */

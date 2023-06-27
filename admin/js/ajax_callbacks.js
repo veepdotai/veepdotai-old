@@ -2,7 +2,7 @@ function ajax_transcribe(blob, filename) {
     var upload = document.createElement('a');
 
     upload.href="#";
-    upload.innerHTML = "✅";
+    upload.innerHTML = "✅ Publier";
     upload.addEventListener("click", function(e){
         e.preventDefault();
 

@@ -50,6 +50,7 @@ function disableButton(self, buttonName, disabled, label) {
 }
 
 function startRecording(e) {
+	cleanForm();
 	totalSeconds = 0;
 	pauseTimer = false;
 
@@ -185,6 +186,8 @@ function stopRecording(e) {
 function createDownloadLink(blob) {
 	
 	var url = URL.createObjectURL(blob);
+	var size = blob.size;
+	var sizeElt = document.createElement('span');
 	var au = document.createElement('audio');
 	var li = document.createElement('li');
 	var link = document.createElement('a');
@@ -200,7 +203,11 @@ function createDownloadLink(blob) {
 	//save to disk link
 	link.href = url;
 	link.download = filename + ".wav"; //download forces the browser to donwload the file using the  filename
-	link.innerHTML = "Save to disk";
+	link.innerHTML = "Save to disk (" + (size / 1024 / 1024).toFixed(2) + "MB)";
+
+	sizeElt.setAttribute('class', 'size');
+	sizeElt.innerHTML = size;
+	sizeElt.style = "display: none";
 
 	//save to disk link
 	remove.href = '';
@@ -212,10 +219,11 @@ function createDownloadLink(blob) {
 
 	
 	//add the new audio element to li
+	li.appendChild(sizeElt);
 	li.appendChild(au);
 	
 	//add the filename to the li
-	li.appendChild(document.createTextNode(filename + ".wav "))
+	li.appendChild(document.createTextNode(filename + ".wav (" + (size / 1024 / 1024).toFixed(3) + " MB)"))
 
 	//add the save to disk link to li
 	//li.appendChild(link);
