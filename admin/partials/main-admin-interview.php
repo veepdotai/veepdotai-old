@@ -5,7 +5,7 @@
 
     <?php echo generate_help_image('interview');?>
     <h2><?php esc_html_e(get_admin_page_title() . ' / Interview')?></h2>
-    <?php echo generate_switch_mode();?>
+    <?php /*echo generate_switch_mode();*/?>
 
     <form id="veep_form_interview" method="post" action="">
 
