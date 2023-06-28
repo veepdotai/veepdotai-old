@@ -32,9 +32,9 @@ class Veepdotai_Activator {
 	 * @since    1.0.0
 	 */
 	public static function activate() {
-		Veepdotai_Util::log('Activating Veepdotai plugin.');
+		Veepdotai_Util::log('debug', 'Activating Veepdotai plugin.');
 
-		Veepdotai_Util::log('Prepare to configure roles and caps.');
+		Veepdotai_Util::log('debug', 'Prepare to configure roles and caps.');
 		Veepdotai_Activator::create_roles_and_caps();
 		Veepdotai_Activator::initialize_categories();
 		//register_activation_hook( __FILE__, 'Veepdotai_Activator::create_roles_and_caps');
@@ -42,9 +42,9 @@ class Veepdotai_Activator {
 	}
 
 	public static function create_roles_and_caps() {
-		Veepdotai_Util::log('Configuring roles and caps 3.');
+		Veepdotai_Util::log('debug', 'Configuring roles and caps 3.');
 
-		Veepdotai_Util::log('Configuring Veepdotai_role_admin.');
+		Veepdotai_Util::log('debug', 'Configuring Veepdotai_role_admin.');
 		add_role(
 			'veepdotai_role_admin',
 			'Veepdotai Admin Role',
@@ -58,7 +58,7 @@ class Veepdotai_Activator {
 			),
 		);
 
-		Veepdotai_Util::log('Configuring Veepdotai_role_site.');
+		Veepdotai_Util::log('debug', 'Configuring Veepdotai_role_site.');
 		add_role(
 			'veepdotai_role_site',
 			'Veepdotai Site Role',
@@ -72,7 +72,7 @@ class Veepdotai_Activator {
 			),
 		);
 
-		Veepdotai_Util::log('Configuring Veepdotai_role_blog.');
+		Veepdotai_Util::log('debug', 'Configuring Veepdotai_role_blog.');
 		add_role(
 			'veepdotai_role_blog',
 			'Veepdotai Blog Role',
@@ -85,7 +85,7 @@ class Veepdotai_Activator {
 			),
 		);
 
-		Veepdotai_Util::log('Configuring Veepdotai_role_user.');
+		Veepdotai_Util::log('debug', 'Configuring Veepdotai_role_user.');
 		add_role(
 			'veepdotai_role_user',
 			'Veepdotai User Role',
@@ -97,7 +97,7 @@ class Veepdotai_Activator {
 			),
 		);
 
-		Veepdotai_Util::log('Configuring Veepdotai_role_advanced.');
+		Veepdotai_Util::log('debug', 'Configuring Veepdotai_role_advanced.');
 		add_role(
 			'veepdotai_role_advanced',
 			'Veepdotai Advanced Role',
@@ -110,7 +110,7 @@ class Veepdotai_Activator {
 			),
 		);
 
-		Veepdotai_Util::log('Configuring Veepdotai_role_agency.');
+		Veepdotai_Util::log('debug', 'Configuring Veepdotai_role_agency.');
 		add_role(
 			'veepdotai_role_agency',
 			'Veepdotai Agency Role',
@@ -130,18 +130,18 @@ class Veepdotai_Activator {
 		if ( $user && 'admin' == $user->user_login ) {
 			$username = $user->user_login;
 
-			Veepdotai_Util::log('Setting roles for: ' . $username . '.');
+			Veepdotai_Util::log('debug', 'Setting roles for: ' . $username . '.');
 
-			Veepdotai_Util::log('Setting veep admin role for: ' . $username . '.');
+			Veepdotai_Util::log('debug', 'Setting veep admin role for: ' . $username . '.');
 			$user->add_role( 'veepdotai_role_admin' );
 
-			Veepdotai_Util::log('Setting veep user role for: ' . $username . '.');
+			Veepdotai_Util::log('debug', 'Setting veep user role for: ' . $username . '.');
 			$user->add_role( 'veepdotai_role_user' );
 
-			Veepdotai_Util::log('Setting veep site role for: ' . $username . '.');
+			Veepdotai_Util::log('debug', 'Setting veep site role for: ' . $username . '.');
 			$user->add_role( 'veepdotai_role_site' );
 
-			Veepdotai_Util::log('Setting veep blog role for: ' . $username . '.');
+			Veepdotai_Util::log('debug', 'Setting veep blog role for: ' . $username . '.');
 			$user->add_role( 'veepdotai_role_blog' );
 		} 
 	}
