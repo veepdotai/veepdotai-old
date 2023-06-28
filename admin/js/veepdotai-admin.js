@@ -31,32 +31,9 @@
 
 	 $( window ).load(function() {
 
-		var last = "";
-	 	var input = jQuery.find("#context"); 
-		if (input && input.length > 0) {
-			input[0].addEventListener("keyup", function(e) {
-				if ('Enter' == e.key) {
-					last = "";
-				} else {
-					var re = /exécute/i;
-
-					// Gets the last line because the user may have been back and insert a char somewhere
-					var lines = this.value.split('\n');
-					last = lines[lines.length - 1];
-
-					if (last.match(re)) {
-						console.log("match exécute");
-						window.location = "https://www.google.com";
-					} else {
-						console.log(e.key);
-					}
-				}
-			});			
-		}
-
 		init_loading_page();
 		init_sections();
-
+		toggleMode();
 	});
 
 })( jQuery );
@@ -73,7 +50,7 @@ function init_loading_page() {
 				fadeDuration: 250,     // Number of milliseconds the fade transition takes (null means no transition)
 				fadeDelay: 1.0          // Point during the overlay's fade-in that the modal begins to fade in (.5 = 50%, 1.5 = 150%, etc.)
 			};
-			
+
 			console.log("Starting ajax call: " + (new Date()).toLocaleTimeString());
 			loading.modal();
 		})
@@ -187,128 +164,41 @@ function init_loading_page() {
 		cleanElements('input');
 		cleanElements('textarea');
 	}
-  /**
-   * Voice synthesis 
-   */
-  function getVoice(lang) {
-    let voices = getVoices();
-	let voice = null;
-	for(let i = 0; i < voices.length; i++ ) {
-		if (lang == voices[i].lang) {
-			console.log('Found voice: ' + lang);
-			voice = voices[i];
-			break;
-		}
-	}
-
-	return voice;
-  }
-
-  function getVoices() {
-    let voices = speechSynthesis.getVoices();
-    if(!voices.length){
-      // some time the voice will not be initialized so we can call spaek with empty string
-      // this will initialize the voices 
-      let utterance = new SpeechSynthesisUtterance("");
-      speechSynthesis.speak(utterance);
-      voices = speechSynthesis.getVoices();
-    }
-    return voices;
-  }
-  
-  function speak(_text, voice, rate = 1, pitch = 1, volume = 1) {
-	let text = "";
-	if (_text == undefined || _text == null || _text == "") {
-		text = "Ceci est un test."
-	} else {
-		text = _text;
-	}
-
-	console.log('Text: ' + text);
-	let voiceContext = new SpeechSynthesisUtterance();
-    voiceContext.volume = volume; // From 0 to 1
-    voiceContext.rate = rate; // From 0.1 to 10
-    voiceContext.pitch = pitch; // From 0 to 2
-    voiceContext.text = text;
-    voiceContext.lang = 'fr-FR';
-    voiceContext.lang = 'Thomas';
-    voiceContext.voice = getVoice('fr-FR');
-    speechSynthesis.speak(voiceContext);  
-  }
-  
-  function start(text = '') {
-    console.log('Focus');
- 
-    if ('speechSynthesis' in window) {
-        console.log('Speech Synthesis is Supported 😞'); 
-
-        let voices = getVoices();
-        let rate = 1, pitch = 1, volume = 1;
-		let talks = text.split(/\.|\?|\!|\.{3}/);
-		for (let i = 0; i < talks.length; i++) {
-			if (talks[i] != "") {
-				console.log('Talks[' + i + ']: ' + talks[i]);
-				speak(talks[i], voices[5], rate, pitch, volume );
-			}
-		}
-    } else {
-        console.log('Speech Synthesis Not Supported 😞'); 
-    }
-  }
 
   function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 
-  /*
-  var recognition = null;
-  var target = null;
-  if (/interview/.test(window.location)) {	
-    recognition = new webkitSpeechRecognition();
-	recognition.continuous = true;
-	recognition.interimResults = true;
-	recognition.onstart = () => {
-		console.log("Speech recognition service has started.");
-	};
-
-	recognition.onend = () => {
-		console.log("Speech recognition service disconnected. Restarting.");
-		recognition.start();
-	};
-
-	recognition.onresult = function(event) {
-		if (target != null) {
-			if (target.nodeName == 'INPUT') {
-				target.value = "";
-			} else {
-				target.innerHTML = "";
-			}
-			var msg = null;
-			for(var i=0; i < event.results.length; i++){
-			console.log(i + "/" + event.results.length + ": " + event.results[i])
-				msg = event.results[i][0].transcript;
-				if (target.nodeName == 'INPUT') {
-					target.value += msg;
-				} else {
-					target.innerHTML += msg;
-				}
-			}	
-		}
+ function toggleMode() {
+	let setToNone;
+	if ('none' == jQuery('.veep_actions')[0].style.display) {
+		setToNone = false;
+	} else {
+		setToNone = true;
+	}
+	
+	/* On editorial calendar */
+	actions = jQuery('.veep_actions')[0];
+	if (! setToNone) {
+		actions.style.display = actions.toggle;
+	} else {
+		actions.toggle = actions.style.display;
+		actions.style.display = 'none';
 	}
 
-	recognition.start = function(event) {};
+	article = jQuery('#veep_id_article_menu')[0];
+	if (! setToNone) {
+		article.style.display = article.toggle;
+	} else {
+		article.toggle = article.style.display;
+		article.style.display = 'none';		
+	}
 
-	recognition.start();
-  }
-
-  function start_listening(output) {
-	  target = output;
-	  recognition.stop();
-  }
-
-  function stop(obj) {
-	console.log("Stopping...");
-	recognition.stop();
-  }
-
-*/
+	prompt = jQuery('.veepdotai-ai-section-edcal0-prompt')[0];
+	if (! setToNone) {
+		prompt.parentElement.style.display = prompt.toggle;
+	} else {
+		prompt.toggle = prompt.parentElement.style.display;
+		prompt.parentElement.style.display = 'none';
+	}
+ }
