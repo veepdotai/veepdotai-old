@@ -145,8 +145,18 @@ function cleanForm() {
 		}
 	}
 
-	cleanElements('input');
-	cleanElements('textarea');
+	if (jQuery('#veep_form_edcal')[0]) {
+		cleanElements('input');
+		cleanElements('textarea');
+	} else if (jQuery('#veep_form_interview')[0]) {
+		veep_sections = jQuery('.veep_section');
+		// We look for the current one
+		section = veep_sections.filter(i => veep_sections[i].style.display == 'block')[0];
+		jQuery('#' + section.id + ' textarea')[0].value = "";
+	} else if (jQuery('#veep_form_site')[0]) {
+		cleanElements('input');
+		cleanElements('textarea');
+	}
 }
 
 function sleep(ms) {
@@ -163,12 +173,14 @@ function toggleMode() {
 				elt = elts[0];
 			}
 
-			if (elt.toggle || elt.toggle == '') {
-				elt.style.display = elt.toggle;
-				elt.toggle = null;
-			} else {
-				elt.toggle = elt.style.display || '';
-				elt.style.display = 'none';
+			if (elt) {
+				if (elt.toggle || elt.toggle == '') {
+					elt.style.display = elt.toggle;
+					elt.toggle = null;
+				} else {
+					elt.toggle = elt.style.display || '';
+					elt.style.display = 'none';
+				}
 			}
 		}
 		return;
@@ -177,6 +189,7 @@ function toggleMode() {
 	if (document.getElementById('veep_form_edcal')) {
 		/* On editorial calendar */
 		setDisplay(jQuery('.veep_actions'));
+		setDisplay(jQuery('.transcribe'));
 		setDisplay(jQuery('#veep_id_article_menu'));
 		setDisplay(jQuery('.veepdotai-ai-section-edcal0-prompt'), true);
 	} else if (document.getElementById('veep_form_edstrat')) {

@@ -226,10 +226,35 @@ ul.tabs_questions {
     padding: 10px;
   }
 
-<<<<<<< HEAD
 /* Switch widget end */
 
 #toggle_div span {
     padding-left: 5px;
 }
-/* Switch widget end */
+
+#help img.help-icon {
+    width: 32px;
+    float: right;
+}
+
+/* Interview */
+#veep_form_interview a.publish {
+    display: none;
+}
+
+/* Editorial Calendar */
+/*
+#veep_form_edcal a.transcribe {
+    display: none;
+}
+*/
+/* Help system */
+#help-content ul {
+    list-style-type: disc;
+    margin-left: 20px;
+}
+
+#help-content .pre {
+    background-color: linen;
+    padding: 10px;
+}

@@ -1,5 +1,5 @@
 function ajax_save_interview() {
-    let form = document.getElementById("veep_form");
+    let form = document.getElementById("veep_form_interview");
     let fd = new FormData(form );
     fd.append('action', 'save_interview');
     fd.append('security', MyAjax.security);
@@ -17,8 +17,8 @@ function ajax_save_interview() {
 }
 
 function ajax_save_article(e, nexts) {
-    let form = document.getElementById("veep_form");
-    let fd = new FormData(form );
+    let form = document.getElementById("veep_form_edcal");
+    let fd = new FormData(form);
     fd.append('action', 'save_article');
     fd.append('security', MyAjax.security);
 
@@ -81,6 +81,7 @@ function ajax_transcribe(e, nexts) {
             //id = self.parentElement.parentElement.parentElement.id;
             textarea = jQuery('#' + id + ' textarea')[0];
             textarea.innerHTML = data;
+            textarea.value = data;
 
             if (nexts) {
                 next = nexts[0];
@@ -110,14 +111,15 @@ function ajax_publish(e) {
 
 function create_links(blob, filename) {
     var publish = document.createElement('a');
+    publish.classList.add('publish');
     publish.href="#";
     publish.innerHTML = "Publier";
     publish.blob = blob;
     publish.filename = filename;
     publish.addEventListener("click", ajax_publish);
 
-
     var upload = document.createElement('a');
+    upload.classList.add('transcribe');
     upload.href="#";
     upload.innerHTML = "✅";
     upload.blob = blob;
