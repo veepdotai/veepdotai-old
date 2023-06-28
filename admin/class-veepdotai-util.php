@@ -376,6 +376,10 @@ class Veepdotai_Util {
         return $section;
     }
 
+    public static function get_language() {
+        return 'fr_FR';
+    }
+
     public static function fix_json($raw) {
         $i = 1;
         $text = (new \Delight\Str\Str($raw))->normalizeLineEndings("EOL");

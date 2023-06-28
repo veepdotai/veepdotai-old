@@ -1,6 +1,12 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.2/jquery.modal.min.css" integrity="sha512-T3VL1q6jMUIzGLRB9z86oJg9PgF7A55eC2XkB93zyWSqQw3Ju+6IEJZYBfT7E9wOHM7HCMCOZSpcssxnUn6AeQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.2/jquery.modal.min.js" integrity="sha512-ztxZscxb55lKL+xmWGZEbBHekIzy+1qYKHGZTWZYH1GUwxy0hiA18lW6ORIMj4DHRgvmP/qGcvqwEyFFV7OYVQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
 <div class="wrap <?php esc_attr( $this->plugin_name.'-main-admin-site' ) ?>">
+
+    <?php echo generate_help_image('site');?>
     <h2><?php esc_html_e(get_admin_page_title() . ' / Site')?></h2>
     <?php echo generate_switch_mode();?>
+
     <form id="veep_form_site" method="post" action="">
         <?php
             echo wp_kses_post( init_nonce() );

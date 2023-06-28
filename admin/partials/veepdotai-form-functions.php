@@ -7,6 +7,25 @@ function init_nonce() {
     return wp_nonce_field( $pn . '-main_admin_site', $pn . '-main_admin_site_nonce' );
 }
 
+function generate_help_image($page) {
+    $lang = Veepdotai_Util::get_language();
+    $final_page = $page . '-' . $lang . '.md';
+    $markdown_content = file_get_contents(VEEPDOTAI_PLUGIN_DIR . '/admin/help/' . $final_page);
+
+    $content = Veepdotai_Util::generate_html_from_markdown($markdown_content);
+    $help_image = '<div id="help">'
+//                        . '<a href="' . VEEPDOTAI_PLUGIN_URL . '/admin/help/'. $page . '.html" rel="modal:open">'
+                        . '<a href="#help-content" rel="modal:open">'
+                        . '<img class="help-icon" src="' . plugins_url() . '/' . VEEPDOTAI_PLUGIN_NAME .'/admin/images/help-support.256.png" />'
+                        . '</a>'
+                        . '<div id="help-content" class="modal">'
+                            . $content
+                        . '</div>'
+                    . '</div>';
+
+    return $help_image;
+}
+
 function generate_switch_mode() {
     $switch_button = '<div id="toggle_div">'
                         . '<label class="switch">'

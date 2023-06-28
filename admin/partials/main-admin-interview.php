@@ -2,10 +2,12 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.2/jquery.modal.min.js" integrity="sha512-ztxZscxb55lKL+xmWGZEbBHekIzy+1qYKHGZTWZYH1GUwxy0hiA18lW6ORIMj4DHRgvmP/qGcvqwEyFFV7OYVQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 <div class="wrap <?php esc_attr_e( $this->plugin_name.'-main-admin-interview' ) ?>">
+
+    <?php echo generate_help_image('interview');?>
     <h2><?php esc_html_e(get_admin_page_title() . ' / Interview')?></h2>
-    <hr>
-        <!-- input type="button" value="Je suis prêt" onclick="start(document.getElementById('context').innerHTML)"/-->
-        <form id="veep_form" method="post" action="">
+    <?php echo generate_switch_mode();?>
+
+    <form id="veep_form_interview" method="post" action="">
 
         <?php
             echo wp_kses_post( init_nonce() );
