@@ -6,8 +6,8 @@
 
 <div class="wrap <?php esc_attr( $this->plugin_name.'-main-admin-editorial_strategy' ) ?>">
     <h2><?php esc_html_e(get_admin_page_title() . ' / Stratégie éditoriale')?></h2>
-    <hr>
-    <form id="veep_form" method="post" action="">
+    <?php echo generate_switch_mode();?>
+    <form id="veep_form_edstrat" method="post" action="">
         <?php
             echo wp_kses_post( init_nonce() );
 
@@ -17,23 +17,14 @@
 
         ?>
 
+
         <div class="veep_actions">
-            <?php
-                if (in_array('veepdotai_role_admin', wp_get_current_user()->roles)) {
-                    echo('<p><input id="veepdotai-content-id" type="text" placeholder="Type your content id" value=""/></p>');
-                }
-            ?>
-
+            <?php echo('<p><input id="veepdotai-content-id" type="text" placeholder="Type your content id" value=""/></p>');?>
             <p id="loadingDiv">Loading...</p>
-
             <?php
                 echo generate_button_escaped($pn, 'ai-save', __( 'Save', 'veepdotai' ));
-                if (! in_array('veepdotai_role_user', wp_get_current_user()->roles)) {
-                    echo generate_button_escaped($pn, 'ai-generate-editorial-strategy', __( 'Generate editorial strategy', 'veepdotai' ));
-                }
-                echo generate_button_escaped($pn, 'ai-generate-all', __('Generate all', 'veepdotai' ));
+                echo generate_button_escaped($pn, 'ai-generate-editorial-strategy', __( 'Generate editorial strategy', 'veepdotai' ));
             ?>
-
         </div>
     </form>
     <script>

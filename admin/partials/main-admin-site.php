@@ -1,7 +1,7 @@
 <div class="wrap <?php esc_attr( $this->plugin_name.'-main-admin-site' ) ?>">
     <h2><?php esc_html_e(get_admin_page_title() . ' / Site')?></h2>
-    <hr>
-    <form id="veep_form" method="post" action="">
+    <?php echo generate_switch_mode();?>
+    <form id="veep_form_site" method="post" action="">
         <?php
             echo wp_kses_post( init_nonce() );
 

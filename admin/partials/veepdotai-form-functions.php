@@ -7,6 +7,18 @@ function init_nonce() {
     return wp_nonce_field( $pn . '-main_admin_site', $pn . '-main_admin_site_nonce' );
 }
 
+function generate_switch_mode() {
+    $switch_button = '<div id="toggle_div">'
+                        . '<label class="switch">'
+                            . '<input type="checkbox" checked onclick="toggleMode()">'
+                            . '<span class="slider round"></span>'
+                        . '</label>'
+                        . '<span>Beginner/Expert</span>'
+                    . '</div>';
+
+    return $switch_button;
+}
+
 function generate_button_escaped($pn, $button_id, $button_name) {
     $input_button = '<input class="button-primary" type="submit" name="'
                     . esc_attr( $pn . '-' . $button_id )
@@ -69,7 +81,7 @@ function display_escaped(bool $enable_voice, string $legend, string $field_name,
 
     $common_attrs_escaped = "$type $name $class";
     if ($_type == "textarea") {
-        $style = 'style="width: 100%; height: 101px;"';
+        $style = 'style="width: 100%; height: 200px;"';
         $field_element_escaped = "<textarea $style $common_attrs_escaped >"
                                     . esc_textarea( $value )
                                     . "</textarea>" ;
@@ -109,4 +121,10 @@ function generate_context($context) {
                 . '</div>';
 
     return $content;
+}
+
+function reset_forms() {
+    for ($i = 0; $i < 4; $i++) {
+        $this->update_option_if_set($post, $pn, 'ai-section' . $i . '-text-interview');
+    }
 }

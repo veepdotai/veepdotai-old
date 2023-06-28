@@ -3,13 +3,12 @@
 
 <div class="wrap <?php esc_attr( $this->plugin_name.'-main-admin-site' ) ?>">
     <h2><?php esc_html_e(get_admin_page_title() . ' / Calendrier éditorial')?></h2>
-    <hr>
-    <form id="veep_form" method="post" action="">
+    <?php echo generate_switch_mode();?>
+    <form id="veep_form_edcal" method="post" action="">
         <?php
             echo wp_kses_post( init_nonce() );
 
             echo generate_editorial_calendar_selector('editorial-calendar-question');
-
             echo generate_editorial_calendar_tabs_escaped(get_pages());
 
             echo wp_kses_post( generate_editorial_calendar_vocal_form_section(true, 'vocal', 'Post vocal', 0) );

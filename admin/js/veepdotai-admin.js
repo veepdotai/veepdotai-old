@@ -9,20 +9,6 @@
 	 * $ function reference has been prepared for usage within the scope
 	 * of this function.
 	 *
-	 * This enables you to define handlers, for when the DOM is ready:
-	 *
-	 * $(function() {
-	 *
-	 * });
-	 *
-	 * When the window is loaded:
-	 *
-	 * $( window ).load(function() {
-	 *
-	 * });
-	 *
-	 * ...and/or other possibilities.
-	 *
 	 * Ideally, it is not considered best practise to attach more than a
 	 * single DOM-ready or window-load handler for a particular page.
 	 * Although scripts in the WordPress core, Plugins and Themes may be
@@ -31,38 +17,14 @@
 
 	 $( window ).load(function() {
 
-		var last = "";
-	 	var input = jQuery.find("#context"); 
-		if (input && input.length > 0) {
-			input[0].addEventListener("keyup", function(e) {
-				if ('Enter' == e.key) {
-					last = "";
-				} else {
-					var re = /exécute/i;
-
-					// Gets the last line because the user may have been back and insert a char somewhere
-					var lines = this.value.split('\n');
-					last = lines[lines.length - 1];
-
-					if (last.match(re)) {
-						console.log("match exécute");
-						window.location = "https://www.google.com";
-					} else {
-						console.log(e.key);
-					}
-				}
-			});			
-		}
-
 		init_loading_page();
 		init_sections();
-
+		toggleMode();
 	});
 
 })( jQuery );
 
 function init_loading_page() {
-
 	var loading = jQuery('#loadingDiv');
 	jQuery(document)
 		.ajaxStart(function () {
@@ -73,7 +35,7 @@ function init_loading_page() {
 				fadeDuration: 250,     // Number of milliseconds the fade transition takes (null means no transition)
 				fadeDelay: 1.0          // Point during the overlay's fade-in that the modal begins to fade in (.5 = 50%, 1.5 = 150%, etc.)
 			};
-			
+
 			console.log("Starting ajax call: " + (new Date()).toLocaleTimeString());
 			loading.modal();
 		})
@@ -88,13 +50,13 @@ function init_loading_page() {
 /**
  * Init tabs to make form filling easier
  */
-  function init_sections() {
+function init_sections() {
 	if (jQuery('.veep_section').length > 0) {
 		toggle_display(jQuery('.veep_section')[0].id);
 	}
-  }
+}
 
-  function hide_sections() {
+function hide_sections() {
 	sections = jQuery('.veep_section');
 	if (sections) {
 		menus = jQuery('ul.tabs_questions li');
@@ -108,9 +70,9 @@ function init_loading_page() {
 			}
 		}
 	}
-  }
+}
 
-  function toggle_display(eltName) {
+function toggle_display(eltName) {
 	hide_sections();
 
 	try {
@@ -127,12 +89,12 @@ function init_loading_page() {
 		// These elements don't exist. Just ignore them.
 		// Interesting when in vocal or in entretien page.
 	}
-  }
+}
 
-  /**
-   * Prompts helper
-   */
-  function fillWithSameValues(o) {
+/**
+ * Prompts helper
+ */
+function fillWithSameValues(o) {
 	function getValueByClassName(className) {
 		return document.getElementsByClassName(className)[0].value;
 	}
@@ -157,158 +119,79 @@ function init_loading_page() {
 			setValueByClassName(cn + 'post', '');
 		}
 	}
+}
 
-  }
-
-  	/**
-	 * Cleans objects
-	 * @param {*} eltName input or textarea
-	 */
-  	function cleanForm() {
-		  
-		function cleanElements(eltName) {
-			elts = jQuery(eltName);
-			console.log('There are ' + elts.length + ' elements.');
-			if (elts) {
-				elts.map(function(i) {
-					_name = elts[i].name;
-					_type = elts[i].type
-					if (_name
-							&& _name.startsWith('veepdotai-ai-')
-							&& ! /[\d]-prompt$/.test(_name)
-							&& 'submit' != _type) {
-						console.log('Setting ' + _name + ' to "".');
-						eltName == 'textarea' ? elts[i].innerHTML = "" : elts[i].value = "";
-					}
-				})
-			}
-		}
-
-		cleanElements('input');
-		cleanElements('textarea');
-	}
-  /**
-   * Voice synthesis 
-   */
-  function getVoice(lang) {
-    let voices = getVoices();
-	let voice = null;
-	for(let i = 0; i < voices.length; i++ ) {
-		if (lang == voices[i].lang) {
-			console.log('Found voice: ' + lang);
-			voice = voices[i];
-			break;
-		}
-	}
-
-	return voice;
-  }
-
-  function getVoices() {
-    let voices = speechSynthesis.getVoices();
-    if(!voices.length){
-      // some time the voice will not be initialized so we can call spaek with empty string
-      // this will initialize the voices 
-      let utterance = new SpeechSynthesisUtterance("");
-      speechSynthesis.speak(utterance);
-      voices = speechSynthesis.getVoices();
-    }
-    return voices;
-  }
-  
-  function speak(_text, voice, rate = 1, pitch = 1, volume = 1) {
-	let text = "";
-	if (_text == undefined || _text == null || _text == "") {
-		text = "Ceci est un test."
-	} else {
-		text = _text;
-	}
-
-	console.log('Text: ' + text);
-	let voiceContext = new SpeechSynthesisUtterance();
-    voiceContext.volume = volume; // From 0 to 1
-    voiceContext.rate = rate; // From 0.1 to 10
-    voiceContext.pitch = pitch; // From 0 to 2
-    voiceContext.text = text;
-    voiceContext.lang = 'fr-FR';
-    voiceContext.lang = 'Thomas';
-    voiceContext.voice = getVoice('fr-FR');
-    speechSynthesis.speak(voiceContext);  
-  }
-  
-  function start(text = '') {
-    console.log('Focus');
- 
-    if ('speechSynthesis' in window) {
-        console.log('Speech Synthesis is Supported 😞'); 
-
-        let voices = getVoices();
-        let rate = 1, pitch = 1, volume = 1;
-		let talks = text.split(/\.|\?|\!|\.{3}/);
-		for (let i = 0; i < talks.length; i++) {
-			if (talks[i] != "") {
-				console.log('Talks[' + i + ']: ' + talks[i]);
-				speak(talks[i], voices[5], rate, pitch, volume );
-			}
-		}
-    } else {
-        console.log('Speech Synthesis Not Supported 😞'); 
-    }
-  }
-
-  function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  }
-
-  /*
-  var recognition = null;
-  var target = null;
-  if (/interview/.test(window.location)) {	
-    recognition = new webkitSpeechRecognition();
-	recognition.continuous = true;
-	recognition.interimResults = true;
-	recognition.onstart = () => {
-		console.log("Speech recognition service has started.");
-	};
-
-	recognition.onend = () => {
-		console.log("Speech recognition service disconnected. Restarting.");
-		recognition.start();
-	};
-
-	recognition.onresult = function(event) {
-		if (target != null) {
-			if (target.nodeName == 'INPUT') {
-				target.value = "";
-			} else {
-				target.innerHTML = "";
-			}
-			var msg = null;
-			for(var i=0; i < event.results.length; i++){
-			console.log(i + "/" + event.results.length + ": " + event.results[i])
-				msg = event.results[i][0].transcript;
-				if (target.nodeName == 'INPUT') {
-					target.value += msg;
-				} else {
-					target.innerHTML += msg;
+/**
+ * Cleans objects
+ * @param {*} eltName input or textarea
+ */
+function cleanForm() {
+		
+	function cleanElements(eltName) {
+		elts = jQuery(eltName);
+		console.log('There are ' + elts.length + ' elements.');
+		if (elts) {
+			elts.map(function(i) {
+				_name = elts[i].name;
+				_type = elts[i].type
+				if (_name
+						&& _name.startsWith('veepdotai-ai-')
+						&& ! /[\d]-prompt$/.test(_name)
+						&& 'submit' != _type) {
+					console.log('Setting ' + _name + ' to "".');
+					eltName == 'textarea' ? elts[i].innerHTML = "" : elts[i].value = "";
 				}
-			}	
+			})
 		}
 	}
 
-	recognition.start = function(event) {};
+	cleanElements('input');
+	cleanElements('textarea');
+}
 
-	recognition.start();
-  }
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
 
-  function start_listening(output) {
-	  target = output;
-	  recognition.stop();
-  }
+function toggleMode() {
+	function setDisplay(elts, parentElement = false) {
+		if (elts) {
+			let elt;
+			if (parentElement) {
+				elt = elts[0].parentElement;
+			} else {
+				elt = elts[0];
+			}
 
-  function stop(obj) {
-	console.log("Stopping...");
-	recognition.stop();
-  }
+			if (elt.toggle || elt.toggle == '') {
+				elt.style.display = elt.toggle;
+				elt.toggle = null;
+			} else {
+				elt.toggle = elt.style.display || '';
+				elt.style.display = 'none';
+			}
+		}
+		return;
+	}
+	
+	if (document.getElementById('veep_form_edcal')) {
+		/* On editorial calendar */
+		setDisplay(jQuery('.veep_actions'));
+		setDisplay(jQuery('#veep_id_article_menu'));
+		setDisplay(jQuery('.veepdotai-ai-section-edcal0-prompt'), true);
+	} else if (document.getElementById('veep_form_edstrat')) {
+		setDisplay(jQuery('#veepdotai-content-id'));
+		setDisplay(jQuery('.veepdotai-ai-section-edstrat0-prompt'), true);
+	} else if (document.getElementById('veep_form_site')) {	
+		setDisplay(jQuery('.veep_actions input[name="veepdotai-ai-transform"]'));
+		setDisplay(jQuery('.veep_actions input[name="veepdotai-ai-generate-images"]'));
+		setDisplay(jQuery('.veep_actions input[name="veepdotai-ai-generate-site"]'));
+		setDisplay(jQuery('.veep_actions input[name="veepdotai-ai-generate-pages"]'));
 
-*/
+		for (i = 0; i < 4; i++) {
+			setDisplay(jQuery('.veepdotai-ai-section' + i + '-img-href'), true);
+			setDisplay(jQuery('.veepdotai-ai-section' + i + '-img-alt'), true);
+			setDisplay(jQuery('.veepdotai-ai-section' + i + '-cta-href'), true);
+		}
+	}
+}

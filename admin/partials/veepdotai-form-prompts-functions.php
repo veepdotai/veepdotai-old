@@ -25,12 +25,13 @@ function generate_prompt_form_section($enable_voice, $intent, $section_title, in
     $section_pre = '<p id="context-' . $num_section . '" class="veep_context veep_context_pre">' . $context . '</p>'
                 . display_escaped($enable_voice, "Pré-prompt", "ai-section" . $num_section . "-text-prompt-pre", "textarea", true);
 
+/*
     $section_post = '<p id="context-' . $num_section . '" class="veep_context veep_context_post">' . $context . '</p>'
     . display_escaped($enable_voice, "Post-prompt", "ai-section" . $num_section . "-text-prompt-post", "textarea", true);
-
+*/
     $section = $section_head
                 . $section_pre
-                . $section_post
+//                . $section_post
                 . '</div>';
 
     return $section;
