@@ -1,2 +1,5 @@
-These 3 files must replace the ones in PHPHtmlParser so it is possible to use HTML comments (<!-- -->) typically used in wordpress by gutenberg. 
+These files contains slight updates:
+
+* so PHPHtmlParser provides comment support
+* so wonolog Log libraries work with php8.1
 
