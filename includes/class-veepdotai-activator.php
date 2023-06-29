@@ -211,7 +211,5 @@ class Veepdotai_Activator {
 			);
 			$customers_cat = wp_insert_category($cat_defaults);
 		}
-
 	}
-
 }
