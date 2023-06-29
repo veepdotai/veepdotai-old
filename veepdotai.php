@@ -16,7 +16,7 @@
  * Plugin Name:       Veepdotai
  * Plugin URI:        https://www.veep.ai
  * Description:       Veepdotai is a project to create a complete autonomous virtual presence through voice and AI (ChatGPT).
- * Version:           1.4.1
+ * Version:           1.4.6
  * Requires at least: 6.0
  * Requires PHP:      8.0
  * Author:            Jean-Christophe Kermagoret
@@ -41,6 +41,10 @@ You should have received a copy of the GNU General Public License
 along with veepdotai. If not, see {URI to Plugin License}.
 */
 
+use Inpsyde\Wonolog;
+use Monolog\Handler\NativeMailerHandler;
+use Monolog\Logger;
+
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -61,7 +65,9 @@ function veepdotai_load_textdomain() {
 define( 'VEEPDOTAI_VERSION', '1.0.0' );
 define( 'VEEPDOTAI_PLUGIN_NAME', 'veepdotai' );
 define( 'VEEPDOTAI_PLUGIN_DIR', plugin_dir_path( __FILE__ ));
+define( 'VEEPDOTAI_DATA_URL', site_url() . '/wp-content/data/veepdotai');
 define( 'VEEPDOTAI_DATA_DIR', WP_CONTENT_DIR . '/data/veepdotai');
+define( 'VEEPDOTAI_PLUGIN_URL', plugins_url() . '/' . VEEPDOTAI_PLUGIN_NAME);
 
 /**
  * The code that runs during plugin activation.
@@ -117,5 +123,13 @@ function run_veepdotai() {
 	$plugin->run();
 
 }
+
+if ( ! defined( 'Inpsyde\Wonolog\LOG' ) ) {
+    return;
+}
+
+// Tell the default handler to use the given directory for logs.
+putenv( 'WONOLOG_DEFAULT_HANDLER_ROOT_DIR=/tmp/logs' );
+Wonolog\bootstrap();
 
 run_veepdotai();
