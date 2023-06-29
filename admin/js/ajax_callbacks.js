@@ -181,6 +181,7 @@ function ajax_edcal_generate_image(e, nexts = null) {
         try {
             if ("textarea" === widgetType) {
                 jQuery(selector)[0].innerHTML = value.replace(/EOL/g,'\n');
+                jQuery(selector)[0].value = jQuery(selector)[0].innerHTML;
             } else {
                 jQuery(selector)[0].value = value;
             }
