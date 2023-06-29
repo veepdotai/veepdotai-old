@@ -52,6 +52,7 @@ class Veepdotai_Admin {
 
 	private function load_dependencies() {
 		//require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-veep-loader.php';
+		require plugin_dir_path( __FILE__ ) . './class-veepdotai-admin-getting-started.php';
 		require plugin_dir_path( __FILE__ ) . './class-veepdotai-admin-configuration.php';
 		//require plugin_dir_path( __FILE__ ) . './class-veepdotai-admin-menu.php';
 		require plugin_dir_path( __FILE__ ) . './class-veepdotai-admin-interview.php';
@@ -154,6 +155,15 @@ class Veepdotai_Admin {
 
         add_submenu_page(
             $this->plugin_name,
+            __( 'Veepdotai', "veepdotai"  ),
+            __( 'Getting started', "veepdotai"  ),
+            'veepdotai',
+            $this->plugin_name.'-veepdotai-getting-started',
+            array($this, 'main_admin_submenu_getting_started_callback')
+        );
+
+        add_submenu_page(
+            $this->plugin_name,
             __( 'Veepdotai', "veepdotai" ),
             __( 'Configuration', "veepdotai" ),
             'veepdotai_configure',
@@ -240,6 +250,15 @@ class Veepdotai_Admin {
 
     public function main_admin_menu_callback() {
         include( 'partials/main-admin-home.php' );
+    }
+
+    /**
+     * Render the main admin menu and save data to the db
+     *
+     * @since  1.0.0
+     */
+    public function main_admin_submenu_getting_started_callback() {
+        (new Veepdotai_Admin_Getting_Started( $this->plugin_name, $this->version ))->manage_action();
     }
 
     /**

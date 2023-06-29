@@ -73,6 +73,8 @@ Class Veepdotai_Admin_Site {
             Veepdotai_Util::go_to_url( $page_url );
         } elseif (isset($vp[$pn .'-ai-generate-all'])) {
             $page_url = $self->generate_all($vp);
+        } elseif (isset($vp[$pn .'-ai-transform-generate-all'])) {
+            $page_url = $self->transform_generate_all($vp);
         }
 
         if ($page_url) {
@@ -472,7 +474,34 @@ Class Veepdotai_Admin_Site {
     /**
      * 
      */
+    public function extract_create_current_page($post) {
+        //echo "<p>Extracting data from the interview thanks to AI.</p>";
+        $page = $this->improve($post);
+        sleep(2);
+        
+        Veepdotai_Util::go_to_url($page_home);
+    }
+
+    /**
+     * 
+     */
     public function generate_all($post) {
+        //echo "<p>Getting images extracted data.</p>";
+        $page = $this->generate_images_from_prompts($post);
+
+        //echo "<p>Generating home page from the extracted data.</p>";
+        $page_home = $this->generate_page_from_template($post);
+
+        //echo "<p>Generating pages, related to the home page, from the extracted data.</p>";
+        $page = $this->generate_pages_from_section_informations($post);
+
+        Veepdotai_Util::go_to_url($page_home);
+    }
+
+    /**
+     * 
+     */
+    public function transform_generate_all($post) {
         //echo "<p>Extracting data from the interview thanks to AI.</p>";
         $page = $this->improve($post);
         sleep(2);

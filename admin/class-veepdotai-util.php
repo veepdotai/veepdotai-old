@@ -392,6 +392,11 @@ class Veepdotai_Util {
         Veepdotai_Util::log('debug', "$i. ############\n" . $string);
         $i++;
         
+        // ,, => , because it breaks json format
+        $string = preg_replace( '/,+/', ',', $string );
+        Veepdotai_Util::log('debug', "$i. ############\n" . $string);
+        $i++;
+
         // ^EOL{|[
         $string = preg_replace('/(' . $blank_chars . ')*{(' . $blank_chars . ')*/', "{", $text);
         Veepdotai_Util::log('debug', "$i. ############\n" . $string);

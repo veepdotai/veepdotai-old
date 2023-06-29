@@ -238,6 +238,14 @@ ul.tabs_questions {
 }
 
 /* Interview */
+#veep_form_edcal a.publish {
+    padding-left: 10px;
+}
+
+#veep_form_edcal a.transcribe {
+    padding-left: 10px;
+}
+
 #veep_form_interview a.publish {
     display: none;
 }
@@ -249,6 +257,7 @@ ul.tabs_questions {
 }
 */
 /* Help system */
+.help-system ul,
 #help-content ul {
     list-style-type: disc;
     margin-left: 20px;

@@ -7,12 +7,18 @@ function init_nonce() {
     return wp_nonce_field( $pn . '-main_admin_site', $pn . '-main_admin_site_nonce' );
 }
 
-function generate_help_image($page) {
+function generate_help_html_from_markdown($page) {
     $lang = Veepdotai_Util::get_language();
     $final_page = $page . '-' . $lang . '.md';
     $markdown_content = file_get_contents(VEEPDOTAI_PLUGIN_DIR . '/admin/help/' . $final_page);
 
     $content = Veepdotai_Util::generate_html_from_markdown($markdown_content);
+
+    return $content;
+}
+
+function generate_help_image($page) {
+    $content = generate_help_html_from_markdown($page);
     $help_image = '<div id="help">'
 //                        . '<a href="' . VEEPDOTAI_PLUGIN_URL . '/admin/help/'. $page . '.html" rel="modal:open">'
                         . '<a href="#help-content" rel="modal:open">'

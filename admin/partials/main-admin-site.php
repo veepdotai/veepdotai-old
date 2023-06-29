@@ -27,12 +27,14 @@
             <?php
                 echo generate_button_escaped($pn, 'ai-save', __('Save'));
                 //if (! in_array('veepdotai_role_user', wp_get_current_user()->roles)) {
+                    echo generate_button_escaped($pn, 'ai-generate-current', __( 'Generate the current page', 'veepdotai' ));
                     echo generate_button_escaped($pn, 'ai-transform', __( 'Transform original text', 'veepdotai' ));
                     echo generate_button_escaped($pn, 'ai-generate-images', __( 'Generate images', 'veepdotai' ));
                     echo generate_button_escaped($pn, 'ai-generate-site', __( 'Generate site', 'veepdotai' ));
                     echo generate_button_escaped($pn, 'ai-generate-pages', __( 'Generate pages', 'veepdotai' ));
                 //}
                 echo generate_button_escaped($pn, 'ai-generate-all', __('Generate all', 'veepdotai' ));
+                echo generate_button_escaped($pn, 'ai-transform-generate-all', __('Transform + Generate all', 'veepdotai' ));
             ?>
 
         </div>

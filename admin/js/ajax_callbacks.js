@@ -101,6 +101,7 @@ function ajax_publish(e) {
     ajax_transcribe(
         e,
         [
+            ajax_save_article,
             ajax_edcal_generate_article,
             ajax_edcal_generate_image,
             ajax_save_article,
@@ -113,7 +114,7 @@ function create_links(blob, filename) {
     var publish = document.createElement('a');
     publish.classList.add('publish');
     publish.href="#";
-    publish.innerHTML = "Publier";
+    publish.innerHTML = "🏗️ Publier";
     publish.blob = blob;
     publish.filename = filename;
     publish.addEventListener("click", ajax_publish);
@@ -121,7 +122,7 @@ function create_links(blob, filename) {
     var upload = document.createElement('a');
     upload.classList.add('transcribe');
     upload.href="#";
-    upload.innerHTML = "✅";
+    upload.innerHTML = "✅ Retranscrire";
     upload.blob = blob;
     upload.filename = filename;
     upload.addEventListener("click", ajax_transcribe);
